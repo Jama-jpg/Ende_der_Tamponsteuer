@@ -77,7 +77,7 @@ function sectorPath(cx, cy, r, startAngle, endAngle) {
 
 /* 9 period dots on center axis */
 (function buildPeriodDots() {
-  const ys = [75, 117, 160, 203, 246, 289, 333, 376, 465];
+  const ys = [42, 101, 159, 218, 276, 335, 393, 452, 510];
   ys.forEach((y, i) => {
     const c = makeSvgEl('circle', {
       cx: 500, cy: y, r: 5.5,
@@ -268,8 +268,7 @@ const tl3 = gsap.timeline({
 });
 
 tl3
-  /* "DIE PERIODE" SVG label & XXXX appear */
-  .to([lblPeriode, lblXxxx], { opacity: 1, duration: 0.2 }, 0)
+  /* SVG lbl-periode and lbl-xxxx stay hidden — HTML labels handle these */
 
   /* Remaining period dots appear */
   .to('#period-dots', { opacity: 1, duration: 0.25 }, 0.1)
