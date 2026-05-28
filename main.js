@@ -172,11 +172,10 @@ gsap.set('#lbl-good-news, #lbl-year, #lbl-von, #lbl-zu, #scene-title, #vat-big',
   opacity: 0
 });
 
-gsap.to('#lbl-good-news',    { opacity: 1,    duration: 1.2, ease: 'power1.out' });
-gsap.to('#lbl-year',         { opacity: 0.45, duration: 1.2, ease: 'power1.out' });
-gsap.to('#lbl-von, #lbl-zu', { opacity: 0.45, duration: 1.4, delay: 0.2 });
-gsap.to('#scene-title',      { opacity: 1,    duration: 1.6, delay: 0.1, ease: 'power1.out' });
-gsap.to('#vat-big',          { opacity: 1,    duration: 2.0, delay: 0.3, ease: 'power1.out' });
+gsap.to('#lbl-good-news', { opacity: 1, duration: 1.2, ease: 'power1.out' });
+gsap.to('#lbl-year',      { opacity: 1, duration: 1.2, ease: 'power1.out' });
+gsap.to('#scene-title',   { opacity: 1, duration: 1.6, delay: 0.1, ease: 'power1.out' });
+gsap.to('#vat-big',       { opacity: 1, duration: 2.0, delay: 0.3, ease: 'power1.out' });
 
 
 /* ═══════════════════════════════════════════════
@@ -228,7 +227,7 @@ const tl2 = gsap.timeline({
 tl2
   /* Title + corner labels fade out */
   .to('#scene-title', { opacity: 0, y: -18, duration: 0.25, ease: 'power2.in' }, 0)
-  .to('#lbl-good-news, #lbl-von, #lbl-zu', { opacity: 0, duration: 0.22 }, 0)
+  .to('#lbl-good-news', { opacity: 0, duration: 0.22 }, 0)
 
   /* Year label stays bright */
   .to('#lbl-year', { opacity: 1, duration: 0.15 }, 0)
