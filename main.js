@@ -23,7 +23,7 @@ const PALETTE   = ['#D63335', '#531416', '#F07E7D', '#F4DEDB', '#D0D0C7'];
 const CX        = 750;
 const CY        = 281;
 const R_SMALL   = 90;
-const PIE_R     = 220;
+const PIE_R     = 198;
 const CIRC      = 2 * Math.PI * R_SMALL;   // spinner circumference
 
 /* Scene 9: 12 month-circle Y positions (spread across vertical axis) */
@@ -272,7 +272,7 @@ ScrollTrigger.create({
 const tl3 = gsap.timeline({
   scrollTrigger: {
     trigger: '#s3',
-    start:   'top 120%',
+    start:   'top top',
     end:     'bottom bottom',
     scrub:   1.5
   }
@@ -330,18 +330,21 @@ const tl5 = gsap.timeline({
 });
 
 tl5
-  /* Scene 3 text fades out as circle starts growing */
+  /* Scene 3 text fades out immediately on scroll */
   .to('#st3', { opacity: 0, duration: 0.2 }, 0)
 
-  /* Circle radius expands 90 → 220 */
+  /* Hold: circle stays fully filled while scroll advances (pause before growth) */
+  .to({}, { duration: 0.28 }, 0.02)
+
+  /* Circle radius expands 90 → 198 (10% less than before) */
   .to(cFill, {
     attr: { r: PIE_R },
     ease: 'power2.out',
-    duration: 0.7
-  }, 0)
+    duration: 0.62
+  }, 0.30)
 
   /* Scene 5 text fades in */
-  .to('#st5', { opacity: 1, duration: 0.25 }, 0.5);
+  .to('#st5', { opacity: 1, duration: 0.25 }, 0.72);
 
 
 /* ═══════════════════════════════════════════════
