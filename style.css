@@ -151,14 +151,14 @@ body {
 
 #scene-title .t-tracked {
   font-family: var(--f-serif);
-  font-size: clamp(14px, 2vw, 26px);
-  letter-spacing: 0.35em;
+  font-size: clamp(22px, 3.6vw, 56px);
+  letter-spacing: 0.3em;
   font-weight: 400;
 }
 
 #scene-title .t-serif {
   font-family: var(--f-serif);
-  font-size: clamp(14px, 2vw, 26px);
+  font-size: clamp(22px, 3.6vw, 56px);
   font-weight: 400;
   letter-spacing: 0.02em;
 }
@@ -166,8 +166,8 @@ body {
 #scene-title .t-italic {
   font-family: var(--f-serif);
   font-style: italic;
-  font-size: clamp(14px, 2vw, 26px);
-  letter-spacing: 0.08em;
+  font-size: clamp(22px, 3.6vw, 56px);
+  letter-spacing: 0.06em;
 }
 
 
