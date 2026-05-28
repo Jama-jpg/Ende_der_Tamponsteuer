@@ -365,20 +365,11 @@ tl4
     duration: 0.65
   }, 0.04)
 
-  /* Liquid stream appears and drops from above into circle */
-  .to(liqStream, { opacity: 1, duration: 0.02 }, 0.68)
-  .to(liqStream, { attr: { height: 141 }, ease: 'power2.in', duration: 0.15 }, 0.69)
-
-  /* Circle fills from bottom up as stream pours in */
-  .to(liqFill, { opacity: 1, duration: 0.02 }, 0.82)
-  .to(liqFill, { attr: { y: 191, height: 180 }, ease: 'power2.out', duration: 0.33 }, 0.83)
-
-  /* Solid fill replaces liquid elements; stream disappears */
-  .to(cFill,               { opacity: 1, duration: 0.08, ease: 'power1.out' }, 1.14)
-  .to([liqFill, liqStream], { opacity: 0, duration: 0.08 }, 1.14)
+  /* Solid circle fills in */
+  .to(cFill,    { opacity: 1, duration: 0.18, ease: 'power1.out' }, 0.75)
 
   /* Spinner + outline fade out */
-  .to([cSpinner, cOutline], { opacity: 0, duration: 0.12 }, 1.18);
+  .to([cSpinner, cOutline], { opacity: 0, duration: 0.12 }, 0.88);
 
 
 /* ═══════════════════════════════════════════════
