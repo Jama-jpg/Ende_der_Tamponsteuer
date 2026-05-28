@@ -202,44 +202,49 @@ gsap.to('#vat-big',       { opacity: 1, duration: 2.0, delay: 0.3, ease: 'power1
       vatBigNum.textContent = 0;
       vatNum.textContent    = 0;
       yearLbl.textContent   = 2026;
+      playS2toS3Transition();
     }
   });
 })();
 
 /* ═══════════════════════════════════════════════
-   SCENE 2 — Phase B (scrubbed): title fades, 0% shrinks to fixed label
-   Only happens on continued scrolling, after the auto-count.
+   S2 → S3 AUTO-PLAY TRANSITION
+   Fires automatically after countdown ends.
+   No scrolling needed.
 ═══════════════════════════════════════════════ */
-const tl2 = gsap.timeline({
-  scrollTrigger: {
-    trigger: '#s2',
-    start:   'top+=15% top',  // give auto-count a moment before scrub takes over
-    end:     'bottom bottom',
-    scrub:   1.5
-  }
-});
+function playS2toS3Transition() {
+  const tlTrans = gsap.timeline({ defaults: { ease: 'power2.inOut' } });
 
-tl2
-  /* Title fades out — GOOD NEWS and year stay visible */
-  .to('#scene-title', { opacity: 0, y: -18, duration: 0.25, ease: 'power2.in' }, 0)
+  tlTrans
+    /* Title fades out */
+    .to('#scene-title', { opacity: 0, y: -16, duration: 0.5, ease: 'power2.in' }, 0)
 
-  /* VAT number shrinks in place to year-label size (transform-origin: center bottom) */
-  .to('#vat-big', {
-    scale: 0.028,
-    ease: 'power2.inOut',
-    duration: 0.45
-  }, 0.22);
+    /* VAT number shrinks to small label size */
+    .to('#vat-big', { scale: 0.056, duration: 0.9, ease: 'power3.inOut' }, 0.1)
+
+    /* GOOD NEWS → DIE PERIODE crossfade */
+    .to('#lbl-good-news', { opacity: 0, duration: 0.25, ease: 'power1.in' }, 0.3)
+    .call(() => { document.getElementById('lbl-good-news').textContent = 'DIE  PERIODE'; }, [], 0.56)
+    .to('#lbl-good-news', { opacity: 1, duration: 0.3, ease: 'power1.out' }, 0.57)
+
+    /* Center axis draws top → bottom */
+    .to(cAxis, { opacity: 1, strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' }, 0.3)
+
+    /* First period dot fills red simultaneously with axis */
+    .to('#period-dots', { opacity: 1, duration: 0.01 }, 0.32)
+    .call(() => {
+      const dot0 = periodDots.querySelector('circle:first-child');
+      if (dot0) gsap.to(dot0, { attr: { fill: '#D63335' }, duration: 0.4, ease: 'power1.out' });
+    }, [], 0.32)
+
+    /* Start glitch counter once transition settles */
+    .call(startGlitch, [], 1.4);
+}
+
+/* tl2 removed — S2→S3 transition is now auto-play (see playS2toS3Transition above) */
 
 
-/* ═══════════════════════════════════════════════
-   GLITCH TRIGGER — starts on Scene 3 entry, ends on Scene 13
-═══════════════════════════════════════════════ */
-ScrollTrigger.create({
-  trigger: '#s3',
-  start:   'top 80%',
-  onEnter:     startGlitch,
-  onLeaveBack: stopGlitch
-});
+/* Glitch is started by playS2toS3Transition — no scroll trigger needed for initial start */
 
 ScrollTrigger.create({
   trigger: '#s13',
@@ -263,25 +268,17 @@ const tl3 = gsap.timeline({
 });
 
 tl3
-  /* "GOOD NEWS" crossfades to "DIE PERIODE" */
-  .to('#lbl-good-news', { opacity: 0, duration: 0.18, ease: 'power1.in' }, 0)
-  .call(() => { document.getElementById('lbl-good-news').textContent = 'DIE  PERIODE'; }, [], 0.19)
-  .to('#lbl-good-news', { opacity: 1, duration: 0.22, ease: 'power1.out' }, 0.20)
+  /* "DIE PERIODE" SVG label & XXXX appear */
+  .to([lblPeriode, lblXxxx], { opacity: 1, duration: 0.2 }, 0)
 
-  /* Center axis draws top → bottom */
-  .to(cAxis, { opacity: 1, strokeDashoffset: 0, duration: 0.4, ease: 'power2.inOut' }, 0.05)
-
-  /* "DIE PERIODE" label & XXXX appear */
-  .to([lblPeriode, lblXxxx], { opacity: 1, duration: 0.2 }, 0.22)
-
-  /* Period dots fade in with slight stagger */
-  .to('#period-dots', { opacity: 1, duration: 0.25 }, 0.28)
+  /* Remaining period dots appear */
+  .to('#period-dots', { opacity: 1, duration: 0.25 }, 0.1)
 
   /* Circle outline appears */
-  .to(cOutline, { opacity: 1, duration: 0.3, ease: 'power1.out' }, 0.42)
+  .to(cOutline, { opacity: 1, duration: 0.3, ease: 'power1.out' }, 0.35)
 
   /* Scene 3 text overlay fades in */
-  .to('#st3', { opacity: 1, duration: 0.25 }, 0.55);
+  .to('#st3', { opacity: 1, duration: 0.25 }, 0.52);
 
 
 /* ═══════════════════════════════════════════════
