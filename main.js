@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
    CONSTANTS & PALETTE
 ─────────────────────────────────────────────── */
 const PALETTE   = ['#D63335', '#531416', '#F07E7D', '#F4DEDB', '#D0D0C7'];
-const CX        = 700;
+const CX        = 750;
 const CY        = 281;
 const R_SMALL   = 90;
 const PIE_R     = 220;
@@ -18,7 +18,7 @@ const CIRC      = 2 * Math.PI * R_SMALL;   // spinner circumference
 
 /* Scene 9: 12 month-circle Y positions (spread across vertical axis) */
 const MC_Y = [70, 108, 147, 185, 223, 261, 300, 338, 376, 415, 454, 492];
-const MC_X = 700;
+const MC_X = 750;
 const MC_R = 15;
 
 
@@ -270,14 +270,10 @@ const tl3 = gsap.timeline({
 tl3
   /* SVG lbl-periode and lbl-xxxx stay hidden — HTML labels handle these */
 
-  /* Remaining period dots appear */
-  .to('#period-dots', { opacity: 1, duration: 0.25 }, 0.1)
-
-  /* Circle outline appears */
-  .to(cOutline, { opacity: 1, duration: 0.3, ease: 'power1.out' }, 0.35)
-
-  /* Scene 3 text overlay fades in */
-  .to('#st3', { opacity: 1, duration: 0.25 }, 0.52);
+  /* Period dots, circle and text all appear on very first scroll */
+  .to('#period-dots', { opacity: 1, duration: 0.2 }, 0.0)
+  .to(cOutline,       { opacity: 1, duration: 0.2, ease: 'power1.out' }, 0.06)
+  .to('#st3',         { opacity: 1, duration: 0.2 }, 0.10);
 
 
 /* ═══════════════════════════════════════════════

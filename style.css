@@ -199,13 +199,14 @@ body {
 ═══════════════════════════════════════════════ */
 .stext {
   position: fixed;
-  left: 8%;
+  left: 25%;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
   opacity: 0;
   pointer-events: none;
   z-index: 50;
-  max-width: 220px;
+  max-width: 240px;
 }
 
 .stext .sl {
