@@ -160,16 +160,17 @@ body {
 /* ─── Massive VAT number (Scenes 1–2) ─────── */
 #vat-big {
   position: absolute;
-  bottom: 2%;
+  bottom: -2%;
   left: 0;
   right: 0;
   text-align: center;
   font-family: var(--f-serif);
-  font-size: clamp(160px, 58vh, 700px);
-  line-height: 0.88;
+  font-size: min(72vw, 80vh);
+  line-height: 0.85;
   color: var(--ink);
   transform-origin: center bottom;
   will-change: transform, opacity;
+  overflow: visible;
 }
 
 
@@ -242,7 +243,7 @@ body {
   }
 
   #vat-big {
-    font-size: clamp(120px, 46vh, 500px);
+    font-size: min(78vw, 76vh);
   }
 
   .stext {
@@ -274,8 +275,8 @@ body {
   }
 
   #vat-big {
-    font-size: clamp(100px, 44vh, 320px);
-    bottom: 1%;
+    font-size: min(85vw, 72vh);
+    bottom: 0;
   }
 
   .stext {
