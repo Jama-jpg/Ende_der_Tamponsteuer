@@ -198,7 +198,7 @@ function randomInt(min, max) {
 function glitchTick(ts) {
   if (ts - glitchLast > GLITCH_INTERVAL) {
     vatBigNum.textContent = randomInt(0, 20);
-    yearLbl.textContent   = randomInt(1000, 9999);
+    yearLbl.textContent   = randomInt(1973, 2026);
     glitchLast = ts;
   }
   glitchRaf = requestAnimationFrame(glitchTick);
