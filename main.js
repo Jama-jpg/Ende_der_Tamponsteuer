@@ -6,6 +6,16 @@
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+/* Lock scrolling until S2→S3 transition completes */
+document.body.style.overflow = 'hidden';
+
+function unlockScroll() {
+  document.body.style.overflow = '';
+  /* Snap scroll position to the start of s3 so scrub triggers behave correctly */
+  const s3 = document.getElementById('s3');
+  if (s3) window.scrollTo(0, s3.offsetTop);
+}
+
 /* ───────────────────────────────────────────────
    CONSTANTS & PALETTE
 ─────────────────────────────────────────────── */
@@ -237,8 +247,9 @@ function playS2toS3Transition() {
       if (dot0) gsap.to(dot0, { attr: { fill: '#1a1a1a' }, duration: 0.4, ease: 'power1.out' });
     }, [], 0.32)
 
-    /* Start glitch counter once transition settles */
-    .call(startGlitch, [], 1.4);
+    /* Unlock scrolling and start glitch once transition settles */
+    .call(unlockScroll, [], 1.45)
+    .call(startGlitch,  [], 1.5);
 }
 
 /* tl2 removed — S2→S3 transition is now auto-play (see playS2toS3Transition above) */
