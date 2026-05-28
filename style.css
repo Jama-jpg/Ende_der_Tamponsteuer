@@ -108,7 +108,7 @@ body {
   top: 22px;
   left: 50%;
   transform: translateX(-50%);
-  font-family: var(--f-mono);
+  font-family: var(--f-serif);
   font-style: normal;
   letter-spacing: 0.2em;
   font-size: clamp(12px, 1.1vw, 16px);
@@ -206,7 +206,7 @@ body {
   opacity: 0;
   pointer-events: none;
   z-index: 50;
-  max-width: 240px;
+  max-width: 320px;
 }
 
 .stext .sl {
@@ -250,7 +250,7 @@ body {
 
   .stext {
     left: 4%;
-    max-width: 200px;
+    max-width: 260px;
   }
 
   .stext .sl { font-size: clamp(8px, 1vw, 11px); }
@@ -284,7 +284,7 @@ body {
   .stext {
     left: 5%;
     top: 55%;
-    max-width: 150px;
+    max-width: 200px;
   }
 
   .stext .sl { font-size: clamp(7px, 2vw, 10px); }
