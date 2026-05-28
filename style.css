@@ -211,7 +211,7 @@ body {
 
 .stext .sl {
   font-family: var(--f-mono);
-  font-size: clamp(8px, 0.75vw, 10.5px);
+  font-size: clamp(12px, 1.1vw, 16px);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   line-height: 1.75;

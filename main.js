@@ -261,7 +261,7 @@ ScrollTrigger.create({
 const tl3 = gsap.timeline({
   scrollTrigger: {
     trigger: '#s3',
-    start:   'top top',
+    start:   'top 85%',
     end:     'bottom bottom',
     scrub:   1.5
   }
