@@ -202,7 +202,7 @@ gsap.to('#vat-big',       { opacity: 1, duration: 2.0, delay: 0.3, ease: 'power1
       vatBigNum.textContent = 0;
       vatNum.textContent    = 0;
       yearLbl.textContent   = 2026;
-      playS2toS3Transition();
+      gsap.delayedCall(0.6, playS2toS3Transition);
     }
   });
 })();
