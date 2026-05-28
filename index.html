@@ -37,6 +37,20 @@
 
   </div><!-- /#ui -->
 
+  <!-- ═══════════════════════════════════════════════
+       LIQUID BACKGROUND (Scenes 1–2)
+       Fixed to viewport bottom; drains as VAT counts 20→0
+  ═══════════════════════════════════════════════ -->
+  <div id="liquid-bg">
+    <svg id="liquid-svg"
+         viewBox="0 0 1000 80"
+         preserveAspectRatio="none"
+         xmlns="http://www.w3.org/2000/svg">
+      <path id="liquid-wave-path"
+            fill="#D63335"
+            d="M 0,15 C 167,8 333,22 500,15 C 667,8 833,22 1000,15 L 1000,80 L 0,80 Z"/>
+    </svg>
+  </div>
 
   <!-- ═══════════════════════════════════════════════
        FIXED SVG CANVAS — all visual animation happens here
@@ -68,6 +82,11 @@
           yChannelSelector="G"
         />
       </filter>
+
+      <!-- Clip path: liquid fill inside circle -->
+      <clipPath id="circle-fill-clip">
+        <circle cx="750" cy="281" r="90"/>
+      </clipPath>
     </defs>
 
     <!-- Center vertical axis (draws in Scene 3) -->
@@ -116,6 +135,23 @@
       fill="none"
       stroke="#D0D0C7"
       stroke-width="0.8"
+      opacity="0"
+    />
+
+    <!-- Liquid stream — narrow pour from above circle (Scene 4) -->
+    <rect
+      id="liq-stream"
+      x="747" y="50" width="6" height="0"
+      fill="#D63335"
+      opacity="0"
+    />
+
+    <!-- Liquid fill inside circle — fills from bottom up (Scene 4) -->
+    <rect
+      id="liq-fill"
+      x="660" y="371" width="180" height="0"
+      fill="#D63335"
+      clip-path="url(#circle-fill-clip)"
       opacity="0"
     />
 

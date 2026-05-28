@@ -60,6 +60,10 @@ const linesGrp  = document.getElementById('lines');
 const periodDots= document.getElementById('period-dots');
 const lblXxxx   = document.getElementById('lbl-xxxx');
 const lblPeriode= document.getElementById('lbl-periode');
+const liquidBg       = document.getElementById('liquid-bg');
+const liquidWavePath = document.getElementById('liquid-wave-path');
+const liqStream      = document.getElementById('liq-stream');
+const liqFill        = document.getElementById('liq-fill');
 
 const SVG_NS    = 'http://www.w3.org/2000/svg';
 
@@ -68,11 +72,39 @@ const SVG_NS    = 'http://www.w3.org/2000/svg';
    Prevents any flash caused by scroll-restoration race conditions
 ─────────────────────────────────────────────── */
 gsap.set([cAxis, cOutline, cSpinner, cFill, pieBg, pieHl, pieTxt,
-          periodDots, mCircles, mRect, rRect, linesGrp,
+          periodDots, mCircles, mRect, rRect, linesGrp, liqFill, liqStream,
           '#st3','#st5','#st8','#st10','#st12','#st13',
           '#vat-fixed'], { opacity: 0 });
 gsap.set(cAxis, { strokeDashoffset: 468 });
 gsap.set(cSpinner, { strokeDashoffset: 565.5 });
+
+
+/* ───────────────────────────────────────────────
+   LIQUID WAVE ANIMATION (Scene 1–2 background)
+   Targets the external #liquid-bg div SVG
+─────────────────────────────────────────────── */
+const WAVE_BASE_Y = 15;   // y in viewBox (0 0 1000 80)
+const WAVE_AMP    = 5;
+let waveRaf   = null;
+let waveStart = null;
+
+function updateWave(ts) {
+  if (!waveStart) waveStart = ts;
+  const t = (ts - waveStart) / 2800;
+  const a = WAVE_AMP;
+  const y = (offset) => (WAVE_BASE_Y + Math.sin(t * Math.PI * 2 + offset) * a).toFixed(1);
+  liquidWavePath.setAttribute('d',
+    `M 0,${y(0)} C 167,${y(1.05)} 333,${y(2.09)} 500,${y(3.14)} ` +
+    `C 667,${y(4.19)} 833,${y(5.24)} 1000,${y(0)} ` +
+    `L 1000,80 L 0,80 Z`
+  );
+  waveRaf = requestAnimationFrame(updateWave);
+}
+
+function startWave() { if (!waveRaf) waveRaf = requestAnimationFrame(updateWave); }
+function stopWave()  {
+  if (waveRaf) { cancelAnimationFrame(waveRaf); waveRaf = null; waveStart = null; }
+}
 
 
 /* ───────────────────────────────────────────────
@@ -203,6 +235,9 @@ gsap.to('#lbl-good-news', { opacity: 1, duration: 1.2, ease: 'power1.out' });
 gsap.to('#lbl-year',      { opacity: 1, duration: 1.2, ease: 'power1.out' });
 gsap.to('#scene-title',   { opacity: 1, duration: 1.6, delay: 0.1, ease: 'power1.out' });
 gsap.to('#vat-big',       { opacity: 1, duration: 2.0, delay: 0.3, ease: 'power1.out' });
+/* Liquid background fades in and wave starts */
+gsap.to(liquidBg, { opacity: 1, duration: 1.8, delay: 0.4, ease: 'power1.out',
+  onStart: startWave });
 
 
 /* ═══════════════════════════════════════════════
@@ -223,11 +258,15 @@ gsap.to('#vat-big',       { opacity: 1, duration: 2.0, delay: 0.3, ease: 'power1
       vatBigNum.textContent = v;
       vatNum.textContent    = v;
       yearLbl.textContent   = y;
+      /* Drain liquid proportionally with VAT counter (20vh → 0vh) */
+      liquidBg.style.height = proxy.vat + 'vh';
     },
     onComplete() {
       vatBigNum.textContent = 0;
       vatNum.textContent    = 0;
       yearLbl.textContent   = 2026;
+      liquidBg.style.height = '0vh';
+      stopWave();
       gsap.delayedCall(0.6, playS2toS3Transition);
     }
   });
@@ -323,14 +362,23 @@ tl4
   .to(cSpinner, {
     strokeDashoffset: 0,
     ease: 'power2.inOut',
-    duration: 0.68
+    duration: 0.65
   }, 0.04)
 
-  /* Circle fills solid red */
-  .to(cFill, { opacity: 1, duration: 0.14, ease: 'power1.out' }, 0.72)
+  /* Liquid stream appears and drops from above into circle */
+  .to(liqStream, { opacity: 1, duration: 0.02 }, 0.68)
+  .to(liqStream, { attr: { height: 141 }, ease: 'power2.in', duration: 0.15 }, 0.69)
+
+  /* Circle fills from bottom up as stream pours in */
+  .to(liqFill, { opacity: 1, duration: 0.02 }, 0.82)
+  .to(liqFill, { attr: { y: 191, height: 180 }, ease: 'power2.out', duration: 0.33 }, 0.83)
+
+  /* Solid fill replaces liquid elements; stream disappears */
+  .to(cFill,               { opacity: 1, duration: 0.08, ease: 'power1.out' }, 1.14)
+  .to([liqFill, liqStream], { opacity: 0, duration: 0.08 }, 1.14)
 
   /* Spinner + outline fade out */
-  .to([cSpinner, cOutline], { opacity: 0, duration: 0.12 }, 0.74);
+  .to([cSpinner, cOutline], { opacity: 0, duration: 0.12 }, 1.18);
 
 
 /* ═══════════════════════════════════════════════
