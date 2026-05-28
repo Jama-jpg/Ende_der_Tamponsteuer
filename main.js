@@ -196,6 +196,7 @@ ScrollTrigger.create({
     const proxy = { vat: 20 };
     gsap.to(proxy, {
       vat: 0,
+      delay: 1.0,
       duration: 2.4,
       ease: 'power1.inOut',
       onUpdate() {

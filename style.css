@@ -151,14 +151,14 @@ body {
 
 #scene-title .t-tracked {
   font-family: var(--f-serif);
-  font-size: clamp(22px, 3.6vw, 56px);
-  letter-spacing: 0.3em;
+  font-size: clamp(28px, 5vw, 78px);
+  letter-spacing: 0.28em;
   font-weight: 400;
 }
 
 #scene-title .t-serif {
   font-family: var(--f-serif);
-  font-size: clamp(22px, 3.6vw, 56px);
+  font-size: clamp(28px, 5vw, 78px);
   font-weight: 400;
   letter-spacing: 0.02em;
 }
@@ -166,7 +166,7 @@ body {
 #scene-title .t-italic {
   font-family: var(--f-serif);
   font-style: italic;
-  font-size: clamp(22px, 3.6vw, 56px);
+  font-size: clamp(28px, 5vw, 78px);
   letter-spacing: 0.06em;
 }
 
@@ -240,25 +240,91 @@ body {
 
 
 /* ═══════════════════════════════════════════════
-   RESPONSIVE ADJUSTMENTS
+   RESPONSIVE — Tablet (max 1024px)
 ═══════════════════════════════════════════════ */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   #scene-title {
     white-space: normal;
-    width: 80%;
+    width: 75%;
+    top: 7%;
+  }
+
+  #scene-title .t-tracked,
+  #scene-title .t-serif,
+  #scene-title .t-italic {
+    font-size: clamp(24px, 4.2vw, 60px);
+  }
+
+  #vat-big {
+    font-size: clamp(100px, 22vw, 260px);
+    bottom: 4%;
   }
 
   .stext {
-    left: 5%;
-    max-width: 160px;
+    left: 4%;
+    max-width: 200px;
   }
 
-  #nav-spine {
-    left: 10px;
+  .stext .sl {
+    font-size: clamp(8px, 1vw, 11px);
+  }
+
+  .stext .sh {
+    font-size: clamp(18px, 3vw, 42px);
   }
 
   #lbl-von,
   #lbl-zu {
     display: none;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — Mobile (max 600px)
+═══════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  #scene-title {
+    white-space: normal;
+    width: 85%;
+    top: 6%;
+  }
+
+  #scene-title .t-tracked,
+  #scene-title .t-serif,
+  #scene-title .t-italic {
+    font-size: clamp(20px, 6vw, 36px);
+  }
+
+  #vat-big {
+    font-size: clamp(80px, 26vw, 160px);
+    bottom: 3%;
+  }
+
+  .stext {
+    left: 5%;
+    max-width: 160px;
+    top: 55%;
+  }
+
+  .stext .sl {
+    font-size: clamp(7px, 2.2vw, 10px);
+  }
+
+  .stext .sh {
+    font-size: clamp(16px, 5vw, 28px);
+  }
+
+  #lbl-good-news {
+    font-size: 9px;
+  }
+
+  #lbl-year {
+    font-size: 10px;
+    right: 14px;
+  }
+
+  #vat-fixed {
+    font-size: 11px;
   }
 }
