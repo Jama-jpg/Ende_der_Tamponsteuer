@@ -6,6 +6,11 @@
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+/* Force scroll to top before any ScrollTrigger initialises —
+   prevents browser scroll-restoration from triggering Scene 3+ elements on reload */
+window.scrollTo(0, 0);
+if (history.scrollRestoration) history.scrollRestoration = 'manual';
+
 /* Lock scrolling until S2→S3 transition completes */
 document.body.style.overflow = 'hidden';
 
@@ -57,6 +62,17 @@ const lblXxxx   = document.getElementById('lbl-xxxx');
 const lblPeriode= document.getElementById('lbl-periode');
 
 const SVG_NS    = 'http://www.w3.org/2000/svg';
+
+/* ───────────────────────────────────────────────
+   FORCE INITIAL HIDDEN STATE for all Scene 3+ elements
+   Prevents any flash caused by scroll-restoration race conditions
+─────────────────────────────────────────────── */
+gsap.set([cAxis, cOutline, cSpinner, cFill, pieBg, pieHl, pieTxt,
+          periodDots, mCircles, mRect, rRect, linesGrp,
+          '#st3','#st5','#st8','#st10','#st12','#st13',
+          '#vat-fixed'], { opacity: 0 });
+gsap.set(cAxis, { strokeDashoffset: 468 });
+gsap.set(cSpinner, { strokeDashoffset: 565.5 });
 
 
 /* ───────────────────────────────────────────────
