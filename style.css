@@ -111,7 +111,7 @@ body {
   font-family: var(--f-mono);
   font-style: normal;
   letter-spacing: 0.2em;
-  font-size: clamp(9px, 0.8vw, 11px);
+  font-size: clamp(12px, 1.1vw, 16px);
 }
 
 #lbl-year {
@@ -119,6 +119,7 @@ body {
   right: 22px;
   opacity: 1;
   color: var(--ink);
+  font-size: clamp(12px, 1.1vw, 16px);
 }
 
 

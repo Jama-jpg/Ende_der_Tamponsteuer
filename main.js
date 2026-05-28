@@ -183,20 +183,24 @@ gsap.to('#vat-big',       { opacity: 1, duration: 2.0, delay: 0.3, ease: 'power1
    Starts 1s after the page opens. No scrolling needed.
 ═══════════════════════════════════════════════ */
 (function startCountdown() {
-  const proxy = { vat: 20 };
+  const proxy = { vat: 20, yr: 1973 };
   gsap.to(proxy, {
     vat: 0,
+    yr:  2026,
     delay: 1.0,
     duration: 2.4,
     ease: 'power1.inOut',
     onUpdate() {
       const v = Math.round(proxy.vat);
+      const y = Math.round(proxy.yr);
       vatBigNum.textContent = v;
       vatNum.textContent    = v;
+      yearLbl.textContent   = y;
     },
     onComplete() {
       vatBigNum.textContent = 0;
       vatNum.textContent    = 0;
+      yearLbl.textContent   = 2026;
     }
   });
 })();
