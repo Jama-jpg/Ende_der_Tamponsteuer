@@ -189,7 +189,7 @@ gsap.to('#vat-big',       { opacity: 1, duration: 2.0, delay: 0.3, ease: 'power1
     vat: 0,
     yr:  2026,
     delay: 1.0,
-    duration: 2.4,
+    duration: 4.2,
     ease: 'power1.inOut',
     onUpdate() {
       const v = Math.round(proxy.vat);
