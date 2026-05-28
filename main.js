@@ -261,7 +261,7 @@ ScrollTrigger.create({
 const tl3 = gsap.timeline({
   scrollTrigger: {
     trigger: '#s3',
-    start:   'top 85%',
+    start:   'top 120%',
     end:     'bottom bottom',
     scrub:   1.5
   }
@@ -303,10 +303,7 @@ tl4
   .to(cFill, { opacity: 1, duration: 0.14, ease: 'power1.out' }, 0.72)
 
   /* Spinner + outline fade out */
-  .to([cSpinner, cOutline], { opacity: 0, duration: 0.12 }, 0.74)
-
-  /* Scene 3 text fades out */
-  .to('#st3', { opacity: 0, duration: 0.18 }, 0.0);
+  .to([cSpinner, cOutline], { opacity: 0, duration: 0.12 }, 0.74);
 
 
 /* ═══════════════════════════════════════════════
@@ -322,6 +319,9 @@ const tl5 = gsap.timeline({
 });
 
 tl5
+  /* Scene 3 text fades out as circle starts growing */
+  .to('#st3', { opacity: 0, duration: 0.2 }, 0)
+
   /* Circle radius expands 90 → 220 */
   .to(cFill, {
     attr: { r: PIE_R },
