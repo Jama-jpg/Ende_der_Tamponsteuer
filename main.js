@@ -139,8 +139,8 @@ function randomInt(min, max) {
 
 function glitchTick(ts) {
   if (ts - glitchLast > GLITCH_INTERVAL) {
-    vatNum.textContent  = randomInt(0, 20);
-    yearLbl.textContent = randomInt(1000, 9999);
+    vatBigNum.textContent = randomInt(0, 20);
+    yearLbl.textContent   = randomInt(1000, 9999);
     glitchLast = ts;
   }
   glitchRaf = requestAnimationFrame(glitchTick);
@@ -157,8 +157,9 @@ function stopGlitch() {
 
 function setFinalCounters() {
   stopGlitch();
-  vatNum.textContent  = 0;
-  yearLbl.textContent = 2026;
+  vatBigNum.textContent = 0;
+  vatNum.textContent    = 0;
+  yearLbl.textContent   = 2026;
 }
 
 
@@ -219,23 +220,15 @@ const tl2 = gsap.timeline({
 });
 
 tl2
-  /* Title + corner labels fade out */
+  /* Title fades out — GOOD NEWS and year stay visible */
   .to('#scene-title', { opacity: 0, y: -18, duration: 0.25, ease: 'power2.in' }, 0)
-  .to('#lbl-good-news', { opacity: 0, duration: 0.22 }, 0)
 
-  /* Year label stays bright */
-  .to('#lbl-year', { opacity: 1, duration: 0.15 }, 0)
-
-  /* vat-big shrinks toward bottom center */
+  /* VAT number shrinks in place to year-label size (transform-origin: center bottom) */
   .to('#vat-big', {
-    scale: 0.04,
-    opacity: 0,
+    scale: 0.028,
     ease: 'power2.inOut',
-    duration: 0.35
-  }, 0.30)
-
-  /* vat-fixed fades in */
-  .to('#vat-fixed', { opacity: 1, duration: 0.22 }, 0.62);
+    duration: 0.45
+  }, 0.22);
 
 
 /* ═══════════════════════════════════════════════
@@ -270,6 +263,11 @@ const tl3 = gsap.timeline({
 });
 
 tl3
+  /* "GOOD NEWS" crossfades to "DIE PERIODE" */
+  .to('#lbl-good-news', { opacity: 0, duration: 0.18, ease: 'power1.in' }, 0)
+  .call(() => { document.getElementById('lbl-good-news').textContent = 'DIE  PERIODE'; }, [], 0.19)
+  .to('#lbl-good-news', { opacity: 1, duration: 0.22, ease: 'power1.out' }, 0.20)
+
   /* Center axis draws top → bottom */
   .to(cAxis, { opacity: 1, strokeDashoffset: 0, duration: 0.4, ease: 'power2.inOut' }, 0.05)
 
