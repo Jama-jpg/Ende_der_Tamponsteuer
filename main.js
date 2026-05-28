@@ -172,11 +172,11 @@ gsap.set('#lbl-good-news, #lbl-year, #lbl-von, #lbl-zu, #scene-title, #vat-big',
   opacity: 0
 });
 
-gsap.to('#lbl-good-news', { opacity: 1,    duration: 0.6, delay: 0.3, ease: 'power1.out' });
-gsap.to('#lbl-year',      { opacity: 0.45, duration: 0.6, delay: 0.3, ease: 'power1.out' });
-gsap.to('#lbl-von, #lbl-zu', { opacity: 0.45, duration: 0.6, delay: 0.5 });
-gsap.to('#scene-title',       { opacity: 1,    duration: 0.8, delay: 0.4, ease: 'power1.out' });
-gsap.to('#vat-big',           { opacity: 1,    duration: 1.0, delay: 0.7, ease: 'power1.out' });
+gsap.to('#lbl-good-news', { opacity: 1,    duration: 0.6, delay: 2.3, ease: 'power1.out' });
+gsap.to('#lbl-year',      { opacity: 0.45, duration: 0.6, delay: 2.3, ease: 'power1.out' });
+gsap.to('#lbl-von, #lbl-zu', { opacity: 0.45, duration: 0.6, delay: 2.5 });
+gsap.to('#scene-title',       { opacity: 1,    duration: 0.8, delay: 2.4, ease: 'power1.out' });
+gsap.to('#vat-big',           { opacity: 1,    duration: 1.0, delay: 2.7, ease: 'power1.out' });
 
 
 /* ═══════════════════════════════════════════════
@@ -193,23 +193,19 @@ ScrollTrigger.create({
     if (countPlayed) return;
     countPlayed = true;
 
-    const proxy = { vat: 20, yr: 1973 };
+    const proxy = { vat: 20 };
     gsap.to(proxy, {
       vat: 0,
-      yr:  2026,
       duration: 2.4,
       ease: 'power1.inOut',
       onUpdate() {
         const v = Math.round(proxy.vat);
-        const y = Math.round(proxy.yr);
         vatBigNum.textContent = v;
         vatNum.textContent    = v;
-        yearLbl.textContent   = y;
       },
       onComplete() {
         vatBigNum.textContent = 0;
         vatNum.textContent    = 0;
-        yearLbl.textContent   = 2026;
       }
     });
   }
