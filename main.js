@@ -168,87 +168,84 @@ function setFinalCounters() {
 /* ───────────────────────────────────────────────
    PAGE LOAD ENTRANCE (staggered fades)
 ─────────────────────────────────────────────── */
-gsap.set('#lbl-1973, #lbl-good-news, #lbl-year, #lbl-von, #lbl-zu, #scene-title, #vat-big', {
+gsap.set('#lbl-good-news, #lbl-year, #lbl-von, #lbl-zu, #scene-title, #vat-big', {
   opacity: 0
 });
 
-gsap.to('#lbl-1973, #lbl-good-news, #lbl-year', {
-  opacity: (i) => [1, 1, 0.45][i],
-  duration: 0.6,
-  delay:    0.3,
-  ease: 'power1.out'
-});
+gsap.to('#lbl-good-news', { opacity: 1,    duration: 0.6, delay: 0.3, ease: 'power1.out' });
+gsap.to('#lbl-year',      { opacity: 0.45, duration: 0.6, delay: 0.3, ease: 'power1.out' });
 gsap.to('#lbl-von, #lbl-zu', { opacity: 0.45, duration: 0.6, delay: 0.5 });
 gsap.to('#scene-title',       { opacity: 1,    duration: 0.8, delay: 0.4, ease: 'power1.out' });
 gsap.to('#vat-big',           { opacity: 1,    duration: 1.0, delay: 0.7, ease: 'power1.out' });
 
-/* Nav spine was removed — no dot activation needed */
-
 
 /* ═══════════════════════════════════════════════
-   SCENE 2 — The Shift: 20% → 0%
-   Count happens immediately on first scroll.
-   Title stays visible during count.
-   Only further scrolling shrinks 0% to small fixed label.
+   SCENE 2 — Phase A (auto-play): 20→0%, 1973→2026
+   Triggered once on first scroll into scene 2.
+   Plays automatically — no further scrolling needed.
+═══════════════════════════════════════════════ */
+let countPlayed = false;
+
+ScrollTrigger.create({
+  trigger: '#s2',
+  start: 'top 90%',   // fires as soon as scene 2 peeks into view
+  onEnter() {
+    if (countPlayed) return;
+    countPlayed = true;
+
+    const proxy = { vat: 20, yr: 1973 };
+    gsap.to(proxy, {
+      vat: 0,
+      yr:  2026,
+      duration: 2.4,
+      ease: 'power1.inOut',
+      onUpdate() {
+        const v = Math.round(proxy.vat);
+        const y = Math.round(proxy.yr);
+        vatBigNum.textContent = v;
+        vatNum.textContent    = v;
+        yearLbl.textContent   = y;
+      },
+      onComplete() {
+        vatBigNum.textContent = 0;
+        vatNum.textContent    = 0;
+        yearLbl.textContent   = 2026;
+      }
+    });
+  }
+});
+
+/* ═══════════════════════════════════════════════
+   SCENE 2 — Phase B (scrubbed): title fades, 0% shrinks to fixed label
+   Only happens on continued scrolling, after the auto-count.
 ═══════════════════════════════════════════════ */
 const tl2 = gsap.timeline({
   scrollTrigger: {
     trigger: '#s2',
-    start:   'top top',
+    start:   'top+=15% top',  // give auto-count a moment before scrub takes over
     end:     'bottom bottom',
-    scrub:   1.5,
-    onUpdate(self) {
-      /* Year glitch tied to scroll progress */
-      if (Math.random() > 0.55) {
-        const raw = Math.round(1973 + self.progress * 53);
-        yearLbl.textContent = Math.random() > 0.3
-          ? randomInt(1000, 9999)
-          : raw;
-      }
-      if (self.progress > 0.97) yearLbl.textContent = 2026;
-    }
+    scrub:   1.5
   }
 });
 
-/*
-  TIMING LAYOUT (scrub 0.0 – 1.0):
-  0.00–0.28  →  count 20→0% (fast, while title still fully visible)
-  0.22–0.42  →  title + corner labels fade out
-  0.42–0.72  →  vat-big shrinks to nothing
-  0.68–0.88  →  vat-fixed fades in
-*/
-
-const vatProxy = { val: 20 };
 tl2
-  /* COUNT 20 → 0% — starts immediately, finishes at 28% of scroll */
-  .to(vatProxy, {
-    val: 0,
-    ease: 'power1.out',
-    duration: 0.28,
-    onUpdate() {
-      const v = Math.round(vatProxy.val);
-      vatBigNum.textContent = v;
-      vatNum.textContent    = v;
-    }
-  }, 0)
+  /* Title + corner labels fade out */
+  .to('#scene-title', { opacity: 0, y: -18, duration: 0.25, ease: 'power2.in' }, 0)
+  .to('#lbl-good-news, #lbl-von, #lbl-zu', { opacity: 0, duration: 0.22 }, 0)
 
-  /* Year label brightens slightly during count */
-  .to('#lbl-year', { opacity: 1, duration: 0.2 }, 0.06)
+  /* Year label stays bright */
+  .to('#lbl-year', { opacity: 1, duration: 0.15 }, 0)
 
-  /* TITLE + CORNER LABELS fade out — starts at 22% (after count is mostly done) */
-  .to('#scene-title', { opacity: 0, y: -18, duration: 0.22, ease: 'power2.in' }, 0.22)
-  .to('#lbl-1973, #lbl-good-news, #lbl-von, #lbl-zu', { opacity: 0, duration: 0.20 }, 0.22)
-
-  /* VAT-BIG SHRINKS — starts at 42%, finishes at 72% */
+  /* vat-big shrinks toward bottom center */
   .to('#vat-big', {
     scale: 0.04,
     opacity: 0,
     ease: 'power2.inOut',
-    duration: 0.30
-  }, 0.42)
+    duration: 0.35
+  }, 0.30)
 
-  /* VAT-FIXED fades in as big disappears */
-  .to('#vat-fixed', { opacity: 1, duration: 0.20 }, 0.68);
+  /* vat-fixed fades in */
+  .to('#vat-fixed', { opacity: 1, duration: 0.22 }, 0.62);
 
 
 /* ═══════════════════════════════════════════════
