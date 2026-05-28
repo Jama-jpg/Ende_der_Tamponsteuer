@@ -208,60 +208,7 @@ body {
 }
 
 
-/* ═══════════════════════════════════════════════
-   LEFT NAVIGATION SPINE
-═══════════════════════════════════════════════ */
-#nav-spine {
-  position: absolute;
-  left: 20px;
-  top: 8%;
-  bottom: 8%;
-  width: 20px;
-  pointer-events: all;
-  opacity: 0;
 
-  /* 1px hairline center line */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#nav-spine::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 1px;
-  background: var(--grey);
-  transform: translateX(-50%);
-}
-
-/* Nav dots */
-.n-dot {
-  position: absolute;
-  left: 50%;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  border: 1px solid var(--grey);
-  background: transparent;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
-  pointer-events: all;
-}
-
-.n-dot:hover {
-  transform: translate(-50%, -50%) scale(1.6);
-  border-color: var(--ink-dim);
-}
-
-.n-dot.active {
-  background: var(--red);
-  border-color: var(--red);
-  transform: translate(-50%, -50%) scale(1.5);
-}
 
 
 /* ═══════════════════════════════════════════════
