@@ -179,37 +179,27 @@ gsap.to('#vat-big',       { opacity: 1, duration: 2.0, delay: 0.3, ease: 'power1
 
 
 /* ═══════════════════════════════════════════════
-   SCENE 2 — Phase A (auto-play): 20→0%, 1973→2026
-   Triggered once on first scroll into scene 2.
-   Plays automatically — no further scrolling needed.
+   PHASE A — Auto-play on page load: 20→0%
+   Starts 1s after the page opens. No scrolling needed.
 ═══════════════════════════════════════════════ */
-let countPlayed = false;
-
-ScrollTrigger.create({
-  trigger: '#s2',
-  start: 'top 90%',   // fires as soon as scene 2 peeks into view
-  onEnter() {
-    if (countPlayed) return;
-    countPlayed = true;
-
-    const proxy = { vat: 20 };
-    gsap.to(proxy, {
-      vat: 0,
-      delay: 1.0,
-      duration: 2.4,
-      ease: 'power1.inOut',
-      onUpdate() {
-        const v = Math.round(proxy.vat);
-        vatBigNum.textContent = v;
-        vatNum.textContent    = v;
-      },
-      onComplete() {
-        vatBigNum.textContent = 0;
-        vatNum.textContent    = 0;
-      }
-    });
-  }
-});
+(function startCountdown() {
+  const proxy = { vat: 20 };
+  gsap.to(proxy, {
+    vat: 0,
+    delay: 1.0,
+    duration: 2.4,
+    ease: 'power1.inOut',
+    onUpdate() {
+      const v = Math.round(proxy.vat);
+      vatBigNum.textContent = v;
+      vatNum.textContent    = v;
+    },
+    onComplete() {
+      vatBigNum.textContent = 0;
+      vatNum.textContent    = 0;
+    }
+  });
+})();
 
 /* ═══════════════════════════════════════════════
    SCENE 2 — Phase B (scrubbed): title fades, 0% shrinks to fixed label
