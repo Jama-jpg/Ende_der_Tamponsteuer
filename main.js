@@ -77,13 +77,13 @@ function sectorPath(cx, cy, r, startAngle, endAngle) {
 
 /* 9 period dots on center axis */
 (function buildPeriodDots() {
-  const ys = [85, 130, 175, 220, 265, 310, 355, 400, 445];
+  const ys = [75, 117, 160, 203, 246, 289, 333, 376, 465];
   ys.forEach((y, i) => {
     const c = makeSvgEl('circle', {
-      cx: 500, cy: y, r: 4,
-      fill:   i === 0 ? '#A0A097' : 'none',
-      stroke: '#D0D0C7',
-      'stroke-width': '0.8'
+      cx: 500, cy: y, r: 5.5,
+      fill:   'white',
+      stroke: '#1a1a1a',
+      'stroke-width': '1'
     });
     periodDots.appendChild(c);
   });
@@ -234,7 +234,7 @@ function playS2toS3Transition() {
     .to('#period-dots', { opacity: 1, duration: 0.01 }, 0.32)
     .call(() => {
       const dot0 = periodDots.querySelector('circle:first-child');
-      if (dot0) gsap.to(dot0, { attr: { fill: '#D63335' }, duration: 0.4, ease: 'power1.out' });
+      if (dot0) gsap.to(dot0, { attr: { fill: '#1a1a1a' }, duration: 0.4, ease: 'power1.out' });
     }, [], 0.32)
 
     /* Start glitch counter once transition settles */
