@@ -30,7 +30,6 @@ const vatBigNum = document.getElementById('vat-big-num');
 const vatFixed  = document.getElementById('vat-fixed');
 const vatNum    = document.getElementById('vat-num');
 const yearLbl   = document.getElementById('lbl-year');
-const navSpine  = document.getElementById('nav-spine');
 
 const cAxis     = document.getElementById('c-axis');
 const cOutline  = document.getElementById('c-outline');
@@ -81,7 +80,7 @@ function sectorPath(cx, cy, r, startAngle, endAngle) {
   const ys = [85, 130, 175, 220, 265, 310, 355, 400, 445];
   ys.forEach((y, i) => {
     const c = makeSvgEl('circle', {
-      cx: 415, cy: y, r: 4,
+      cx: 500, cy: y, r: 4,
       fill:   i === 0 ? '#A0A097' : 'none',
       stroke: '#D0D0C7',
       'stroke-width': '0.8'
@@ -163,44 +162,7 @@ function setFinalCounters() {
 }
 
 
-/* ───────────────────────────────────────────────
-   LEFT NAV SPINE — create dots + click handlers
-─────────────────────────────────────────────── */
-const dotEls = [];
-(function buildSpine() {
-  const scenes = document.querySelectorAll('.scene');
-  scenes.forEach((scene, i) => {
-    const pct = 5 + i * (90 / 12); // distribute 5%–95%
-    const dot = document.createElement('div');
-    dot.className  = 'n-dot';
-    dot.style.top  = pct + '%';
-    dot.dataset.i  = i;
-    dot.addEventListener('click', () => {
-      gsap.to(window, {
-        scrollTo: { y: '#s' + (i + 1), offsetY: 0 },
-        duration: 1.4,
-        ease: 'power2.inOut'
-      });
-    });
-    navSpine.appendChild(dot);
-    dotEls.push(dot);
-  });
-})();
 
-function setActiveDot(i) {
-  dotEls.forEach((d, j) => d.classList.toggle('active', j === i));
-}
-
-/* Activate dots on scroll */
-document.querySelectorAll('.scene').forEach((scene, i) => {
-  ScrollTrigger.create({
-    trigger: scene,
-    start: 'top 50%',
-    end:   'bottom 50%',
-    onEnter:     () => setActiveDot(i),
-    onEnterBack: () => setActiveDot(i)
-  });
-});
 
 
 /* ───────────────────────────────────────────────
@@ -220,10 +182,14 @@ gsap.to('#lbl-von, #lbl-zu', { opacity: 0.45, duration: 0.6, delay: 0.5 });
 gsap.to('#scene-title',       { opacity: 1,    duration: 0.8, delay: 0.4, ease: 'power1.out' });
 gsap.to('#vat-big',           { opacity: 1,    duration: 1.0, delay: 0.7, ease: 'power1.out' });
 
+/* Nav spine was removed — no dot activation needed */
+
 
 /* ═══════════════════════════════════════════════
    SCENE 2 — The Shift: 20% → 0%
-   Year glitch fires on scroll update
+   Count happens immediately on first scroll.
+   Title stays visible during count.
+   Only further scrolling shrinks 0% to small fixed label.
 ═══════════════════════════════════════════════ */
 const tl2 = gsap.timeline({
   scrollTrigger: {
@@ -244,13 +210,21 @@ const tl2 = gsap.timeline({
   }
 });
 
-/* VAT counter object (drives both big + fixed) */
+/*
+  TIMING LAYOUT (scrub 0.0 – 1.0):
+  0.00–0.28  →  count 20→0% (fast, while title still fully visible)
+  0.22–0.42  →  title + corner labels fade out
+  0.42–0.72  →  vat-big shrinks to nothing
+  0.68–0.88  →  vat-fixed fades in
+*/
+
 const vatProxy = { val: 20 };
 tl2
+  /* COUNT 20 → 0% — starts immediately, finishes at 28% of scroll */
   .to(vatProxy, {
     val: 0,
-    ease: 'power1.inOut',
-    duration: 1,
+    ease: 'power1.out',
+    duration: 0.28,
     onUpdate() {
       const v = Math.round(vatProxy.val);
       vatBigNum.textContent = v;
@@ -258,21 +232,23 @@ tl2
     }
   }, 0)
 
-  /* Scene-title fades first */
-  .to('#scene-title', { opacity: 0, y: -20, duration: 0.22, ease: 'power2.in' }, 0)
-  .to('#lbl-1973, #lbl-good-news, #lbl-von, #lbl-zu', { opacity: 0, duration: 0.18 }, 0)
-  .to('#lbl-year', { opacity: 1, duration: 0.2 }, 0.08)
+  /* Year label brightens slightly during count */
+  .to('#lbl-year', { opacity: 1, duration: 0.2 }, 0.06)
 
-  /* vat-big shrinks toward bottom center (where vat-fixed lives) */
+  /* TITLE + CORNER LABELS fade out — starts at 22% (after count is mostly done) */
+  .to('#scene-title', { opacity: 0, y: -18, duration: 0.22, ease: 'power2.in' }, 0.22)
+  .to('#lbl-1973, #lbl-good-news, #lbl-von, #lbl-zu', { opacity: 0, duration: 0.20 }, 0.22)
+
+  /* VAT-BIG SHRINKS — starts at 42%, finishes at 72% */
   .to('#vat-big', {
-    scale: 0.05,
+    scale: 0.04,
     opacity: 0,
     ease: 'power2.inOut',
-    duration: 0.45
-  }, 0.45)
+    duration: 0.30
+  }, 0.42)
 
-  /* vat-fixed fades in as big disappears */
-  .to('#vat-fixed', { opacity: 1, duration: 0.22 }, 0.78);
+  /* VAT-FIXED fades in as big disappears */
+  .to('#vat-fixed', { opacity: 1, duration: 0.20 }, 0.68);
 
 
 /* ═══════════════════════════════════════════════
@@ -307,9 +283,6 @@ const tl3 = gsap.timeline({
 });
 
 tl3
-  /* Nav spine fades in */
-  .to('#nav-spine', { opacity: 1, duration: 0.18 }, 0)
-
   /* Center axis draws top → bottom */
   .to(cAxis, { opacity: 1, strokeDashoffset: 0, duration: 0.4, ease: 'power2.inOut' }, 0.05)
 
