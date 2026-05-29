@@ -170,20 +170,11 @@ body {
   overflow: visible;
 }
 
-
-/* ─── Fixed small VAT label (Scene 3+) ─────── */
-#vat-fixed {
-  position: absolute;
-  bottom: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--f-serif);
-  font-size: clamp(12px, 1.1vw, 16px);
-  letter-spacing: 0.05em;
-  color: var(--ink);
+/* The "MwST." part of the VAT label — taken out of flow until Chapter 2, so
+   the "20%"/"0%" stays perfectly centered during the intro. */
+#vat-big-tax {
+  display: none;
   opacity: 0;
-  white-space: nowrap;
-  will-change: opacity, transform;
 }
 
 
@@ -258,6 +249,5 @@ body {
 
   #lbl-good-news { font-size: 9px; }
   #lbl-year      { font-size: 10px; right: 14px; }
-  #vat-fixed     { font-size: 11px; }
   #lbl-von, #lbl-zu { display: none; }
 }

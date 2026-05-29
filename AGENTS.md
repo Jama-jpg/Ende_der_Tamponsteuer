@@ -63,12 +63,12 @@ export default {
 | `ctx.stage.refs` | All persistent stage element handles (see below). |
 | `ctx.helpers` | `makeSvgEl`, `polarToCartesian`, `sectorPath` from [src/core/svg.js](src/core/svg.js). |
 | `ctx.constants` | Geometry + palette from [src/core/constants.js](src/core/constants.js). |
-| `ctx.controllers` | `{ glitch, wave, pulse }` — cross-scene animation controllers (see below). |
+| `ctx.controllers` | `{ wave, pulse }` — cross-scene animation controllers (see below). |
 | `ctx.shared` | A mutable bag for cross-scene handles. e.g. `pie-26` publishes `ctx.shared.pie = { enter, leave }` and `jeden-monat` calls `shared.pie.leave()`. |
 
 ### `ctx.stage.refs`
 
-UI: `sceneTitle`, `lblGoodNews`, `vatBigEl`, `vatBigNum`, `vatFixed`, `vatNum`, `yearLbl`.
+UI: `sceneTitle`, `lblGoodNews`, `vatBigEl`, `vatBigNum`, `vatBigTax`, `yearLbl`.
 SVG shapes: `cAxis`, `cOutline`, `cSpinner`, `cFill`, `pieBg`, `pieHl`, `pieTxt`,
 `mCircles`, `mRect`, `rRect`, `linesGrp`, `periodDots`, `lblXxxx`, `lblPeriode`.
 Liquid: `liquidBg`, `liquidWavePath`, `liqStream`, `liqFill`.
@@ -79,9 +79,13 @@ Layout anchors: `scroller`, `overlays`.
 
 | Controller | Methods | Used by |
 | --- | --- | --- |
-| `glitch` | `start()`, `stop()`, `setFinal()` | Started in `countdown` (Scene 3), locked in `payoff-7-years` (s13). |
 | `wave` | `start()`, `stop()` | Liquid background; started in `countdown`'s entrance, stopped when the countdown completes. |
 | `pulse` | `start()`, `stop()` | Breathing circle; toggled by a ScrollTrigger in `blob-pulse` (s4 exit → s6 exit). |
+
+**VAT label / year:** In the intro the big number counts `20→0%` and the year counts
+`1973→2026`; both then stay static (no glitch controller). The big number shrinks to
+become the bottom label, and at the start of Chapter 2 (`circle-fill`, s4) the `#vat-big-tax`
+("MwST.") fades in beside it → "0% MwST.".
 
 ## The Chapter contract
 

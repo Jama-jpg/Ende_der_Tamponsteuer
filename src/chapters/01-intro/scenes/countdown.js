@@ -9,9 +9,10 @@ export default {
   id: 's1',
   height: '220vh',
 
-  init({ gsap, stage, controllers }) {
+  init({ gsap, stage, controllers, constants }) {
     const r = stage.refs;
-    const { wave, glitch } = controllers;
+    const { wave } = controllers;
+    const { VAT_SHRINK } = constants;
 
     /* Lock scrolling until the S2→S3 transition completes */
     document.body.style.overflow = 'hidden';
@@ -36,7 +37,7 @@ export default {
       const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' } });
       tl
         .to(r.sceneTitle, { opacity: 0, y: -16, duration: 0.5, ease: 'power2.in' }, 0)
-        .to(r.vatBigEl,   { scale: 0.056, duration: 0.9, ease: 'power3.inOut' }, 0.1)
+        .to(r.vatBigEl,   { scale: VAT_SHRINK, duration: 0.9, ease: 'power3.inOut' }, 0.1)
         .to(r.lblGoodNews,{ opacity: 0, duration: 0.25, ease: 'power1.in' }, 0.3)
         .call(() => { r.lblGoodNews.textContent = 'DIE  PERIODE'; }, [], 0.56)
         .to(r.lblGoodNews,{ opacity: 1, duration: 0.3, ease: 'power1.out' }, 0.57)
@@ -46,11 +47,12 @@ export default {
           const dot0 = r.periodDots.querySelector('circle:first-child');
           if (dot0) gsap.to(dot0, { attr: { fill: '#1a1a1a' }, duration: 0.4, ease: 'power1.out' });
         }, [], 0.32)
-        .call(unlockScroll,   [], 1.45)
-        .call(glitch.start,   [], 1.5);
+        .call(unlockScroll, [], 1.45);
     }
 
-    /* ── Auto-play countdown: 20→0% over 4.2s, liquid drains in step ── */
+    /* ── Auto-play countdown: 20→0% and 1973→2026 over 4.2s, liquid drains
+       in step. Both land on their final value and stay static — no glitch.
+       The bottom shows just "0%"; the "MwST." part is added at chapter 2. ── */
     const proxy = { vat: 20, yr: 1973 };
     gsap.to(proxy, {
       vat: 0,
@@ -59,15 +61,12 @@ export default {
       duration: 4.2,
       ease: 'power1.inOut',
       onUpdate() {
-        const v = Math.round(proxy.vat);
-        r.vatBigNum.textContent = v;
-        r.vatNum.textContent    = v;
+        r.vatBigNum.textContent = Math.round(proxy.vat);
         r.yearLbl.textContent   = Math.round(proxy.yr);
         r.liquidBg.style.height = proxy.vat + 'vh';
       },
       onComplete() {
         r.vatBigNum.textContent = 0;
-        r.vatNum.textContent    = 0;
         r.yearLbl.textContent   = 2026;
         r.liquidBg.style.height = '0vh';
         wave.stop();

@@ -15,7 +15,6 @@ import { chapters } from './registry.js';
 import { buildStage } from './stage/index.js';
 import * as helpers from './core/svg.js';
 import * as constants from './core/constants.js';
-import { createGlitch } from './core/glitch.js';
 import { createWave } from './core/wave.js';
 import { createPulse } from './core/pulse.js';
 
@@ -56,7 +55,6 @@ scenes.forEach((scene, i) => {
 
 /* 4 ─ Build the shared context and run every scene's init */
 const controllers = {
-  glitch: createGlitch(refs),
   wave:   createWave(refs),
   pulse:  createPulse({ gsap, cFill: refs.cFill }),
 };

@@ -52,7 +52,6 @@ src/
   core/
     constants.js            Palette + SVG geometry (CX/CY, radii, month/dot positions)
     svg.js                  makeSvgEl, polarToCartesian, sectorPath
-    glitch.js               VAT/year scramble counter controller
     wave.js                 Liquid wave background controller
     pulse.js                Breathing circle pulse controller
   stage/

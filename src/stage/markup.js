@@ -20,8 +20,9 @@ export const stageMarkup = /* html */ `
       <div class="t-italic">TAMPONSTEUER</div>
     </div>
 
-    <div id="vat-big"><span id="vat-big-num">20</span>%</div>
-    <div id="vat-fixed"><span id="vat-num">20</span>% MwST.</div>
+    <!-- The big VAT number drains 20→0%, shrinks to the bottom, then at the
+         start of chapter 2 the "MwST." part fades in → "0% MwST." -->
+    <div id="vat-big"><span id="vat-big-num">20</span>%<span id="vat-big-tax">&nbsp;MwST.</span></div>
   </div>
 
   <!-- LIQUID BACKGROUND (Scenes 1–2) — drains as VAT counts 20→0 -->

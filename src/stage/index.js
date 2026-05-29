@@ -23,8 +23,7 @@ export function buildStage(mount, gsap) {
     lblGoodNews:$('lbl-good-news'),
     vatBigEl:  $('vat-big'),
     vatBigNum: $('vat-big-num'),
-    vatFixed:  $('vat-fixed'),
-    vatNum:    $('vat-num'),
+    vatBigTax: $('vat-big-tax'),
     yearLbl:   $('lbl-year'),
 
     /* SVG canvas — shapes */
@@ -93,7 +92,7 @@ export function buildStage(mount, gsap) {
   gsap.set([
     refs.cAxis, refs.cOutline, refs.cSpinner, refs.cFill, refs.pieBg, refs.pieHl,
     refs.pieTxt, refs.periodDots, refs.mCircles, refs.mRect, refs.rRect,
-    refs.linesGrp, refs.liqFill, refs.liqStream, refs.vatFixed,
+    refs.linesGrp, refs.liqFill, refs.liqStream, refs.vatBigTax,
   ], { opacity: 0 });
   gsap.set(refs.cAxis,   { strokeDashoffset: 468 });
   gsap.set(refs.cSpinner,{ strokeDashoffset: 565.5 });
