@@ -134,3 +134,8 @@ array is the scroll order within the chapter.
   from scroll-restoration races on reload.
 - The intro (Scenes 1–2) is **time-driven, not scroll-driven**: scrolling is locked until the
   countdown + S2→S3 transition complete, then `unlockScroll` snaps to `#s3`.
+- The S2→S3 transition (in `countdown.js`) also **builds up the first circle (`cOutline`), the
+  left text (`#st3`) and the period dots** alongside the spine, and reveals the `#scroll-hint`
+  (down arrow) that `unlockScroll` fades out on the first scroll. Because of this, **s3
+  (`period-axis`) is a pure spacer** — adding a scrubbed reveal there would reset those elements
+  to `opacity:0` when the page lands at `#s3`.

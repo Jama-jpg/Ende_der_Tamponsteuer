@@ -25,6 +25,7 @@ export function buildStage(mount, gsap) {
     vatBigNum: $('vat-big-num'),
     vatBigTax: $('vat-big-tax'),
     yearLbl:   $('lbl-year'),
+    scrollHint:$('scroll-hint'),
 
     /* SVG canvas — shapes */
     cAxis:     $('c-axis'),

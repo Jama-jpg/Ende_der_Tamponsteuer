@@ -27,7 +27,17 @@ export default {
     function unlockScroll() {
       document.body.style.overflow = '';
       const s3 = document.getElementById('s3');
-      if (s3) window.scrollTo(0, s3.offsetTop);
+      const base = s3 ? s3.offsetTop : 0;
+      if (s3) window.scrollTo(0, base);
+
+      /* Hide the scroll hint the moment the reader actually scrolls. */
+      const hideHint = () => {
+        if (window.scrollY > base + 30) {
+          gsap.to(r.scrollHint, { opacity: 0, duration: 0.4, ease: 'power1.out' });
+          window.removeEventListener('scroll', hideHint);
+        }
+      };
+      window.addEventListener('scroll', hideHint, { passive: true });
     }
 
     /* ── Page-load entrance (staggered fades) ── */
@@ -58,7 +68,12 @@ export default {
         /* The moment the 0% has finished shrinking, "MwST." fades in to its
            right (absolutely positioned, so it never shifts the centered 0%). */
         .to(r.vatBigTax, { opacity: 1, duration: 0.4, ease: 'power1.out' }, 1.0)
-        .call(unlockScroll, [], 1.45);
+        /* …and the first circle + left text build up alongside the spine. */
+        .to(r.cOutline, { opacity: 1, duration: 0.7, ease: 'power1.out' }, 0.9)
+        .to('#st3',     { opacity: 1, duration: 0.7, ease: 'power1.out' }, 1.1)
+        /* Once everything has settled, prompt the reader to scroll. */
+        .to(r.scrollHint, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 1.6)
+        .call(unlockScroll, [], 1.6);
     }
 
     /* ── Auto-play countdown: 20→0% and 1973→2026 over 4.2s, liquid drains

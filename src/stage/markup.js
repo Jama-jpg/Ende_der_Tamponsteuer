@@ -24,6 +24,16 @@ export const stageMarkup = /* html */ `
          "0%" (the core) stays centered under the spine; "MwST." is absolutely
          positioned to its right (smaller), so it never shifts the number. -->
     <div id="vat-big"><span id="vat-big-core"><span id="vat-big-num">20</span>%<span id="vat-big-tax">MwST.</span></span></div>
+
+    <!-- Scroll hint — fades in once the intro build-up settles, fades out
+         again on the first scroll (driven by countdown.js). -->
+    <div id="scroll-hint" aria-hidden="true">
+      <span class="sh-label">SCROLLEN</span>
+      <svg class="sh-arrow" viewBox="0 0 24 24" width="22" height="22" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 4 V19 M5 12.5 L12 19.5 L19 12.5"/>
+      </svg>
+    </div>
   </div>
 
   <!-- LIQUID BACKGROUND (Scenes 1–2) — drains as VAT counts 20→0 -->
