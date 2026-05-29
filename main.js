@@ -73,7 +73,7 @@ const SVG_NS    = 'http://www.w3.org/2000/svg';
 ─────────────────────────────────────────────── */
 gsap.set([cAxis, cOutline, cSpinner, cFill, pieBg, pieHl, pieTxt,
           periodDots, mCircles, mRect, rRect, linesGrp, liqFill, liqStream,
-          '#st3','#st5','#st8','#st10','#st12','#st13',
+          '#st3','#st5','#st7','#st8','#st10','#st12','#st13',
           '#vat-fixed'], { opacity: 0 });
 gsap.set(cAxis, { strokeDashoffset: 468 });
 gsap.set(cSpinner, { strokeDashoffset: 565.5 });
@@ -455,7 +455,8 @@ tl6
 
 
 /* ═══════════════════════════════════════════════
-   SCENE 7 — Organic → Pie Chart (26% / 74%)
+   SCENE 7 — Hover-activated 26% pie chart
+   Circle stays; pie sweeps in on mouseenter
 ═══════════════════════════════════════════════ */
 const tl7 = gsap.timeline({
   scrollTrigger: {
@@ -465,21 +466,55 @@ const tl7 = gsap.timeline({
     scrub:   1.5
   }
 });
+/* tl7 scroll: circle stays visible, no automatic pie animation */
 
-tl7
-  /* Filled circle fades out */
-  .to(cFill, { opacity: 0, duration: 0.18 }, 0.22)
+/* Hover interaction ─────────────────────────── */
+const pieProxy = { angle: 0 };
+let pieEnterTween = null;
+let pieLeaveTween = null;
 
-  /* Pie chart arcs appear */
-  .to(pieBg, { opacity: 1, duration: 0.22 }, 0.30)
-  .to(pieHl, { opacity: 1, duration: 0.22 }, 0.42)
+function onCircleEnter() {
+  if (pieLeaveTween) { pieLeaveTween.kill(); pieLeaveTween = null; }
+  gsap.set(pieHl, { opacity: 1 });
+  pieEnterTween = gsap.to(pieProxy, {
+    angle: 93.6,
+    duration: 0.9,
+    ease: 'power2.inOut',
+    onUpdate() {
+      pieHl.setAttribute('d', sectorPath(CX, CY, PIE_R, 0, pieProxy.angle));
+    }
+  });
+  gsap.to('#st7', { opacity: 1, duration: 0.4, ease: 'power1.out' });
+}
 
-  /* Pie text fades in */
-  .to(pieTxt, { opacity: 1, duration: 0.25 }, 0.58);
+function onCircleLeave() {
+  if (pieEnterTween) { pieEnterTween.kill(); pieEnterTween = null; }
+  gsap.to('#st7', { opacity: 0, duration: 0.3 });
+  pieLeaveTween = gsap.to(pieProxy, {
+    angle: 0,
+    duration: 0.6,
+    ease: 'power2.in',
+    onUpdate() {
+      pieHl.setAttribute('d', sectorPath(CX, CY, PIE_R, 0, pieProxy.angle));
+    },
+    onComplete() { gsap.set(pieHl, { opacity: 0 }); }
+  });
+}
+
+cFill.addEventListener('mouseenter', onCircleEnter);
+cFill.addEventListener('mouseleave', onCircleLeave);
+
+/* Reset hover state when scrolling away from Scene 7 */
+ScrollTrigger.create({
+  trigger: '#s7',
+  start:   'bottom bottom',
+  onLeave:     onCircleLeave,
+  onLeaveBack: onCircleLeave
+});
 
 
 /* ═══════════════════════════════════════════════
-   SCENE 8 — Pie Collapses → Solid Circle Returns
+   SCENE 8 — Solid Circle (hover state cleaned up)
 ═══════════════════════════════════════════════ */
 const tl8 = gsap.timeline({
   scrollTrigger: {
@@ -491,16 +526,11 @@ const tl8 = gsap.timeline({
 });
 
 tl8
-  /* Pie fades out */
-  .to([pieBg, pieHl, pieTxt], { opacity: 0, duration: 0.28 }, 0)
+  /* Ensure hover-pie is hidden when entering Scene 8 */
+  .call(() => onCircleLeave(), [], 0)
 
-  /* Solid circle returns (still at r=220) */
-  .to(cFill, {
-    opacity: 1,
-    attr: { r: PIE_R },
-    duration: 0.25,
-    ease: 'power1.out'
-  }, 0.25)
+  /* Solid circle stays at full size */
+  .to(cFill, { opacity: 1, attr: { r: PIE_R }, duration: 0.25, ease: 'power1.out' }, 0.25)
 
   /* "JEDEN MONAT" text */
   .to('#st8', { opacity: 1, duration: 0.25 }, 0.48);
