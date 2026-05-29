@@ -1,26 +1,36 @@
 /* ═══════════════════════════════════════════════════════════════════
    SPINE SCROLL INDICATOR
-   Turns the central axis into the page's scrollbar: a red fill + thumb
-   track overall scroll progress through the whole story, and the spine
-   can be clicked / dragged to seek. The native scrollbar is hidden in
-   base.css. Interaction is disabled while the intro locks scrolling.
+   Turns the central axis into the page's scrollbar: a red fill grows down
+   the spine and the period dots fill in as it passes them, both tracking
+   overall scroll progress through the whole story. The spine can be
+   clicked / dragged to seek. The native scrollbar is hidden in base.css.
+   Interaction is disabled while the intro locks scrolling.
 ═══════════════════════════════════════════════════════════════════ */
 
 /* Spine endpoints in #main-svg viewBox coords (match #c-axis y1/y2). */
 const Y_TOP = 42;
 const Y_BOT = 510;
 
+const FILLED = '#A9A99F';
+const EMPTY  = 'white';
+
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 
 export function createSpine({ ScrollTrigger, refs }) {
-  const { cAxisProgress, spineThumb, spineHit } = refs;
-  if (!cAxisProgress || !spineThumb || !spineHit) return;
+  const { cAxisProgress, spineHit, periodDots } = refs;
+  if (!cAxisProgress || !spineHit) return;
 
-  /* Position the fill + thumb for a 0→1 scroll progress. */
+  /* The period dots become the scrollbar's "ticks". */
+  const dots = periodDots ? Array.from(periodDots.children) : [];
+
+  /* Grow the red fill down the spine and fill every dot it has passed. */
   function render(progress) {
     const y = Y_TOP + (Y_BOT - Y_TOP) * clamp01(progress);
     cAxisProgress.setAttribute('y2', y);
-    spineThumb.setAttribute('cy', y);
+    for (const dot of dots) {
+      const dy = parseFloat(dot.getAttribute('cy'));
+      dot.setAttribute('fill', dy <= y + 0.5 ? FILLED : EMPTY);
+    }
   }
 
   /* Drive the indicator from overall page scroll. */

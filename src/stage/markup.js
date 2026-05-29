@@ -52,8 +52,8 @@ export const stageMarkup = /* html */ `
     </defs>
 
     <!-- Center vertical axis (draws in Scene 3) -->
-    <line id="c-axis" x1="500" y1="42" x2="500" y2="510" stroke="#1a1a1a"
-          stroke-width="1" stroke-dasharray="468" stroke-dashoffset="468" opacity="0"/>
+    <line id="c-axis" x1="500" y1="42" x2="500" y2="510" stroke="#C9C9C0"
+          stroke-width="2" stroke-dasharray="468" stroke-dashoffset="468" opacity="0"/>
 
     <text id="lbl-periode" x="500" y="11" text-anchor="middle" class="svg-mono"
           font-size="9" fill="#1a1a1a" letter-spacing="2" opacity="0">DIE PERIODE</text>
@@ -104,13 +104,13 @@ export const stageMarkup = /* html */ `
     <g id="lines" opacity="0"></g>
 
     <!-- ── SPINE SCROLL INDICATOR ──────────────────────────────────────
-         The central axis doubles as the page scrollbar: a red fill + thumb
-         track overall scroll progress, and an invisible hit-area lets you
+         The central axis doubles as the page scrollbar: a red fill grows
+         down the spine and the period dots fill in as it passes them, both
+         tracking overall scroll progress. An invisible hit-area lets you
          click / drag the spine to seek. Driven by core/spine.js; the native
-         scrollbar is hidden in base.css. Drawn last so the thumb stays on top. -->
+         scrollbar is hidden in base.css. -->
     <line id="c-axis-progress" x1="500" y1="42" x2="500" y2="42"
-          stroke="#D63335" stroke-width="2" stroke-linecap="round" opacity="0"/>
-    <circle id="spine-thumb" cx="500" cy="42" r="4.5" fill="#D63335" opacity="0"/>
+          stroke="#A9A99F" stroke-width="5" stroke-linecap="round" opacity="0"/>
     <rect id="spine-hit" x="486" y="42" width="28" height="468" fill="transparent"/>
   </svg>
 
