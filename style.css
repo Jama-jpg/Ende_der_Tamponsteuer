@@ -200,7 +200,7 @@ body {
 .stext {
   position: fixed;
   left: 0;
-  width: 50%;
+  width: 40%;
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
