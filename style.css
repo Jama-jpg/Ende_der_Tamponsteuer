@@ -249,7 +249,6 @@ body {
   }
 
   .stext {
-    left: 4%;
     max-width: 260px;
   }
 
@@ -282,9 +281,8 @@ body {
   }
 
   .stext {
-    left: 5%;
     top: 55%;
-    max-width: 200px;
+    max-width: 44vw;
   }
 
   .stext .sl { font-size: clamp(7px, 2vw, 10px); }

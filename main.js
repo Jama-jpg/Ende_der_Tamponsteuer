@@ -405,11 +405,40 @@ tl5
 /* ═══════════════════════════════════════════════
    SCENE 6 — Organic Blob (SVG filter displacement)
 ═══════════════════════════════════════════════ */
-const feDisp  = document.getElementById('fe-disp');
-const feTurb  = document.getElementById('fe-turb');
+/* Looping pulse animation — independent of scroll, uses scale to avoid r conflicts */
+let circlePulse = null;
 
-/* Apply the blob filter to the filled circle */
-gsap.set(cFill, { attr: { filter: 'url(#blob-filter)' } });
+function startCirclePulse() {
+  if (circlePulse) return;
+  circlePulse = gsap.to(cFill, {
+    scale: 1.07,
+    transformOrigin: '50% 50%',
+    ease: 'sine.inOut',
+    duration: 1.4,
+    yoyo: true,
+    repeat: -1
+  });
+}
+
+function stopCirclePulse() {
+  if (circlePulse) {
+    circlePulse.kill();
+    circlePulse = null;
+    gsap.set(cFill, { scale: 1, transformOrigin: '50% 50%' });
+  }
+}
+
+/* Start pulse as soon as circle is filled (s4 exit), stop when s6 exits */
+ScrollTrigger.create({
+  trigger: '#s4',
+  start:   'bottom bottom',
+  endTrigger: '#s6',
+  end:     'bottom bottom',
+  onEnter:     () => startCirclePulse(),
+  onEnterBack: () => startCirclePulse(),
+  onLeave:     () => stopCirclePulse(),
+  onLeaveBack: () => stopCirclePulse()
+});
 
 const tl6 = gsap.timeline({
   scrollTrigger: {
@@ -421,27 +450,6 @@ const tl6 = gsap.timeline({
 });
 
 tl6
-  /* Turbulence frequency shifts (more fluid, less rigid) */
-  .to(feTurb, {
-    attr: { baseFrequency: '0.028' },
-    ease: 'sine.inOut',
-    duration: 0.5
-  }, 0)
-
-  /* Displacement grows → blob forms */
-  .to(feDisp, {
-    attr: { scale: 30 },
-    ease: 'power2.inOut',
-    duration: 0.55
-  }, 0.0)
-
-  /* Breathing pullback — slight inhale */
-  .to(feDisp, {
-    attr: { scale: 22 },
-    ease: 'sine.inOut',
-    duration: 0.35
-  }, 0.58)
-
   /* st5 text fades out */
   .to('#st5', { opacity: 0, duration: 0.18 }, 0.0);
 
@@ -459,23 +467,8 @@ const tl7 = gsap.timeline({
 });
 
 tl7
-  /* Filter dissolves — circle resolves */
-  .to(feDisp, {
-    attr: { scale: 0 },
-    ease: 'power2.out',
-    duration: 0.35
-  }, 0)
-  .to(feTurb, {
-    attr: { baseFrequency: '0.035' },
-    ease: 'sine.out',
-    duration: 0.35
-  }, 0)
-
   /* Filled circle fades out */
   .to(cFill, { opacity: 0, duration: 0.18 }, 0.22)
-
-  /* Remove filter attribute once invisible */
-  .call(() => { gsap.set(cFill, { attr: { filter: 'none' } }); }, [], 0.42)
 
   /* Pie chart arcs appear */
   .to(pieBg, { opacity: 1, duration: 0.22 }, 0.30)
