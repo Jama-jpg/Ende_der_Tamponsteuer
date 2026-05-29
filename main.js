@@ -25,7 +25,7 @@ function unlockScroll() {
    CONSTANTS & PALETTE
 ─────────────────────────────────────────────── */
 const PALETTE   = ['#D63335', '#531416', '#F07E7D', '#F4DEDB', '#D0D0C7'];
-const CX        = 800;
+const CX        = 775;
 const CY        = 281;
 const R_SMALL   = 90;
 const PIE_R     = 198;
@@ -33,7 +33,7 @@ const CIRC      = 2 * Math.PI * R_SMALL;   // spinner circumference
 
 /* Scene 9: 12 month-circle Y positions (spread across vertical axis) */
 const MC_Y = [70, 108, 147, 185, 223, 261, 300, 338, 376, 415, 454, 492];
-const MC_X = 800;
+const MC_X = 775;
 const MC_R = 15;
 
 
@@ -173,7 +173,7 @@ const lineEls = [];
     const y = yMin + (yMax - yMin) * (i / (totalLines - 1));
     const color = PALETTE[i % PALETTE.length];
     const ln = makeSvgEl('line', {
-      x1: 745, y1: y, x2: 755, y2: y,
+      x1: 720, y1: y, x2: 730, y2: y,
       stroke: color,
       'stroke-width': '0.9'
     });
@@ -597,14 +597,14 @@ const tl11 = gsap.timeline({
 tl11
   /* Rect expands from thin column to wide rectangle */
   .to(mRect, {
-    attr: { x: 675, width: 150 },
+    attr: { x: 650, width: 150 },
     ease: 'power2.inOut',
     duration: 0.7
   }, 0)
 
   /* Keep r-rect (highlight segment) synced position for later */
   .to(rRect, {
-    attr: { x: 675, width: 150 },
+    attr: { x: 650, width: 150 },
     ease: 'power2.inOut',
     duration: 0.7
   }, 0);

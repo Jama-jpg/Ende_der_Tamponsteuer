@@ -2,7 +2,7 @@
    CSS CUSTOM PROPERTIES
 ═══════════════════════════════════════════════ */
 :root {
-  --bg:       #FAFAFA;
+  --bg:       rgb(248, 248, 246);
   --red:      #D63335;
   --burgundy: #531416;
   --coral:    #F07E7D;
@@ -200,7 +200,7 @@ body {
 .stext {
   position: fixed;
   left: 0;
-  width: 40%;
+  width: 47%;
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
