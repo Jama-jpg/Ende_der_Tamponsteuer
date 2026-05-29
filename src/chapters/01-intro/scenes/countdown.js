@@ -68,9 +68,10 @@ export default {
         /* The moment the 0% has finished shrinking, "MwST." fades in to its
            right (absolutely positioned, so it never shifts the centered 0%). */
         .to(r.vatBigTax, { opacity: 1, duration: 0.4, ease: 'power1.out' }, 1.0)
-        /* …and the first circle + left text build up alongside the spine. */
+        /* …and the first circle builds up alongside the spine. The left text
+           is held back — it fades in only once the reader starts scrolling
+           (see period-axis.js). */
         .to(r.cOutline, { opacity: 1, duration: 0.7, ease: 'power1.out' }, 0.9)
-        .to('#st3',     { opacity: 1, duration: 0.7, ease: 'power1.out' }, 1.1)
         /* Once everything has settled, prompt the reader to scroll. */
         .to(r.scrollHint, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 1.6)
         .call(unlockScroll, [], 1.6);

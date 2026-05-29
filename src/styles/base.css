@@ -132,31 +132,36 @@ body {
 }
 
 
-/* ─── Scroll hint (down arrow) ─────────────── */
+/* ─── Scroll hint (down arrow) ───────────────
+   Centered in the left half (where the text will appear), clear of the
+   centered VAT number. */
 #scroll-hint {
-  position: absolute;
-  bottom: 26px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
+  left: 0;
+  width: 50%;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
   color: var(--ink-dim);
   font-family: var(--f-mono);
-  font-size: clamp(9px, 0.85vw, 12px);
-  letter-spacing: 0.22em;
+  font-size: clamp(12px, 1.15vw, 16px);
+  letter-spacing: 0.25em;
   opacity: 0;            /* revealed by the intro build-up */
   pointer-events: none;
 }
 
 #scroll-hint .sh-arrow {
+  width: clamp(30px, 2.6vw, 40px);
+  height: clamp(30px, 2.6vw, 40px);
   animation: sh-bounce 1.6s ease-in-out infinite;
 }
 
 @keyframes sh-bounce {
   0%, 100% { transform: translateY(0);   opacity: 0.55; }
-  50%      { transform: translateY(7px); opacity: 1; }
+  50%      { transform: translateY(8px); opacity: 1; }
 }
 
 
