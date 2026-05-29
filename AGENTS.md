@@ -64,7 +64,7 @@ export default {
 | `ctx.helpers` | `makeSvgEl`, `polarToCartesian`, `sectorPath` from [src/core/svg.js](src/core/svg.js). |
 | `ctx.constants` | Geometry + palette from [src/core/constants.js](src/core/constants.js). |
 | `ctx.controllers` | `{ wave, pulse }` — cross-scene animation controllers (see below). |
-| `ctx.shared` | A mutable bag for cross-scene handles. e.g. `pie-26` publishes `ctx.shared.pie = { enter, leave }` and `jeden-monat` calls `shared.pie.leave()`. |
+| `ctx.shared` | A mutable bag for cross-scene handles. e.g. `countdown` publishes `ctx.shared.vatScale` for the s13 pulse to reuse. |
 
 ### `ctx.stage.refs`
 
@@ -80,7 +80,7 @@ Layout anchors: `scroller`, `overlays`.
 | Controller | Methods | Used by |
 | --- | --- | --- |
 | `wave` | `start()`, `stop()` | Liquid background; started in `countdown`'s entrance, stopped when the countdown completes. |
-| `pulse` | `start()`, `stop()` | Breathing circle; toggled by a ScrollTrigger in `blob-pulse` (s4 exit → s6 exit). |
+| `pulse` | `start()`, `stop()` | Breathing scale on the filled circle **and the pie highlight together** (concentric, around `CX CY`); toggled by a ScrollTrigger in `blob-pulse` (s4 exit → s7 exit), so the circle keeps breathing through the pie scene. |
 
 **Spine = scrollbar:** [src/core/spine.js](src/core/spine.js) (`createSpine`, wired once in
 `main.js`) turns the central axis into the page scrollbar. A red fill (`#c-axis-progress`, revealed

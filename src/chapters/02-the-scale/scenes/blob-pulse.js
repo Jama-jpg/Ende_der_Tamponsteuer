@@ -1,32 +1,28 @@
 /* ═══════════════════════════════════════════════
    SCENE — Blob pulse (s6)
-   Hooks the looping circle pulse (active from s4 exit until s6 exit) and
-   fades out the "1,9 Milliarden" text.
+   Hooks the looping circle pulse (active from s4 exit until s7 exit, so the
+   circle keeps breathing through the pie scene). The "1,9 Milliarden" text is
+   owned by the pie hover logic (see pie-26.js), so it stays on screen here.
 ═══════════════════════════════════════════════ */
 
 export default {
   id: 's6',
   height: '200vh',
 
-  init({ gsap, ScrollTrigger, controllers }) {
+  init({ ScrollTrigger, controllers }) {
     const { pulse } = controllers;
 
-    /* Pulse runs while the big circle is on screen (s4 exit → s6 exit). */
+    /* Pulse runs while the big circle is on screen (s4 exit → s7 exit),
+       so it keeps breathing through the pie scene. */
     ScrollTrigger.create({
       trigger:    '#s4',
       start:      'bottom bottom',
-      endTrigger: '#s6',
+      endTrigger: '#s7',
       end:        'bottom bottom',
       onEnter:     pulse.start,
       onEnterBack: pulse.start,
       onLeave:     pulse.stop,
       onLeaveBack: pulse.stop,
     });
-
-    const tl = gsap.timeline({
-      scrollTrigger: { trigger: '#s6', start: 'top top', end: 'bottom bottom', scrub: 1.5 },
-    });
-
-    tl.to('#st5', { opacity: 0, duration: 0.18 }, 0.0);
   },
 };

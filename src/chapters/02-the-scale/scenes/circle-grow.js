@@ -1,7 +1,8 @@
 /* ═══════════════════════════════════════════════
    SCENE — Circle grows (s5)
-   The filled circle expands (r 90 → 198) and the "1,9 Milliarden" text
-   fades in. Scene 3 text is cleared on first scroll.
+   The filled circle expands (r 90 → 198). Scene 3 text is cleared on first
+   scroll. The "1,9 Milliarden" text (#st5) is shown/hidden by the pie hover
+   logic (see pie-26.js), which switches on the instant the circle is full.
 ═══════════════════════════════════════════════ */
 import { PIE_R } from '../../../core/constants.js';
 
@@ -25,7 +26,6 @@ export default {
     tl
       .to('#st3', { opacity: 0, duration: 0.2 }, 0)
       .to({}, { duration: 0.28 }, 0.02) // hold fully filled before growth
-      .to(cFill, { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.62 }, 0.30)
-      .to('#st5', { opacity: 1, duration: 0.25 }, 0.72);
+      .to(cFill, { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.62 }, 0.30);
   },
 };

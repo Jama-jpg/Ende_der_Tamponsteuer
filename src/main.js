@@ -57,7 +57,11 @@ scenes.forEach((scene, i) => {
 /* 4 ─ Build the shared context and run every scene's init */
 const controllers = {
   wave:   createWave(refs),
-  pulse:  createPulse({ gsap, cFill: refs.cFill }),
+  pulse:  createPulse({
+    gsap,
+    targets: [refs.cFill, refs.pieHl],
+    origin:  `${constants.CX} ${constants.CY}`,
+  }),
 };
 
 const ctx = {

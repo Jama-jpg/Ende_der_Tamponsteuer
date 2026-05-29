@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════
    SCENE — Jeden Monat (s8)
-   The hover-pie is cleaned up, the solid circle holds at full size, and
-   the "Jeden Monat" text fades in.
+   The solid circle holds at full size and the "Jeden Monat" text fades in.
+   (The pie hover + its text are torn down by pie-26.js when s7 is left.)
 ═══════════════════════════════════════════════ */
 import { PIE_R } from '../../../core/constants.js';
 
@@ -14,7 +14,7 @@ export default {
            <p class="sh">JEDEN MONAT</p>`,
   },
 
-  init({ gsap, stage, shared }) {
+  init({ gsap, stage }) {
     const { cFill } = stage.refs;
 
     const tl = gsap.timeline({
@@ -22,7 +22,6 @@ export default {
     });
 
     tl
-      .call(() => shared.pie?.leave(), [], 0)
       .to(cFill, { opacity: 1, attr: { r: PIE_R }, duration: 0.25, ease: 'power1.out' }, 0.25)
       .to('#st8', { opacity: 1, duration: 0.25 }, 0.48);
   },
