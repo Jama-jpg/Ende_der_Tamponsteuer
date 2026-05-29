@@ -84,8 +84,8 @@ Layout anchors: `scroller`, `overlays`.
 
 **VAT label / year:** In the intro the big number counts `20→0%` and the year counts
 `1973→2026`; both then stay static (no glitch controller). The big number shrinks to
-become the bottom label, and at the start of Chapter 2 (`circle-fill`, s4) the `#vat-big-tax`
-("MwST.") fades in beside it → "0% MwST.".
+become the bottom label, and the instant the shrink finishes (still in the intro autoplay,
+no scroll needed) the `#vat-big-tax` ("MwST.") animates in beside it → "0% MwST.".
 
 ## The Chapter contract
 

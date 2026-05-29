@@ -15,9 +15,10 @@ export default {
            <p class="sl">MENSTRUATION. DURCHGEHEND.</p>`,
   },
 
-  init({ gsap, stage, constants }) {
+  init({ gsap, stage, shared }) {
     const r = stage.refs;
-    const { VAT_SHRINK } = constants;
+    /* Same shrink scale the intro computed, so the pulse stays on-size. */
+    const base = shared.vatScale ?? 0.056;
 
     const tl = gsap.timeline({
       scrollTrigger: { trigger: '#s13', start: 'top top', end: 'bottom bottom', scrub: 1.5 },
@@ -36,7 +37,7 @@ export default {
       .to(r.linesGrp, { opacity: 0, duration: 0.08 }, 0.62)
       .to(r.rRect,    { opacity: 1, duration: 0.28, ease: 'power1.out' }, 0.52)
       .to('#st13',    { opacity: 1, duration: 0.25 }, 0.65)
-      .to(r.vatBigEl, { scale: VAT_SHRINK * 1.45, color: '#D63335', duration: 0.1, ease: 'power2.out' }, 0.76)
-      .to(r.vatBigEl, { scale: VAT_SHRINK, color: '#1a1a1a', duration: 0.12, ease: 'power2.in' }, 0.87);
+      .to(r.vatBigEl, { scale: base * 1.45, color: '#D63335', duration: 0.1, ease: 'power2.out' }, 0.76)
+      .to(r.vatBigEl, { scale: base, color: '#1a1a1a', duration: 0.12, ease: 'power2.in' }, 0.87);
   },
 };

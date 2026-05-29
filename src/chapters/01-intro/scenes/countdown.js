@@ -9,10 +9,17 @@ export default {
   id: 's1',
   height: '220vh',
 
-  init({ gsap, stage, controllers, constants }) {
+  init({ gsap, stage, controllers, shared }) {
     const r = stage.refs;
     const { wave } = controllers;
-    const { VAT_SHRINK } = constants;
+
+    /* Shrink the big VAT number so the "0%" lands at twice the year-label size;
+       "MwST." (0.5em) then renders at the year size. Derived from rendered px,
+       and shared so the s13 pulse uses the same base scale. */
+    const vatScale =
+      (parseFloat(getComputedStyle(r.yearLbl).fontSize) /
+       parseFloat(getComputedStyle(r.vatBigEl).fontSize)) * 2;
+    shared.vatScale = vatScale;
 
     /* Lock scrolling until the S2→S3 transition completes */
     document.body.style.overflow = 'hidden';
@@ -37,7 +44,7 @@ export default {
       const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' } });
       tl
         .to(r.sceneTitle, { opacity: 0, y: -16, duration: 0.5, ease: 'power2.in' }, 0)
-        .to(r.vatBigEl,   { scale: VAT_SHRINK, duration: 0.9, ease: 'power3.inOut' }, 0.1)
+        .to(r.vatBigEl,   { scale: vatScale, duration: 0.9, ease: 'power3.inOut' }, 0.1)
         .to(r.lblGoodNews,{ opacity: 0, duration: 0.25, ease: 'power1.in' }, 0.3)
         .call(() => { r.lblGoodNews.textContent = 'DIE  PERIODE'; }, [], 0.56)
         .to(r.lblGoodNews,{ opacity: 1, duration: 0.3, ease: 'power1.out' }, 0.57)
@@ -47,6 +54,9 @@ export default {
           const dot0 = r.periodDots.querySelector('circle:first-child');
           if (dot0) gsap.to(dot0, { attr: { fill: '#1a1a1a' }, duration: 0.4, ease: 'power1.out' });
         }, [], 0.32)
+        /* The moment the 0% has finished shrinking, "MwST." fades in to its
+           right (absolutely positioned, so it never shifts the centered 0%). */
+        .to(r.vatBigTax, { opacity: 1, duration: 0.4, ease: 'power1.out' }, 1.0)
         .call(unlockScroll, [], 1.45);
     }
 

@@ -170,10 +170,22 @@ body {
   overflow: visible;
 }
 
-/* The "MwST." part of the VAT label — taken out of flow until Chapter 2, so
-   the "20%"/"0%" stays perfectly centered during the intro. */
+/* "0%" core — centered under the spine; its width drives the centering. */
+#vat-big-core {
+  position: relative;
+  display: inline-block;
+}
+
+/* "MwST." — absolutely positioned to the right of the number so it never
+   shifts the centered "0%". Half the number's size (→ year-label size after
+   the shrink). Hidden until it fades in at the end of the intro. */
 #vat-big-tax {
-  display: none;
+  position: absolute;
+  left: calc(100% + 0.2em);
+  bottom: 0;
+  font-size: 0.5em;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
   opacity: 0;
 }
 

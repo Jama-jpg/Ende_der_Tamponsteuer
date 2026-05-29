@@ -12,9 +12,6 @@ export const R_SMALL = 90;
 export const PIE_R   = 198;
 export const CIRC    = 2 * Math.PI * R_SMALL; // spinner stroke circumference
 
-/* Intro: scale the big VAT number shrinks to as it becomes the bottom label */
-export const VAT_SHRINK = 0.056;
-
 /* Scene 9: 12 month-circle Y positions (spread across vertical axis) */
 export const MC_Y = [70, 108, 147, 185, 223, 261, 300, 338, 376, 415, 454, 492];
 export const MC_X = 775;
