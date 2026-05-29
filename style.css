@@ -199,14 +199,15 @@ body {
 ═══════════════════════════════════════════════ */
 .stext {
   position: fixed;
-  left: 25%;
+  left: 0;
+  width: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
   text-align: center;
+  padding: 0 24px;
   opacity: 0;
   pointer-events: none;
   z-index: 50;
-  max-width: 320px;
 }
 
 .stext .sl {
@@ -249,7 +250,7 @@ body {
   }
 
   .stext {
-    max-width: 260px;
+    padding: 0 16px;
   }
 
   .stext .sl { font-size: clamp(8px, 1vw, 11px); }
@@ -282,7 +283,7 @@ body {
 
   .stext {
     top: 55%;
-    max-width: 44vw;
+    padding: 0 12px;
   }
 
   .stext .sl { font-size: clamp(7px, 2vw, 10px); }
