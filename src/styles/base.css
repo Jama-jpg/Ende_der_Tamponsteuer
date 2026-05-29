@@ -28,7 +28,12 @@
 html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
+
+  /* Hide the native scrollbar — the spine is the scrollbar (see core/spine.js) */
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* old Edge / IE */
 }
+html::-webkit-scrollbar { width: 0; height: 0; display: none; } /* WebKit */
 
 body {
   background: var(--bg);
@@ -61,6 +66,12 @@ body {
 }
 
 #c-fill {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+/* The spine's invisible click/drag target (#main-svg is pointer-events:none) */
+#spine-hit {
   pointer-events: all;
   cursor: pointer;
 }

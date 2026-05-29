@@ -82,6 +82,12 @@ Layout anchors: `scroller`, `overlays`.
 | `wave` | `start()`, `stop()` | Liquid background; started in `countdown`'s entrance, stopped when the countdown completes. |
 | `pulse` | `start()`, `stop()` | Breathing circle; toggled by a ScrollTrigger in `blob-pulse` (s4 exit → s6 exit). |
 
+**Spine = scrollbar:** [src/core/spine.js](src/core/spine.js) (`createSpine`, wired once in
+`main.js`) turns the central axis into the page scrollbar. A red fill + thumb (`#c-axis-progress`,
+`#spine-thumb`, revealed with `#c-axis` in the intro) track overall scroll progress via a
+document-spanning ScrollTrigger, and an invisible `#spine-hit` rect lets you click/drag the spine
+to seek (ignored while the intro locks scrolling). The native scrollbar is hidden in `base.css`.
+
 **VAT label / year:** In the intro the big number counts `20→0%` and the year counts
 `1973→2026`; both then stay static (no glitch controller). The big number shrinks to
 become the bottom label, and the instant the shrink finishes (still in the intro autoplay,

@@ -17,6 +17,7 @@ import * as helpers from './core/svg.js';
 import * as constants from './core/constants.js';
 import { createWave } from './core/wave.js';
 import { createPulse } from './core/pulse.js';
+import { createSpine } from './core/spine.js';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -70,3 +71,6 @@ const ctx = {
 };
 
 scenes.forEach((scene) => scene.init?.(ctx));
+
+/* 5 ─ Wire the spine as the page scrollbar (overall scroll progress + seek) */
+createSpine({ ScrollTrigger, refs });

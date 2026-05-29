@@ -49,6 +49,7 @@ export default {
         .call(() => { r.lblGoodNews.textContent = 'DIE  PERIODE'; }, [], 0.56)
         .to(r.lblGoodNews,{ opacity: 1, duration: 0.3, ease: 'power1.out' }, 0.57)
         .to(r.cAxis,      { opacity: 1, strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' }, 0.3)
+        .to([r.cAxisProgress, r.spineThumb], { opacity: 1, duration: 0.8, ease: 'power1.out' }, 0.8)
         .to(r.periodDots, { opacity: 1, duration: 0.01 }, 0.32)
         .call(() => {
           const dot0 = r.periodDots.querySelector('circle:first-child');

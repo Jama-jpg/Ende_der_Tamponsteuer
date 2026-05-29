@@ -28,6 +28,9 @@ export function buildStage(mount, gsap) {
 
     /* SVG canvas — shapes */
     cAxis:     $('c-axis'),
+    cAxisProgress: $('c-axis-progress'),
+    spineThumb:    $('spine-thumb'),
+    spineHit:      $('spine-hit'),
     cOutline:  $('c-outline'),
     cSpinner:  $('c-spinner'),
     cFill:     $('c-fill'),
@@ -93,6 +96,7 @@ export function buildStage(mount, gsap) {
     refs.cAxis, refs.cOutline, refs.cSpinner, refs.cFill, refs.pieBg, refs.pieHl,
     refs.pieTxt, refs.periodDots, refs.mCircles, refs.mRect, refs.rRect,
     refs.linesGrp, refs.liqFill, refs.liqStream, refs.vatBigTax,
+    refs.cAxisProgress, refs.spineThumb,
   ], { opacity: 0 });
   gsap.set(refs.cAxis,   { strokeDashoffset: 468 });
   gsap.set(refs.cSpinner,{ strokeDashoffset: 565.5 });
