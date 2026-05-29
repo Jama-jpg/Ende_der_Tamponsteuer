@@ -1,0 +1,18 @@
+{
+  "name": "tamponsteuer-scrollytelling",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Modular GSAP scrollytelling — Österreichs Weg zur 0% Tamponsteuer",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

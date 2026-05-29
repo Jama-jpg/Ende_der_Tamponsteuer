@@ -66,15 +66,9 @@ body {
 }
 
 /* SVG text font classes */
-.svg-serif {
-  font-family: var(--f-serif);
-}
-.svg-mono {
-  font-family: var(--f-mono);
-}
-.svg-italic {
-  font-style: italic;
-}
+.svg-serif  { font-family: var(--f-serif); }
+.svg-mono   { font-family: var(--f-mono); }
+.svg-italic { font-style: italic; }
 
 
 /* ═══════════════════════════════════════════════
@@ -85,7 +79,6 @@ body {
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  /* No background — fully transparent overlay */
 }
 
 
@@ -126,8 +119,6 @@ body {
   color: var(--ink);
   font-size: clamp(12px, 1.1vw, 16px);
 }
-
-
 
 
 /* ─── Scene 1–2 Title Block ────────────────── */
@@ -196,41 +187,27 @@ body {
 }
 
 
-
-
-
 /* ═══════════════════════════════════════════════
-   SCENE TEXT OVERLAYS
+   LIQUID BACKGROUND (Scene 1–2)
 ═══════════════════════════════════════════════ */
-.stext {
+#liquid-bg {
   position: fixed;
+  bottom: 0;
   left: 0;
-  width: 47%;
-  top: 50%;
-  transform: translateY(-50%);
-  text-align: center;
-  padding: 0 24px;
-  opacity: 0;
+  width: 100%;
+  height: 20vh;
+  z-index: 5;
   pointer-events: none;
-  z-index: 50;
+  opacity: 0;
+  overflow: hidden;
 }
 
-.stext .sl {
-  font-family: var(--f-mono);
-  font-size: clamp(12px, 1.1vw, 16px);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  line-height: 1.3;
-  color: var(--ink);
-}
-
-.stext .sh {
-  font-family: var(--f-serif);
-  font-size: clamp(20px, 2.6vw, 38px);
-  letter-spacing: 0.02em;
-  line-height: 1.1;
-  color: var(--ink);
-  margin: 4px 0;
+#liquid-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 
@@ -253,13 +230,6 @@ body {
   #vat-big {
     font-size: min(78vw, 76vh);
   }
-
-  .stext {
-    padding: 0 16px;
-  }
-
-  .stext .sl { font-size: clamp(8px, 1vw, 11px); }
-  .stext .sh { font-size: clamp(18px, 3vw, 40px); }
 
   #lbl-von, #lbl-zu { display: none; }
 }
@@ -286,40 +256,8 @@ body {
     bottom: 0;
   }
 
-  .stext {
-    top: 55%;
-    padding: 0 12px;
-  }
-
-  .stext .sl { font-size: clamp(7px, 2vw, 10px); }
-  .stext .sh { font-size: clamp(14px, 5vw, 26px); }
-
   #lbl-good-news { font-size: 9px; }
   #lbl-year      { font-size: 10px; right: 14px; }
   #vat-fixed     { font-size: 11px; }
   #lbl-von, #lbl-zu { display: none; }
-}
-
-
-/* ═══════════════════════════════════════════════
-   LIQUID BACKGROUND (Scene 1–2)
-═══════════════════════════════════════════════ */
-#liquid-bg {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 20vh;
-  z-index: 5;
-  pointer-events: none;
-  opacity: 0;
-  overflow: hidden;
-}
-
-#liquid-svg {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
 }

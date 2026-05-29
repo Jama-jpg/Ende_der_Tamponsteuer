@@ -1,0 +1,50 @@
+/* ═══════════════════════════════════════════════
+   SCENE TEXT OVERLAYS
+   One .stext block per scene (injected by the engine into #overlays).
+═══════════════════════════════════════════════ */
+.stext {
+  position: fixed;
+  left: 0;
+  width: 47%;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  padding: 0 24px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.stext .sl {
+  font-family: var(--f-mono);
+  font-size: clamp(12px, 1.1vw, 16px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.stext .sh {
+  font-family: var(--f-serif);
+  font-size: clamp(20px, 2.6vw, 38px);
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 4px 0;
+}
+
+
+/* ─── Responsive — Tablet (≤ 1024px) ─────────── */
+@media (max-width: 1024px) {
+  .stext { padding: 0 16px; }
+  .stext .sl { font-size: clamp(8px, 1vw, 11px); }
+  .stext .sh { font-size: clamp(18px, 3vw, 40px); }
+}
+
+
+/* ─── Responsive — Mobile (≤ 600px) ──────────── */
+@media (max-width: 600px) {
+  .stext { top: 55%; padding: 0 12px; }
+  .stext .sl { font-size: clamp(7px, 2vw, 10px); }
+  .stext .sh { font-size: clamp(14px, 5vw, 26px); }
+}
