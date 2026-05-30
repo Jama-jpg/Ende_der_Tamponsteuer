@@ -30,8 +30,10 @@ export default {
       },
     });
 
-    /* Fade out "456 mal" text at the very start — before lines retract. */
-    tl.fromTo('#st-p3', { opacity: 1 }, { opacity: 0, duration: 0.10 }, 0.00);
+    /* Fade out "456 mal" text at the very start — before lines retract.
+       immediateRender:false so FROM is captured during actual play (opacity:1
+       from scene B), not at page-load time (when it would be 0). */
+    tl.to('#st-p3', { opacity: 0, duration: 0.10, immediateRender: false }, 0.00);
 
     /* 456 lines converge back toward the rect centre */
     tl

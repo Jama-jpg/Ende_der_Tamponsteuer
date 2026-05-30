@@ -30,8 +30,10 @@ export default {
       },
     });
 
-    /* Fade out previous text at the very start — before lines appear. */
-    tl.fromTo('#st-p2', { opacity: 1 }, { opacity: 0, duration: 0.10 }, 0.00);
+    /* Fade out previous text at the very start — before lines appear.
+       immediateRender:false so FROM is captured during actual play (opacity:1
+       from scene A), not at page-load time (when it would be 0). */
+    tl.to('#st-p2', { opacity: 0, duration: 0.10, immediateRender: false }, 0.00);
 
     /* 456 lines expand from rect centre (x≈720–730) to rect bounds (x≈650–800)
        — layered on top of the 38 year-dividers for a barcode effect */

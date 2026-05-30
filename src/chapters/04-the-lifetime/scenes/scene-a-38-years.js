@@ -50,10 +50,14 @@ export default {
 
     tl.set('#st-periode', { opacity: 1 }, 0);
     tl.set([lblPeriode, lblXxxx], { opacity: 1 }, 0);
+    /* Defensive reset: ensure no stale text state from previous scrub sessions. */
+    tl.set(['#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
 
     /* Phase A1 (0→0.22): 12 circles collapse → thin vertical rect */
     tl
-      .to('#st8', { opacity: 0, duration: 0.06, ease: 'power1.in' }, 0)
+      /* immediateRender:false so FROM is captured when the scrub actually plays
+         (with #st8 at opacity:1 from s8), not at page-load time (when it is 0). */
+      .to('#st8', { opacity: 0, duration: 0.06, ease: 'power1.in', immediateRender: false }, 0)
       .to(mcEls, {
         attr: { r: 0 },
         stagger: { each: 0.008, from: 'start' },
