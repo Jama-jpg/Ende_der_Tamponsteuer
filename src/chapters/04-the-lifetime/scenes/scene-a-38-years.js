@@ -54,8 +54,8 @@ export default {
     /* Defensive reset: ensure no stale text state from previous scrub sessions. */
     tl.set(['#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
 
-    /* Fade out "JEDEN MONAT" text as scene A begins scrolling. */
-    tl.to('#st8', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
+    /* Previous text out as scene A begins — explicit from/to so scrub-back works cleanly. */
+    tl.fromTo('#st8', { opacity: 1 }, { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
 
     /* Phase A1 (0→0.22): 12 circles collapse → thin vertical rect */
     tl

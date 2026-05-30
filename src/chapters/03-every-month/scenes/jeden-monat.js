@@ -50,7 +50,7 @@ export default {
            <p class="sh">JEDEN MONAT</p>`,
   },
 
-  init({ gsap, ScrollTrigger, stage }) {
+  init({ gsap, stage }) {
     const { cFill, mCircles, mcEls, gooeyBlur } = stage.refs;
 
     const backOut = gsap.parseEase(`back.out(${BOUNCE})`);
@@ -115,28 +115,5 @@ export default {
     /* Text stays visible until scene A scrolls it away. */
 
     render(0);
-
-    /* Euro counter attention pulse — fires once when Chapter 3 first enters view. */
-    ScrollTrigger.create({
-      trigger: '#s8',
-      start: 'top 80%',
-      once: true,
-      onEnter: () => {
-        gsap.timeline()
-          .to('#euro-counter', {
-            color: '#D63335',
-            scale: 1.7,
-            duration: 0.35,
-            ease: 'power2.out',
-            transformOrigin: 'left top',
-          })
-          .to('#euro-counter', {
-            color: '#1a1a1a',
-            scale: 1,
-            duration: 0.55,
-            ease: 'power2.inOut',
-          });
-      },
-    });
   },
 };

@@ -28,4 +28,22 @@ export function createEuroCounter({ gsap, ScrollTrigger }) {
       numEl.textContent = fmt(counter.value);
     },
   });
+
+  /* Attention pulse — fires once when the counter reaches its final value
+     (same scroll position as the counting end: 72% of s8 at viewport bottom).
+     The counter flashes red and grows, then returns to normal. */
+  ScrollTrigger.create({
+    trigger:    '#s8',
+    start:      '72% bottom',
+    once:       true,
+    onEnter: () => {
+      gsap.timeline()
+        .fromTo('#euro-counter',
+          { color: '#1a1a1a', scale: 1 },
+          { color: '#D63335', scale: 2.0, duration: 0.4, ease: 'power2.out',
+            transformOrigin: 'left top' })
+        .to('#euro-counter',
+          { color: '#1a1a1a', scale: 1, duration: 0.6, ease: 'power2.inOut' });
+    },
+  });
 }
