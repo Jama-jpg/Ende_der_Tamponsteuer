@@ -10,7 +10,7 @@
 
 export default {
   id: 's7',
-  height: '150vh',
+  noSection: true,  // hover overlay only — no scroll spacer, no snap points
   overlay: {
     id: 'st7',
     html: `<p class="sl">DAS SIND</p>
@@ -102,8 +102,8 @@ export default {
     ScrollTrigger.create({
       trigger:     '#s5',
       start:       'top top',
-      endTrigger:  '#s7',
-      end:         'bottom bottom',
+      endTrigger:  '#s8',
+      end:         'top top',
       onEnter:     () => { inRange = true; },
       onEnterBack: () => { inRange = true; },
       onLeave:     () => { inRange = false; setActive(false); },

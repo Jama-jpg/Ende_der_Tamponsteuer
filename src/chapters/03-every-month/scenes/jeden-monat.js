@@ -1,8 +1,8 @@
 /* ═══════════════════════════════════════════════
    SCENE — Jeden Monat → 12 circles (s8)
-   "Jeden Monat" lands over the full red circle, then — in one continuous
-   scrub — the single mass splits into twelve month circles like a drop of
-   viscous liquid tearing apart.
+   "Jeden Monat" and the split happen simultaneously on the first scroll:
+   text swaps and the single mass tears into twelve month circles like a
+   drop of viscous liquid.
 
    The split is driven procedurally (ScrollTrigger.onUpdate) instead of a fixed
    keyframe tween, so we can model real liquid behaviour:
@@ -24,7 +24,7 @@
 import { CX, CY, MC_X, MC_Y, MC_R } from '../../../core/constants.js';
 
 /* ── Split physics tuning ───────────────────────────────────────────── */
-const HOLD       = 0.32;  // scrub fraction the full circle holds before splitting
+const HOLD       = 0.0;   // no hold — split starts immediately on first scroll
 const PH1        = 0.40;  // end of "plastic stretch" (mass kept, barely shrinks)
 const PH2        = 0.72;  // end of "necking" (organic waves + thin threads)
 const R_START    = 90;    // matches the big red circle (#c-fill r)
@@ -43,6 +43,7 @@ const lerp  = (a, b, t) => a + (b - a) * t;
 export default {
   id: 's8',
   height: '220vh',
+  skipSnapStart: true,
   overlay: {
     id: 'st8',
     html: `<p class="sl">UND DAS</p>
@@ -101,12 +102,12 @@ export default {
     });
 
     tl
-      /* "Jeden Monat" lands while the big circle is still pulsing … */
-      .to('#st8', { opacity: 1, duration: 0.14, ease: 'power1.out' }, 0.04)
-      /* … after the hold, the gooey mass crossfades in and the disc fades out … */
-      .set(mCircles, { opacity: 1 }, HOLD)
-      .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.08, ease: 'power1.out' }, HOLD + 0.01)
-      /* … then it stretches, necks and tears into 12 drops (see render()). */
+      /* Text and split start together on the very first scroll tick. */
+      .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0)
+      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0)
+      /* Gooey mass appears and the big disc fades out simultaneously. */
+      .set(mCircles, { opacity: 1 }, 0.01)
+      .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.08, ease: 'power1.out' }, 0.01)
       /* Text clears before the next scene. */
       .to('#st8', { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0.92);
 

@@ -39,12 +39,16 @@ const scroller = refs.scroller;
 const overlays = refs.overlays;
 
 scenes.forEach((scene, i) => {
-  const section = document.createElement('section');
-  section.id = scene.id;
-  section.className = 'scene';
-  section.dataset.scene = String(i + 1);
-  section.style.height = scene.height || '100vh';
-  scroller.appendChild(section);
+  /* noSection scenes contribute an overlay but no scroll-spacer section,
+     so they add zero snap points while their init() and overlay still run. */
+  if (!scene.noSection) {
+    const section = document.createElement('section');
+    section.id = scene.id;
+    section.className = 'scene';
+    section.dataset.scene = String(i + 1);
+    section.style.height = scene.height || '100vh';
+    scroller.appendChild(section);
+  }
 
   if (scene.overlay) {
     const ov = document.createElement('div');
