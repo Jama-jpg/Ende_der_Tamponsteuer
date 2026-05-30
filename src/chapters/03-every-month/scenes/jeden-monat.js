@@ -110,8 +110,10 @@ export default {
       /* Big circle pulses for the HOLD window, then month circles take over. */
       .set(mCircles, { opacity: 1 }, HOLD)
       .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.06, ease: 'power1.out' }, HOLD)
-      /* Text fades in right after circles are crisp (SPLIT_END=0.65) — within lock window. */
-      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.68);
+      /* Text fades in right after circles are crisp (SPLIT_END=0.65). */
+      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.68)
+      /* Fade out at the end so scene A starts with a clean slate — scene owns its text. */
+      .to('#st8', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.88);
 
     render(0);
   },

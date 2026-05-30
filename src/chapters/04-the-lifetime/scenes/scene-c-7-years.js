@@ -1,10 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE C — 456 lines retract → 31 years fade → 7-year payoff text
    Enters from scene-b's end state: rect + 38 dividers + 456 barcode
-   lines + "INSGESAMT 456 mal" text.
+   lines (st-p3 already gone, faded out at end of scene B).
 
    Timeline (0 → 1 over 300vh):
-     0.00–0.10  "456 mal" text fades out first (no overlap with animation)
      0.12–0.30  456 lines converge back to rect centre (from random)
      0.32–0.42  456-lines group fades out; 38 dividers remain visible
      0.42–0.62  Light-pink rRect overlay fades in over bottom 31 years
@@ -29,11 +28,6 @@ export default {
         scrub: 2,
       },
     });
-
-    /* Fade out "456 mal" text at the very start — before lines retract.
-       immediateRender:false so FROM is captured during actual play (opacity:1
-       from scene B), not at page-load time (when it would be 0). */
-    tl.to('#st-p3', { opacity: 0, duration: 0.10, immediateRender: false }, 0.00);
 
     /* 456 lines converge back toward the rect centre */
     tl

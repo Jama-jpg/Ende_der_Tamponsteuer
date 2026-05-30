@@ -7,7 +7,9 @@
      0.22–0.47  Phase A2: rect widens to full 38-year span
      0.48–0.66  Phase A3: 38 year-divider lines radiate across rect
      0.70–0.82  Phase A4: "FÜR 38 JAHRE" text fades in
-     0.82–1.00  Hold — user sees the rect + dividers + label before next scroll
+     0.82–0.90  Hold — user reads the label
+     0.90–0.98  Phase A5: "FÜR 38 JAHRE" text fades out (scene owns its own text)
+     0.98–1.00  Hold — clean slate for scene B
 ═══════════════════════════════════════════════════════════════════ */
 
 export default {
@@ -55,9 +57,6 @@ export default {
 
     /* Phase A1 (0→0.22): 12 circles collapse → thin vertical rect */
     tl
-      /* immediateRender:false so FROM is captured when the scrub actually plays
-         (with #st8 at opacity:1 from s8), not at page-load time (when it is 0). */
-      .to('#st8', { opacity: 0, duration: 0.06, ease: 'power1.in', immediateRender: false }, 0)
       .to(mcEls, {
         attr: { r: 0 },
         stagger: { each: 0.008, from: 'start' },
@@ -88,5 +87,9 @@ export default {
     /* Phase A4 (0.70→0.82): "FÜR 38 JAHRE" text fades in */
     tl
       .to('#st-p2', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.70);
+
+    /* Phase A5 (0.90→0.98): fade out before scene B starts — scene owns its text */
+    tl
+      .to('#st-p2', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.90);
   },
 };
