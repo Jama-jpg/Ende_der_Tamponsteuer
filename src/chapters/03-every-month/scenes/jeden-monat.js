@@ -24,7 +24,7 @@
 import { CX, CY, MC_X, MC_Y, MC_R } from '../../../core/constants.js';
 
 /* ── Split physics tuning ───────────────────────────────────────────── */
-const HOLD       = 0.18;  // scrub fraction the full circle holds before splitting
+const HOLD       = 0.32;  // scrub fraction the full circle holds before splitting
 const PH1        = 0.40;  // end of "plastic stretch" (mass kept, barely shrinks)
 const PH2        = 0.72;  // end of "necking" (organic waves + thin threads)
 const R_START    = 90;    // matches the big red circle (#c-fill r)
@@ -101,11 +101,11 @@ export default {
     });
 
     tl
-      /* "Jeden Monat" lands first, almost immediately on entering … */
-      .to('#st8', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.04)
-      /* … the gooey mass (12 stacked circles) crossfades in under the disc … */
-      .set(mCircles, { opacity: 1 }, 0.14)
-      .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.08, ease: 'power1.out' }, 0.15)
+      /* "Jeden Monat" lands while the big circle is still pulsing … */
+      .to('#st8', { opacity: 1, duration: 0.14, ease: 'power1.out' }, 0.04)
+      /* … after the hold, the gooey mass crossfades in and the disc fades out … */
+      .set(mCircles, { opacity: 1 }, HOLD)
+      .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.08, ease: 'power1.out' }, HOLD + 0.01)
       /* … then it stretches, necks and tears into 12 drops (see render()). */
       /* Text clears before the next scene. */
       .to('#st8', { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0.92);

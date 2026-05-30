@@ -31,12 +31,12 @@ export default {
       .to(cFill, { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.62 }, 0.30)
       .to('#st5', { opacity: 1, duration: 0.4, ease: 'power1.out' }, 0.40);
 
-    /* Pulse runs while the big circle is on screen (s4 exit → s7 exit). */
+    /* Pulse runs while the big circle is on screen (s4 exit → s8 mid). */
     ScrollTrigger.create({
       trigger:    '#s4',
       start:      'bottom bottom',
-      endTrigger: '#s7',
-      end:        'bottom bottom',
+      endTrigger: '#s8',
+      end:        'center bottom',
       onEnter:     pulse.start,
       onEnterBack: pulse.start,
       onLeave:     pulse.stop,

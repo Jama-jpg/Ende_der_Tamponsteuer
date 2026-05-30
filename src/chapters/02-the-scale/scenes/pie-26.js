@@ -10,7 +10,7 @@
 
 export default {
   id: 's7',
-  height: '250vh',
+  height: '150vh',
   overlay: {
     id: 'st7',
     html: `<p class="sl">DAS SIND</p>
