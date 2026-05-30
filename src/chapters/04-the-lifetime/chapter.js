@@ -1,13 +1,11 @@
-/* Chapter 4 — The Lifetime
-   The monthly periods accumulate across a lifetime: 38 years, 456 times,
-   adding up to 7 continuous years — and the VAT finally lands at 0%. */
-import rect38Years  from './scenes/rect-38-years.js';
-import rectWiden    from './scenes/rect-widen.js';
-import lines456     from './scenes/lines-456.js';
-import payoff7Years from './scenes/payoff-7-years.js';
+/* Chapter 4 — Die Periode (unified sequence)
+   The 12 month-circles collapse into a rect, which widens to 38 years,
+   divides into 456 months, then resolves to the 7-year total. All five
+   phases live in one 500vh sticky section driven by a single ScrollTrigger. */
+import periodeSequence from './scenes/periode-sequence.js';
 
 export default {
   id: 'lifetime',
-  title: 'The Lifetime',
-  scenes: [rect38Years, rectWiden, lines456, payoff7Years],
+  title: 'Die Periode',
+  scenes: [periodeSequence],
 };

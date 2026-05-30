@@ -8,7 +8,7 @@
 import { stageMarkup } from './markup.js';
 import { makeSvgEl, sectorPath } from '../core/svg.js';
 import {
-  PALETTE, CX, CY, PIE_R, MC_X, MC_R, MC_Y, DOT_YS, LINE_COUNT,
+  PALETTE, CX, CY, PIE_R, MC_X, MC_R, MC_Y, DOT_YS, LINE_COUNT, LINE_38_COUNT,
 } from '../core/constants.js';
 
 /* gsap — used only to apply the initial hidden state. */
@@ -42,6 +42,7 @@ export function buildStage(mount, gsap) {
     mRect:     $('m-rect'),
     rRect:     $('r-rect'),
     linesGrp:  $('lines'),
+    lines38Grp:$('lines-38'),
     periodDots:$('period-dots'),
     lblXxxx:   $('lbl-xxxx'),
     lblPeriode:$('lbl-periode'),
@@ -53,8 +54,9 @@ export function buildStage(mount, gsap) {
     liqFill:        $('liq-fill'),
 
     /* Procedurally generated collections (filled below) */
-    mcEls:   [],
-    lineEls: [],
+    mcEls:    [],
+    lineEls:  [],
+    line38Els:[],
 
     /* Layout anchors injected by the engine */
     scroller: $('scroller'),
@@ -79,7 +81,7 @@ export function buildStage(mount, gsap) {
   refs.pieBg.setAttribute('d', sectorPath(CX, CY, PIE_R, 93.6, 360));
   refs.pieHl.setAttribute('d', sectorPath(CX, CY, PIE_R, 0, 93.6));
 
-  /* 456 horizontal lines (x1/x2 expanded in Scene 12) */
+  /* 456 horizontal lines (x1/x2 expanded during Die Periode Phase 4) */
   const yMin = 70, yMax = 492;
   for (let i = 0; i < LINE_COUNT; i++) {
     const y = yMin + (yMax - yMin) * (i / (LINE_COUNT - 1));
@@ -91,12 +93,24 @@ export function buildStage(mount, gsap) {
     refs.lineEls.push(ln);
   }
 
+  /* 38 year-divider lines — span the rect width (x=650…800) during Die Periode Phase 3.
+     Start collapsed at the rect centre (x=725) so they radiate outward on reveal. */
+  for (let i = 0; i < LINE_38_COUNT; i++) {
+    const y = yMin + (yMax - yMin) * (i / (LINE_38_COUNT - 1));
+    const ln = makeSvgEl('line', {
+      x1: 725, y1: y, x2: 725, y2: y,
+      stroke: '#531416', 'stroke-width': '1.5',
+    });
+    refs.lines38Grp.appendChild(ln);
+    refs.line38Els.push(ln);
+  }
+
   /* Initial hidden state — prevents any flash from scroll-restoration races.
      (Per-scene text overlays are hidden by .stext { opacity:0 } in CSS.) */
   gsap.set([
     refs.cAxis, refs.cOutline, refs.cSpinner, refs.cFill, refs.pieBg, refs.pieHl,
     refs.pieTxt, refs.periodDots, refs.mCircles, refs.mRect, refs.rRect,
-    refs.linesGrp, refs.liqFill, refs.liqStream, refs.vatBigTax,
+    refs.linesGrp, refs.lines38Grp, refs.liqFill, refs.liqStream, refs.vatBigTax,
     refs.cAxisProgress,
   ], { opacity: 0 });
   gsap.set(refs.cAxis,   { strokeDashoffset: 468 });
