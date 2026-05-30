@@ -7,9 +7,9 @@
    like a dense barcode over the 38-year rectangle.
 
    Timeline (0 → 1 over 300vh):
-     0.00–0.08  "FÜR 38 JAHRE" fades out
-     0.12–0.55  456 lines expand from collapsed centre to rect width
-     0.60–0.78  "INSGESAMT 456 mal" text fades in
+     0.00–0.10  "FÜR 38 JAHRE" fades out first (no overlap with animation)
+     0.15–0.58  456 lines expand from collapsed centre to rect width
+     0.65–0.78  "INSGESAMT 456 mal" text fades in
      0.78–1.00  Hold
 ═══════════════════════════════════════════════════════════════════ */
 
@@ -30,13 +30,13 @@ export default {
       },
     });
 
-    /* Fade out previous text just before the new text fades in (at 0.60). */
-    tl.fromTo('#st-p2', { opacity: 1 }, { opacity: 0, duration: 0.08 }, 0.52);
+    /* Fade out previous text at the very start — before lines appear. */
+    tl.fromTo('#st-p2', { opacity: 1 }, { opacity: 0, duration: 0.10 }, 0.00);
 
     /* 456 lines expand from rect centre (x≈720–730) to rect bounds (x≈650–800)
        — layered on top of the 38 year-dividers for a barcode effect */
     tl
-      .to(linesGrp, { opacity: 1, duration: 0.04 }, 0.12)
+      .to(linesGrp, { opacity: 1, duration: 0.04 }, 0.15)
       .to(lineEls, {
         attr: () => ({
           x1: 650 + Math.random() * 3,
@@ -45,9 +45,9 @@ export default {
         stagger: { each: 0.0003, from: 'start' },
         ease: 'power2.out',
         duration: 0.38,
-      }, 0.16);
+      }, 0.19);
 
-    /* "INSGESAMT 456 mal" text */
-    tl.to('#st-p3', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.60);
+    /* "INSGESAMT 456 mal" text fades in after lines are fully built. */
+    tl.to('#st-p3', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.65);
   },
 };
