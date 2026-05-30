@@ -29,6 +29,9 @@ export default {
       },
     });
 
+    /* Fade out "456 mal" text as scene C begins scrolling. */
+    tl.to('#st-p3', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
+
     /* 456 lines converge back toward the rect centre */
     tl
       .to(lineEls, {

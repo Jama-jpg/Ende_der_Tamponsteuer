@@ -50,7 +50,7 @@ export default {
            <p class="sh">JEDEN MONAT</p>`,
   },
 
-  init({ gsap, stage }) {
+  init({ gsap, ScrollTrigger, stage }) {
     const { cFill, mCircles, mcEls, gooeyBlur } = stage.refs;
 
     const backOut = gsap.parseEase(`back.out(${BOUNCE})`);
@@ -111,10 +111,32 @@ export default {
       .set(mCircles, { opacity: 1 }, HOLD)
       .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.06, ease: 'power1.out' }, HOLD)
       /* Text fades in right after circles are crisp (SPLIT_END=0.65). */
-      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.68)
-      /* Fade out at the end so scene A starts with a clean slate — scene owns its text. */
-      .to('#st8', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.88);
+      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.68);
+    /* Text stays visible until scene A scrolls it away. */
 
     render(0);
+
+    /* Euro counter attention pulse — fires once when Chapter 3 first enters view. */
+    ScrollTrigger.create({
+      trigger: '#s8',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.timeline()
+          .to('#euro-counter', {
+            color: '#D63335',
+            scale: 1.7,
+            duration: 0.35,
+            ease: 'power2.out',
+            transformOrigin: 'left top',
+          })
+          .to('#euro-counter', {
+            color: '#1a1a1a',
+            scale: 1,
+            duration: 0.55,
+            ease: 'power2.inOut',
+          });
+      },
+    });
   },
 };

@@ -31,6 +31,9 @@ export default {
       },
     });
 
+    /* Fade out "38 JAHRE" text as scene B begins scrolling. */
+    tl.to('#st-p2', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
+
     /* 456 lines expand from rect centre (x≈720–730) to rect bounds (x≈650–800)
        — layered on top of the 38 year-dividers for a barcode effect */
     tl
@@ -48,7 +51,6 @@ export default {
     /* "INSGESAMT 456 mal" text fades in after lines are fully built. */
     tl.to('#st-p3', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.65);
 
-    /* Fade out before scene C starts — scene owns its own text. */
-    tl.to('#st-p3', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.88);
+    /* Text stays visible until scene C scrolls it away. */
   },
 };

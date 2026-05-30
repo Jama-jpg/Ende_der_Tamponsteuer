@@ -54,6 +54,9 @@ export default {
     /* Defensive reset: ensure no stale text state from previous scrub sessions. */
     tl.set(['#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
 
+    /* Fade out "JEDEN MONAT" text as scene A begins scrolling. */
+    tl.to('#st8', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
+
     /* Phase A1 (0→0.22): 12 circles collapse → thin vertical rect */
     tl
       .to(mcEls, {
@@ -87,8 +90,6 @@ export default {
     tl
       .to('#st-p2', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.70);
 
-    /* Phase A5 (0.90→0.98): fade out before scene B starts — scene owns its text */
-    tl
-      .to('#st-p2', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.90);
+    /* Phase A5: text stays visible until scene B scrolls it away. */
   },
 };
