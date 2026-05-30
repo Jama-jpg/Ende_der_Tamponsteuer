@@ -13,10 +13,10 @@ export function createEuroCounter({ gsap, ScrollTrigger }) {
   const fmt = (n) =>
     Math.round(n).toLocaleString('de-AT');
 
-  /* Fade in when Chapter 2 enters, fade out if scrolled back past it. */
+  /* Fade in when Chapter 2 is at top of viewport, fade out if scrolled back past it. */
   ScrollTrigger.create({
     trigger:      '#s4',
-    start:        'top bottom',
+    start:        'top top',
     onEnter:      () => gsap.to(container, { opacity: 1, duration: 0.5 }),
     onLeaveBack:  () => gsap.to(container, { opacity: 0, duration: 0.4 }),
   });

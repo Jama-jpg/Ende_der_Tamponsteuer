@@ -8,8 +8,16 @@ export default {
   height: '250vh',
   skipSnapStart: true,
 
-  init({ gsap, stage }) {
-    const { cSpinner, cFill, cOutline } = stage.refs;
+  init({ gsap, ScrollTrigger, stage }) {
+    const { cSpinner, cFill, cOutline, vatBigNum } = stage.refs;
+
+    /* Switch the VAT display from 0% → 20% MwST. when Chapter 2 is at the top. */
+    ScrollTrigger.create({
+      trigger:     '#s4',
+      start:       'top top',
+      onEnter:     () => { vatBigNum.textContent = '20'; },
+      onLeaveBack: () => { vatBigNum.textContent = '0'; },
+    });
 
     const tl = gsap.timeline({
       scrollTrigger: { trigger: '#s4', start: 'top top', end: 'bottom bottom', scrub: 1.5 },
