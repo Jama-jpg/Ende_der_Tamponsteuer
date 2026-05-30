@@ -52,7 +52,7 @@ export default {
       hovered = true;
       sweepIn();
       gsap.to('#st5', { opacity: 0, duration: 0.3, ease: 'power1.in' });
-      gsap.to('#st7', { opacity: 1, duration: 0.4, ease: 'power1.out' });
+      gsap.to('#st7', { opacity: 1, duration: 0.3, delay: 0.3, ease: 'power1.out' });
     }
 
     function leave() {
@@ -60,7 +60,7 @@ export default {
       hovered = false;
       sweepOut();
       gsap.to('#st7', { opacity: 0, duration: 0.3, ease: 'power1.in' });
-      gsap.to('#st5', { opacity: 1, duration: 0.4, ease: 'power1.out' });
+      gsap.to('#st5', { opacity: 1, duration: 0.3, delay: 0.3, ease: 'power1.out' });
     }
 
     r.cFill.addEventListener('mouseenter', enter);
