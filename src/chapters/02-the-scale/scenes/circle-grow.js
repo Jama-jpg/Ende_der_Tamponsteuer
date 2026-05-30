@@ -9,6 +9,7 @@ import { PIE_R } from '../../../core/constants.js';
 export default {
   id: 's5',
   height: '200vh',
+  skipSnapStart: true,
   overlay: {
     id: 'st5',
     html: `<p class="sl">WELTWEIT MENSTRUIEREN ÜBER</p>
@@ -27,7 +28,8 @@ export default {
     tl
       .to('#st3', { opacity: 0, duration: 0.2 }, 0)
       .to({}, { duration: 0.28 }, 0.02) // hold fully filled before growth
-      .to(cFill, { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.62 }, 0.30);
+      .to(cFill, { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.62 }, 0.30)
+      .to('#st5', { opacity: 1, duration: 0.4, ease: 'power1.out' }, 0.40);
 
     /* Pulse runs while the big circle is on screen (s4 exit → s7 exit). */
     ScrollTrigger.create({

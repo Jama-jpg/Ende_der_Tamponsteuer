@@ -28,21 +28,22 @@ const ACCUM_THRESHOLD = 40;  // px accumulated before triggering
 const ACCUM_RESET     = 200; // ms of wheel silence to reset the accumulator
 
 export function createSnap({ ScrollTrigger, gsap, scenes }) {
-  const ids = scenes.map((s) => s.id);
-
   /* Live scene-edge scroll positions, sorted top→bottom.
      Per scene: its start (offsetTop, scrub 0%) and its end (where the
      section's bottom meets the viewport bottom, scrub 100%) — matching the
      scenes' `top top → bottom bottom` scrub range. Rounded + de-duped, so a
-     100vh scene (start == end) collapses to one point. */
+     100vh scene (start == end) collapses to one point.
+     Scenes with skipSnapStart:true omit the start boundary so the snap jumps
+     directly to the animation's end — avoiding a dead rest point where nothing
+     changes visually. */
   function boundaries() {
     const vh = window.innerHeight;
     const pts = [];
-    for (const id of ids) {
-      const el = document.getElementById(id);
+    for (const scene of scenes) {
+      const el = document.getElementById(scene.id);
       if (!el) continue;
       const start = el.offsetTop;
-      pts.push(Math.round(start));
+      if (!scene.skipSnapStart) pts.push(Math.round(start));
       pts.push(Math.round(start + el.offsetHeight - vh)); // scrub end
     }
     return Array.from(new Set(pts)).sort((a, b) => a - b);

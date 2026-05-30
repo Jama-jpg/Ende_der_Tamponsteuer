@@ -72,9 +72,7 @@ export default {
       if (on === active) return;
       active = on;
       r.cFill.style.cursor = on ? 'pointer' : 'default';
-      if (on) {
-        gsap.to('#st5', { opacity: 1, duration: 0.3, ease: 'power1.out' });
-      } else {
+      if (!on) {
         hovered = false;
         sweepOut(); // retract the pie if it was open
         gsap.to(['#st5', '#st7'], { opacity: 0, duration: 0.3, ease: 'power1.in' });

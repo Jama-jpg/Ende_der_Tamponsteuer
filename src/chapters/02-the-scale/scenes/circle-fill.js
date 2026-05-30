@@ -6,6 +6,7 @@
 export default {
   id: 's4',
   height: '250vh',
+  skipSnapStart: true,
 
   init({ gsap, stage }) {
     const { cSpinner, cFill, cOutline } = stage.refs;
