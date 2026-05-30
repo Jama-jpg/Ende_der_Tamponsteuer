@@ -19,10 +19,6 @@ export default {
     id: 'st-periode',
     html: `
       <div style="display:grid; width:100%; text-align:center;">
-        <div id="st-p1" style="grid-area:1/1; opacity:0; width:100%;">
-          <p class="sl">UND DAS</p>
-          <p class="sh">MONAT FÜR MONAT.</p>
-        </div>
         <div id="st-p2" style="grid-area:1/1; opacity:0; width:100%;">
           <p class="sl">FÜR</p>
           <p class="sh">38 JAHRE</p>
@@ -57,7 +53,7 @@ export default {
 
     /* Phase A1 (0→0.22): 12 circles collapse → thin vertical rect */
     tl
-      .to('#st8', { opacity: 0, duration: 0.05 }, 0)
+      .set('#st8', { opacity: 0 }, 0)
       .to(mcEls, {
         attr: { r: 0 },
         stagger: { each: 0.008, from: 'start' },
