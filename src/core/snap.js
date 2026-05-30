@@ -17,10 +17,15 @@
    reads the live scroll position on every gesture, so it stays in sync.
 ═══════════════════════════════════════════════════════════════════ */
 
-const DURATION = 0.9;      // seconds per scene transition
-const EASE     = 'power2.inOut';
-const COOLDOWN = 120;      // ms lock after a transition before re-arming
-const SWIPE    = 30;       // px of touch travel before it counts as a swipe
+const DURATION  = 0.85;    // seconds per scene transition
+const EASE      = 'power2.inOut';
+const LOCK_TIME = 1400;    // ms total lock from trigger (covers anim + trackpad coast)
+const SWIPE     = 40;      // px of touch travel before it counts as a swipe
+
+// Wheel accumulator: prevents trackpad noise from triggering multiple snaps.
+// We sum raw deltaY events; once the total exceeds this threshold we fire once.
+const ACCUM_THRESHOLD = 40;  // px accumulated before triggering
+const ACCUM_RESET     = 200; // ms of wheel silence to reset the accumulator
 
 export function createSnap({ ScrollTrigger, gsap, scenes }) {
   const ids = scenes.map((s) => s.id);
@@ -46,9 +51,19 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
   const maxScroll = () => ScrollTrigger.maxScroll(window);
   const locked    = () => document.body.style.overflow === 'hidden';
 
-  let busy = false;
+  let busy      = false;
+  let lockTimer = null;
 
-  /* Ease to the next boundary in the given direction (+1 down, −1 up). */
+  /* Normalize wheel delta across deltaMode (pixels / lines / pages). */
+  function normalizeDelta(e) {
+    if (e.deltaMode === 1) return e.deltaY * 30;
+    if (e.deltaMode === 2) return e.deltaY * window.innerHeight;
+    return e.deltaY;
+  }
+
+  /* Ease to the next boundary in the given direction (+1 down, −1 up).
+     busy is set immediately at trigger time and held for LOCK_TIME ms so
+     trackpad momentum events after the animation cannot re-trigger a snap. */
   function go(dir) {
     if (busy || locked()) return;
     const pts = boundaries();
@@ -68,21 +83,41 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
     dest = Math.min(dest, maxScroll());
     if (Math.abs(dest - y) < eps) return;
 
+    // Lock immediately — not after animation — so coast events are dropped.
     busy = true;
+    clearTimeout(lockTimer);
+    lockTimer = setTimeout(() => { busy = false; }, LOCK_TIME);
+
     gsap.to(window, {
-      scrollTo: { y: dest, autoKill: false },       // can't be interrupted mid-flight
+      scrollTo: { y: dest, autoKill: false },
       duration: DURATION,
       ease: EASE,
-      onComplete: () => { setTimeout(() => { busy = false; }, COOLDOWN); },
     });
   }
 
-  /* ── Wheel / trackpad ── */
+  /* ── Wheel / trackpad ──
+     Accumulate deltaY across consecutive events so that light trackpad
+     touches (which produce many small events) don't trigger multiple snaps.
+     A heavy mouse-wheel click (deltaY ~100) crosses the threshold immediately. */
+  let accumY     = 0;
+  let accumTimer = null;
+
   window.addEventListener('wheel', (e) => {
     if (locked()) return;
     e.preventDefault();                             // suppress native scroll
-    if (Math.abs(e.deltaY) < 1) return;
-    go(e.deltaY > 0 ? 1 : -1);
+
+    if (busy) return;                               // drop all events while locked
+
+    accumY += normalizeDelta(e);
+    clearTimeout(accumTimer);
+    accumTimer = setTimeout(() => { accumY = 0; }, ACCUM_RESET);
+
+    if (Math.abs(accumY) >= ACCUM_THRESHOLD) {
+      const dir = accumY > 0 ? 1 : -1;
+      accumY = 0;
+      clearTimeout(accumTimer);
+      go(dir);
+    }
   }, { passive: false });
 
   /* ── Touch (mobile) ── */
