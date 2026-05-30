@@ -42,6 +42,50 @@ body {
   font-family: var(--f-mono);
 }
 
+/* ═══════════════════════════════════════════════
+   MOBILE / TABLET NOTICE
+═══════════════════════════════════════════════ */
+#mobile-notice {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2.5rem;
+  gap: 1.5rem;
+}
+
+#mobile-notice .notice-title {
+  font-family: var(--f-serif);
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  color: var(--burgundy);
+  line-height: 1.2;
+}
+
+#mobile-notice .notice-body {
+  font-family: var(--f-mono);
+  font-size: clamp(0.8rem, 3.5vw, 1rem);
+  color: var(--ink);
+  line-height: 1.6;
+  max-width: 34ch;
+}
+
+#mobile-notice .notice-icon {
+  width: clamp(3rem, 12vw, 5rem);
+  height: auto;
+  opacity: 0.35;
+}
+
+@media (max-width: 1023px) {
+  #mobile-notice { display: flex; }
+  #app { display: none; }
+}
+
+
 /* The tall scrollable container */
 #scroller {
   position: relative;
