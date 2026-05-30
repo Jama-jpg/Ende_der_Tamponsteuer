@@ -47,7 +47,7 @@ export default {
   overlay: {
     id: 'st8',
     html: `<p class="sl">UND DAS</p>
-           <p class="sh">MONAT FÜR MONAT</p>`,
+           <p class="sh">JEDEN MONAT</p>`,
   },
 
   init({ gsap, stage }) {
@@ -110,9 +110,8 @@ export default {
       /* Big circle pulses for the HOLD window, then month circles take over. */
       .set(mCircles, { opacity: 1 }, HOLD)
       .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.06, ease: 'power1.out' }, HOLD)
-      /* Text fades in after the circles have settled, then fades out before chapter 4. */
-      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.72)
-      .to('#st8', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.90);
+      /* Text fades in after the circles have settled and stays visible until chapter 4. */
+      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.72);
 
     render(0);
   },

@@ -53,7 +53,7 @@ export default {
 
     /* Phase A1 (0→0.22): 12 circles collapse → thin vertical rect */
     tl
-      .set('#st8', { opacity: 0 }, 0)
+      .to('#st8', { opacity: 0, duration: 0.06, ease: 'power1.in' }, 0)
       .to(mcEls, {
         attr: { r: 0 },
         stagger: { each: 0.008, from: 'start' },
