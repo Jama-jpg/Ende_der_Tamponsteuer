@@ -16,8 +16,9 @@ export default {
            <p class="sl">MENSCHEN</p>`,
   },
 
-  init({ gsap, stage }) {
+  init({ gsap, ScrollTrigger, stage, controllers }) {
     const { cFill } = stage.refs;
+    const { pulse } = controllers;
 
     const tl = gsap.timeline({
       scrollTrigger: { trigger: '#s5', start: 'top top', end: 'bottom bottom', scrub: 1.5 },
@@ -27,5 +28,17 @@ export default {
       .to('#st3', { opacity: 0, duration: 0.2 }, 0)
       .to({}, { duration: 0.28 }, 0.02) // hold fully filled before growth
       .to(cFill, { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.62 }, 0.30);
+
+    /* Pulse runs while the big circle is on screen (s4 exit → s7 exit). */
+    ScrollTrigger.create({
+      trigger:    '#s4',
+      start:      'bottom bottom',
+      endTrigger: '#s7',
+      end:        'bottom bottom',
+      onEnter:     pulse.start,
+      onEnterBack: pulse.start,
+      onLeave:     pulse.stop,
+      onLeaveBack: pulse.stop,
+    });
   },
 };
