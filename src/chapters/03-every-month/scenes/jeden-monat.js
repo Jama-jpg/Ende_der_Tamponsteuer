@@ -98,20 +98,20 @@ export default {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 12,
+        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 1,
         onUpdate: (self) => render(Math.min(self.progress / SPLIT_END, 1)),
         onRefresh: (self) => render(Math.min(self.progress / SPLIT_END, 1)),
       },
     });
 
     tl
-      /* Previous scene text out just before the new text fades in (at 0.72). */
-      .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.64)
+      /* Previous scene text out just before circles settle. */
+      .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.60)
       /* Big circle pulses for the HOLD window, then month circles take over. */
       .set(mCircles, { opacity: 1 }, HOLD)
       .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.06, ease: 'power1.out' }, HOLD)
-      /* Text fades in after the circles have settled and stays visible until chapter 4. */
-      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.72);
+      /* Text fades in right after circles are crisp (SPLIT_END=0.65) — within lock window. */
+      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.68);
 
     render(0);
   },
