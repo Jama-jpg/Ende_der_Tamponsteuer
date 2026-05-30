@@ -15,11 +15,13 @@ export default {
 
     /* Shrink the big VAT number so the "0%" lands at twice the year-label size;
        "MwST." (0.5em) then renders at the year size. Derived from rendered px,
-       and shared so the s13 pulse uses the same base scale. */
-    const vatScale =
-      (parseFloat(getComputedStyle(r.yearLbl).fontSize) /
-       parseFloat(getComputedStyle(r.vatBigEl).fontSize)) * 2;
+       and shared so the s13 pulse uses the same base scale.
+       Capture yearLbl size before the spine transition changes it. */
+    const yearLblPx = parseFloat(getComputedStyle(r.yearLbl).fontSize);
+    const vatScale  = (yearLblPx / parseFloat(getComputedStyle(r.vatBigEl).fontSize)) * 2;
     shared.vatScale = vatScale;
+    /* Target size for euro counter + year label: match the shrunk VAT number. */
+    const targetLabelPx = yearLblPx * 2;
 
     /* Lock scrolling until the S2→S3 transition completes */
     document.body.style.overflow = 'hidden';
@@ -51,6 +53,7 @@ export default {
 
     /* ── S2 → S3 transition (auto-plays after the countdown) ── */
     function playS2toS3Transition() {
+      const euroContainer = document.getElementById('euro-counter');
       const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' } });
       tl
         .to(r.sceneTitle, { opacity: 0, y: -16, duration: 0.5, ease: 'power2.in' }, 0)
@@ -72,6 +75,11 @@ export default {
            is held back — it fades in only once the reader starts scrolling
            (see period-axis.js). */
         .to(r.cOutline, { opacity: 1, duration: 0.7, ease: 'power1.out' }, 0.9)
+        /* Euro counter + year label appear with the spine progress bar and grow
+           to match the visual size of the shrunk VAT number (2× base size). */
+        .to(euroContainer, { opacity: 1, duration: 0.8, ease: 'power1.out' }, 0.8)
+        .call(() => { r.yearLbl.textContent = '2020'; }, [], 0.8)
+        .to([euroContainer, r.yearLbl], { fontSize: targetLabelPx + 'px', duration: 0.5, ease: 'power2.out' }, 0.8)
         /* Once everything has settled, prompt the reader to scroll. */
         .to(r.scrollHint, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 1.6)
         .call(unlockScroll, [], 1.6);
