@@ -13,6 +13,7 @@ export const stageMarkup = /* html */ `
   <div id="ui">
     <span id="lbl-good-news">GOOD&nbsp;&nbsp;NEWS</span>
     <span id="lbl-year">1973</span>
+    <div id="euro-counter">€&nbsp;<span id="euro-num">0</span></div>
 
     <div id="scene-title">
       <div class="t-tracked">ÖSTERREICH</div>
