@@ -29,21 +29,27 @@ export function createEuroCounter({ gsap, ScrollTrigger }) {
     },
   });
 
-  /* Attention pulse — fires once when the counter reaches its final value
-     (same scroll position as the counting end: 72% of s8 at viewport bottom).
-     The counter flashes red and grows, then returns to normal. */
+  /* Attention pulse — fires once when the counter first appears (s4, ~92% of
+     the circle-fill scrub ≈ 55% of s4's height at the viewport top).
+     A short delay lets the counter finish fading in before pulsing red. */
   ScrollTrigger.create({
-    trigger:    '#s8',
-    start:      '72% bottom',
+    trigger:    '#s4',
+    start:      '55% top',
     once:       true,
     onEnter: () => {
-      gsap.timeline()
-        .fromTo('#euro-counter',
-          { color: '#1a1a1a', scale: 1 },
-          { color: '#D63335', scale: 2.0, duration: 0.4, ease: 'power2.out',
-            transformOrigin: 'left top' })
-        .to('#euro-counter',
-          { color: '#1a1a1a', scale: 1, duration: 0.6, ease: 'power2.inOut' });
+      gsap.delayedCall(0.3, () => {
+        gsap.timeline()
+          .fromTo('#euro-counter',
+            { color: '#1a1a1a', scale: 1 },
+            { color: '#D63335', scale: 1.6, duration: 0.35, ease: 'power2.out',
+              transformOrigin: 'left top' })
+          .to('#euro-counter',
+            { scale: 1.0, duration: 0.15, ease: 'power1.in' })
+          .to('#euro-counter',
+            { scale: 1.4, duration: 0.2, ease: 'power2.out' })
+          .to('#euro-counter',
+            { color: '#1a1a1a', scale: 1, duration: 0.4, ease: 'power2.inOut' });
+      });
     },
   });
 }
