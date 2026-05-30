@@ -18,6 +18,7 @@ import * as constants from './core/constants.js';
 import { createWave } from './core/wave.js';
 import { createPulse } from './core/pulse.js';
 import { createSpine } from './core/spine.js';
+import { createSnap } from './core/snap.js';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -78,3 +79,7 @@ scenes.forEach((scene) => scene.init?.(ctx));
 
 /* 5 ─ Wire the spine as the page scrollbar (overall scroll progress + seek) */
 createSpine({ ScrollTrigger, refs });
+
+/* 6 ─ Snap the page to scene boundaries so animations always run to
+       completion and a single scroll moves on to the next scene. */
+createSnap({ ScrollTrigger, gsap, scenes });

@@ -38,6 +38,7 @@ export function buildStage(mount, gsap) {
     pieHl:     $('pie-hl'),
     pieTxt:    $('pie-txt'),
     mCircles:  $('m-circles'),
+    gooeyBlur: $('gooey-blur'),
     mRect:     $('m-rect'),
     rRect:     $('r-rect'),
     linesGrp:  $('lines'),
