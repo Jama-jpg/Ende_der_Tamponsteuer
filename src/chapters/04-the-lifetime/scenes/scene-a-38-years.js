@@ -39,7 +39,7 @@ export default {
 
   init({ gsap, stage }) {
     const r = stage.refs;
-    const { mcEls, mCircles, mRect, rRect, lines38Grp, line38Els, lblPeriode, lblXxxx } = r;
+    const { mcEls, mCircles, mRect, rRect, lines38Grp, line38Els } = r;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -51,7 +51,6 @@ export default {
     });
 
     tl.set('#st-periode', { opacity: 1 }, 0);
-    tl.set([lblPeriode, lblXxxx], { opacity: 1 }, 0);
     /* Defensive reset: ensure no stale text state from previous scrub sessions. */
     tl.set(['#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
 
