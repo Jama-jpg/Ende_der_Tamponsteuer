@@ -1,9 +1,14 @@
 /* ═══════════════════════════════════════════════════════════════════
-   SCROLL SNAP  (one scroll → one scene)
+   SCROLL SNAP  (one scroll → one scene edge)
    Turns the page into a slideshow: every scroll gesture is captured and
-   eased straight to the next (or previous) scene boundary, so the scrubbed
+   eased straight to the next (or previous) scene edge, so the scrubbed
    transition in between always plays through to completion and the view
-   always comes to rest exactly on a scene — it can never freeze mid-way.
+   always comes to rest exactly on an edge — it can never freeze mid-way.
+
+   Each scene rests at TWO points: its start (scrub at 0%) and its end
+   (scrub at 100%, where the animation has fully played). One scroll runs
+   the animation to completion and stops; the next moves on to the scene
+   below. Short (100vh) scenes have start == end, so they're a single rest.
 
    Native scrolling is taken over (wheel / touch / keys) and replaced with a
    single locked tween per gesture, driven through GSAP's ScrollToPlugin.
@@ -20,13 +25,22 @@ const SWIPE    = 30;       // px of touch travel before it counts as a swipe
 export function createSnap({ ScrollTrigger, gsap, scenes }) {
   const ids = scenes.map((s) => s.id);
 
-  /* Live scene-start scroll positions, sorted top→bottom. */
+  /* Live scene-edge scroll positions, sorted top→bottom.
+     Per scene: its start (offsetTop, scrub 0%) and its end (where the
+     section's bottom meets the viewport bottom, scrub 100%) — matching the
+     scenes' `top top → bottom bottom` scrub range. Rounded + de-duped, so a
+     100vh scene (start == end) collapses to one point. */
   function boundaries() {
-    return ids
-      .map((id) => document.getElementById(id))
-      .filter(Boolean)
-      .map((el) => el.offsetTop)
-      .sort((a, b) => a - b);
+    const vh = window.innerHeight;
+    const pts = [];
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      const start = el.offsetTop;
+      pts.push(Math.round(start));
+      pts.push(Math.round(start + el.offsetHeight - vh)); // scrub end
+    }
+    return Array.from(new Set(pts)).sort((a, b) => a - b);
   }
 
   const maxScroll = () => ScrollTrigger.maxScroll(window);
