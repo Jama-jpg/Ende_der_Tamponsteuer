@@ -30,8 +30,8 @@ export default {
       },
     });
 
-    /* Fade out previous text (explicitly set from-state to avoid stale values) */
-    tl.fromTo('#st-p2', { opacity: 1 }, { opacity: 0, duration: 0.08 }, 0);
+    /* Fade out previous text just before the new text fades in (at 0.60). */
+    tl.fromTo('#st-p2', { opacity: 1 }, { opacity: 0, duration: 0.08 }, 0.52);
 
     /* 456 lines expand from rect centre (x≈720–730) to rect bounds (x≈650–800)
        — layered on top of the 38 year-dividers for a barcode effect */

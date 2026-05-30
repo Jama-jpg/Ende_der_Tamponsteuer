@@ -30,8 +30,8 @@ export default {
       },
     });
 
-    /* Fade out "456 mal" text */
-    tl.fromTo('#st-p3', { opacity: 1 }, { opacity: 0, duration: 0.08 }, 0);
+    /* Fade out "456 mal" text just before the final text fades in (at 0.62). */
+    tl.fromTo('#st-p3', { opacity: 1 }, { opacity: 0, duration: 0.08 }, 0.54);
 
     /* 456 lines converge back toward the rect centre */
     tl

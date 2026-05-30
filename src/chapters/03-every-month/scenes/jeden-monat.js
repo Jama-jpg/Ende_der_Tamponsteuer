@@ -105,8 +105,8 @@ export default {
     });
 
     tl
-      /* Previous scene text out immediately. */
-      .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0)
+      /* Previous scene text out just before the new text fades in (at 0.72). */
+      .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.64)
       /* Big circle pulses for the HOLD window, then month circles take over. */
       .set(mCircles, { opacity: 1 }, HOLD)
       .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.06, ease: 'power1.out' }, HOLD)
