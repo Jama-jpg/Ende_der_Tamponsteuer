@@ -32,7 +32,7 @@ const R_P1       = 72;    // radius after the plastic stretch — still massive
 const R_P2       = 45;    // radius after necking — thin connecting filaments
 const R_END      = MC_R;  // final month-circle radius (15)
 const STAGGER    = 0.16;  // how far the inner links lag behind the outer ones
-const BOUNCE     = 2.2;   // elastic overshoot on the cy settle (back.out)
+const BOUNCE     = 4.5;   // elastic overshoot on the cy settle (back.out)
 const SWAY       = 5;     // organic side-to-side wobble during the split (px)
 const FULL_BLUR  = 10;    // gooey blur while the mass is connected
 const CENTER_I   = 5.5;   // mid-point between the 12 indices (0…11)
@@ -98,7 +98,7 @@ export default {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 4,
+        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 8,
         onUpdate: (self) => render(Math.min(self.progress / SPLIT_END, 1)),
         onRefresh: (self) => render(Math.min(self.progress / SPLIT_END, 1)),
       },
