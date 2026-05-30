@@ -24,7 +24,7 @@
 import { CX, CY, MC_X, MC_Y, MC_R } from '../../../core/constants.js';
 
 /* ── Split physics tuning ───────────────────────────────────────────── */
-const HOLD       = 0.0;   // no hold — split starts immediately on first scroll
+const HOLD       = 0.18;  // hold — big circle pulses visibly before split begins
 const PH1        = 0.40;  // end of "plastic stretch" (mass kept, barely shrinks)
 const PH2        = 0.72;  // end of "necking" (organic waves + thin threads)
 const R_START    = 90;    // matches the big red circle (#c-fill r)
@@ -42,7 +42,7 @@ const lerp  = (a, b, t) => a + (b - a) * t;
 
 export default {
   id: 's8',
-  height: '700vh',
+  height: '1400vh',
   skipSnapStart: true,
   overlay: {
     id: 'st8',
@@ -98,17 +98,18 @@ export default {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 8,
+        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 12,
         onUpdate: (self) => render(Math.min(self.progress / SPLIT_END, 1)),
         onRefresh: (self) => render(Math.min(self.progress / SPLIT_END, 1)),
       },
     });
 
     tl
-      /* Previous scene text out, split starts. */
+      /* Previous scene text out immediately. */
       .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0)
-      .set(mCircles, { opacity: 1 }, 0.01)
-      .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.08, ease: 'power1.out' }, 0.01)
+      /* Big circle pulses for the HOLD window, then month circles take over. */
+      .set(mCircles, { opacity: 1 }, HOLD)
+      .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.06, ease: 'power1.out' }, HOLD)
       /* Text fades in after the circles have settled and stays visible. */
       .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.72);
 
