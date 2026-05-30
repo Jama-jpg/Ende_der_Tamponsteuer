@@ -12,9 +12,9 @@ export default {
   skipSnapStart: true,
   overlay: {
     id: 'st5',
-    html: `<p class="sl">WELTWEIT MENSTRUIEREN ÜBER</p>
+    html: `<p class="sl">EIN ZUSTAND, DEN WELTWEIT ÜBER</p>
            <p class="sh">1,9 MILLIARDEN</p>
-           <p class="sl">MENSCHEN</p>`,
+           <p class="sl">MENSCHEN TEILEN: SIE MENSTRUIEREN.</p>`,
   },
 
   init({ gsap, ScrollTrigger, stage, controllers }) {

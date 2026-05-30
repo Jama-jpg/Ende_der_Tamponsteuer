@@ -42,7 +42,7 @@ const lerp  = (a, b, t) => a + (b - a) * t;
 
 export default {
   id: 's8',
-  height: '220vh',
+  height: '700vh',
   skipSnapStart: true,
   overlay: {
     id: 'st8',
@@ -93,22 +93,24 @@ export default {
       }
     }
 
+    /* Split occupies the first 65% of scroll; text appears after. */
+    const SPLIT_END = 0.65;
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 1.5,
-        onUpdate: (self) => render(self.progress),
-        onRefresh: (self) => render(self.progress),
+        onUpdate: (self) => render(Math.min(self.progress / SPLIT_END, 1)),
+        onRefresh: (self) => render(Math.min(self.progress / SPLIT_END, 1)),
       },
     });
 
     tl
-      /* Text and split start together on the very first scroll tick. */
+      /* Previous scene text out, split starts. */
       .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0)
-      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0)
-      /* Gooey mass appears and the big disc fades out simultaneously. */
       .set(mCircles, { opacity: 1 }, 0.01)
       .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.08, ease: 'power1.out' }, 0.01)
-      /* Text clears before the next scene. */
+      /* Text fades in after the circles have settled. */
+      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.72)
       .to('#st8', { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0.92);
 
     render(0);
