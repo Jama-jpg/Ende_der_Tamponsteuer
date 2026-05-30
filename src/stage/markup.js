@@ -34,6 +34,21 @@ export const stageMarkup = /* html */ `
         <path d="M12 4 V19 M5 12.5 L12 19.5 L19 12.5"/>
       </svg>
     </div>
+
+    <!-- Info icon — appears top-right of the big circle when hover is active
+         (driven by pie-26.js). Tooltip mirrors the scroll-hint style. -->
+    <div id="info-hint" aria-hidden="true">
+      <div id="info-icon-btn">
+        <span class="info-i">i</span>
+      </div>
+      <div id="info-tooltip">
+        <span class="info-label">HOVER ZUM ERKUNDEN</span>
+        <svg class="info-cursor" viewBox="0 0 24 24" width="18" height="18" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 3 L5 19 L9 15 L12 21 L14 20 L11 14 L17 14 Z"/>
+        </svg>
+      </div>
+    </div>
   </div>
 
   <!-- LIQUID BACKGROUND (Scenes 1–2) — drains as VAT counts 20→0 -->

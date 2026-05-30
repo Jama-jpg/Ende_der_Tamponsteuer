@@ -23,6 +23,8 @@ export default {
     const { sectorPath } = helpers;
     const { CX, CY, PIE_R } = constants;
 
+    const infoHint = document.getElementById('info-hint');
+
     const pieProxy = { angle: 0 };
     let enterTween = null;
     let leaveTween = null;
@@ -50,6 +52,7 @@ export default {
     function enter() {
       if (!active || hovered) return;
       hovered = true;
+      infoHint.classList.add('hover-active');
       sweepIn();
       gsap.to('#st5', { opacity: 0, duration: 0.3, ease: 'power1.in' });
       gsap.to('#st7', { opacity: 1, duration: 0.3, delay: 0.3, ease: 'power1.out' });
@@ -58,6 +61,7 @@ export default {
     function leave() {
       if (!hovered) return;
       hovered = false;
+      infoHint.classList.remove('hover-active');
       sweepOut();
       gsap.to('#st7', { opacity: 0, duration: 0.3, ease: 'power1.in' });
       gsap.to('#st5', { opacity: 1, duration: 0.3, delay: 0.3, ease: 'power1.out' });
@@ -72,24 +76,38 @@ export default {
       if (on === active) return;
       active = on;
       r.cFill.style.cursor = on ? 'pointer' : 'default';
-      if (!on) {
+      if (on) {
+        gsap.to(infoHint, { opacity: 1, duration: 0.5, ease: 'power1.out' });
+        infoHint.classList.add('visible');
+      } else {
         hovered = false;
+        infoHint.classList.remove('hover-active');
+        gsap.to(infoHint, { opacity: 0, duration: 0.3, ease: 'power1.in',
+          onComplete() { infoHint.classList.remove('visible'); } });
         sweepOut(); // retract the pie if it was open
         gsap.to(['#st5', '#st7'], { opacity: 0, duration: 0.3, ease: 'power1.in' });
       }
     }
 
-    /* Hover works only while the circle is at full size: gate on the live
-       radius across the s5→s7 range so it switches on the instant the grow
-       finishes and off again when leaving the pie scene. */
+    /* Hover works only while the circle is at full size. We use a gsap ticker
+       (not onUpdate) so setActive fires even during the scrub ease-out after
+       the user stops scrolling — otherwise hover only activates on the next
+       scroll event, not the instant the circle finishes growing. */
+    let inRange = false;
+
+    gsap.ticker.add(() => {
+      if (inRange) setActive(parseFloat(r.cFill.getAttribute('r')) >= PIE_R - 1);
+    });
+
     ScrollTrigger.create({
-      trigger:    '#s5',
-      start:      'top top',
-      endTrigger: '#s7',
-      end:        'bottom bottom',
-      onUpdate:    () => setActive(parseFloat(r.cFill.getAttribute('r')) >= PIE_R - 1),
-      onLeave:     () => setActive(false),
-      onLeaveBack: () => setActive(false),
+      trigger:     '#s5',
+      start:       'top top',
+      endTrigger:  '#s7',
+      end:         'bottom bottom',
+      onEnter:     () => { inRange = true; },
+      onEnterBack: () => { inRange = true; },
+      onLeave:     () => { inRange = false; setActive(false); },
+      onLeaveBack: () => { inRange = false; setActive(false); },
     });
   },
 };
