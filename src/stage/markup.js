@@ -41,13 +41,7 @@ export const stageMarkup = /* html */ `
       <div id="info-icon-btn">
         <span class="info-i">i</span>
       </div>
-      <div id="info-tooltip">
-        <span class="info-label">HOVER ZUM ERKUNDEN</span>
-        <svg class="info-cursor" viewBox="0 0 24 24" width="18" height="18" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 3 L5 19 L9 15 L12 21 L14 20 L11 14 L17 14 Z"/>
-        </svg>
-      </div>
+      <span id="info-label">HOVER</span>
     </div>
   </div>
 

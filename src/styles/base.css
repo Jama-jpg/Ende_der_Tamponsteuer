@@ -166,14 +166,14 @@ body {
 
 
 /* ─── Info icon (Chapter 2 hover hint) ──────
-   Positioned near the top-right of the full-size circle.
-   The circle center is ~77.5% left, ~50% top (SVG 775/1000, 281/562),
-   radius ~19.8% width. Top-right at 45° ≈ right: 8%, top: 22%. */
+   Sits above the circle's top-right arc (circle top ≈ 14.8% from top).
+   Row layout: [i] HOVER — positioned so neither element overlaps the circle. */
 #info-hint {
   position: fixed;
-  right: 8%;
-  top: 22%;
+  right: 2%;
+  top: 8%;
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 10px;
   opacity: 0;
@@ -217,24 +217,13 @@ body {
   color: var(--bg);
 }
 
-#info-tooltip {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
+#info-label {
   color: var(--ink-dim);
   font-family: var(--f-mono);
-  font-size: clamp(10px, 0.9vw, 13px);
-  letter-spacing: 0.22em;
-  animation: info-pulse 2s ease-in-out infinite;
-}
-
-.info-label {
+  font-size: clamp(12px, 1.15vw, 16px);
+  letter-spacing: 0.25em;
   white-space: nowrap;
-}
-
-.info-cursor {
-  opacity: 0.55;
+  animation: info-pulse 2s ease-in-out infinite;
 }
 
 @keyframes info-pulse {
