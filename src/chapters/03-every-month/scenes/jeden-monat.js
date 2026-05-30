@@ -98,7 +98,7 @@ export default {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 1.5,
+        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 4,
         onUpdate: (self) => render(Math.min(self.progress / SPLIT_END, 1)),
         onRefresh: (self) => render(Math.min(self.progress / SPLIT_END, 1)),
       },
@@ -109,9 +109,8 @@ export default {
       .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0)
       .set(mCircles, { opacity: 1 }, 0.01)
       .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.08, ease: 'power1.out' }, 0.01)
-      /* Text fades in after the circles have settled. */
-      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.72)
-      .to('#st8', { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0.92);
+      /* Text fades in after the circles have settled and stays visible. */
+      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.72);
 
     render(0);
   },
