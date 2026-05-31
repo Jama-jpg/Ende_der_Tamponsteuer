@@ -25,17 +25,17 @@ export default {
         trigger: '#s-periode-c',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 2,
+        scrub: 1,
       },
     });
 
     /* Previous text out as scene C begins — explicit from/to so scrub-back works cleanly. */
     tl.fromTo('#st-p3', { opacity: 1 }, { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
 
-    /* 456 lines converge back toward the rect centre */
+    /* 456 lines converge back toward the rect centre (CX=775) */
     tl
       .to(lineEls, {
-        attr: { x1: 724, x2: 726 },
+        attr: { x1: 774, x2: 776 },
         stagger: { each: 0.00008, from: 'random' },
         ease: 'power2.in',
         duration: 0.18,

@@ -19,7 +19,7 @@
 
 const DURATION  = 0.85;    // seconds per scene transition
 const EASE      = 'power2.inOut';
-const LOCK_TIME = 1400;    // ms total lock from trigger (covers anim + trackpad coast)
+const LOCK_TIME = 2000;    // ms total lock: covers anim (850ms) + max scrub lag (1000ms)
 const SWIPE     = 40;      // px of touch travel before it counts as a swipe
 
 // Wheel accumulator: prevents trackpad noise from triggering multiple snaps.

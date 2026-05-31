@@ -23,7 +23,7 @@ export default {
     const { pulse } = controllers;
 
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: '#s5', start: 'top top', end: 'bottom bottom', scrub: 1.5 },
+      scrollTrigger: { trigger: '#s5', start: 'top top', end: 'bottom bottom', scrub: 1 },
     });
 
     tl

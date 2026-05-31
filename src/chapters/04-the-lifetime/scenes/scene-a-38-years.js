@@ -3,14 +3,16 @@
    skipSnapStart: one scroll from chapter-3's end lands here at completion.
 
    Timeline (0 → 1 over 350vh):
-     0.00–0.22  Phase A1: circles collapse into thin vertical rect
+     0.00–0.22  Phase A1: circles grow via gooey and merge into the thin rect
      0.22–0.47  Phase A2: rect widens to full 38-year span
      0.48–0.66  Phase A3: 38 year-divider lines radiate across rect
      0.70–0.82  Phase A4: "FÜR 38 JAHRE" text fades in
-     0.82–0.90  Hold — user reads the label
-     0.90–0.98  Phase A5: "FÜR 38 JAHRE" text fades out (scene owns its own text)
-     0.98–1.00  Hold — clean slate for scene B
+     0.82–1.00  Hold — user reads the label; scene B scrolls it away
 ═══════════════════════════════════════════════════════════════════ */
+import { MC_R } from '../../../core/constants.js';
+
+const GOOEY_BLUR = 10;  // matches jeden-monat.js FULL_BLUR
+const GROW_R     = 22;  // circles grow to this radius so neighbours merge via gooey
 
 export default {
   id: 's-periode-a',
@@ -39,39 +41,42 @@ export default {
 
   init({ gsap, stage }) {
     const r = stage.refs;
-    const { mcEls, mCircles, mRect, rRect, lines38Grp, line38Els } = r;
+    const { mcEls, mCircles, mRect, rRect, lines38Grp, line38Els, gooeyBlur } = r;
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-periode-a',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 2,
+        scrub: 1,
       },
     });
 
     tl.set('#st-periode', { opacity: 1 }, 0);
-    /* Defensive reset: ensure no stale text state from previous scrub sessions. */
     tl.set(['#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
 
-    /* Previous text out as scene A begins — explicit from/to so scrub-back works cleanly. */
-    tl.fromTo('#st8', { opacity: 1 }, { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
-
-    /* Phase A1 (0→0.22): 12 circles collapse → thin vertical rect */
+    /* Phase A1 (0→0.22): circles grow and merge via gooey filter into a vertical bar,
+       then the solid rect cross-dissolves in as the gooey blob fades out. */
     tl
-      .to(mcEls, {
-        attr: { r: 0 },
-        stagger: { each: 0.008, from: 'start' },
-        ease: 'power2.in',
+      /* Re-engage gooey filter so growing circles merge organically. */
+      .fromTo(gooeyBlur, { attr: { stdDeviation: 0 } }, { attr: { stdDeviation: GOOEY_BLUR }, duration: 0.06 }, 0.02)
+      /* Circles grow from their resting radius so they touch neighbours and merge. */
+      .fromTo(mcEls, { attr: { r: MC_R } }, {
+        attr: { r: GROW_R },
+        stagger: { each: 0.005, from: 'center' },
+        ease: 'power1.inOut',
         duration: 0.12,
-      }, 0.06)
-      .to(mRect, { opacity: 1, duration: 0.04 }, 0.15)
-      .to(mCircles, { opacity: 0, duration: 0.04 }, 0.18);
+      }, 0.03)
+      /* Solid rect fades in under the merged blob. */
+      .to(mRect, { opacity: 1, duration: 0.03 }, 0.16)
+      /* Gooey blob fades out, leaving the clean rect behind. */
+      .to(mCircles, { opacity: 0, duration: 0.04 }, 0.17)
+      .to(gooeyBlur, { attr: { stdDeviation: 0 }, duration: 0.02 }, 0.21);
 
-    /* Phase A2 (0.22→0.47): thin rect widens to full 38-year span */
+    /* Phase A2 (0.22→0.47): thin rect widens to full 38-year span (center stays at CX=775) */
     tl
       .to([mRect, rRect], {
-        attr: { x: 650, width: 150 },
+        attr: { x: 700, width: 150 },
         ease: 'power2.inOut',
         duration: 0.25,
       }, 0.22);
@@ -80,7 +85,7 @@ export default {
     tl
       .to(lines38Grp, { opacity: 1, duration: 0.03 }, 0.48)
       .to(line38Els, {
-        attr: { x1: 650, x2: 800 },
+        attr: { x1: 700, x2: 850 },
         stagger: { each: 0.003, from: 'start' },
         ease: 'power2.out',
         duration: 0.14,
@@ -90,6 +95,6 @@ export default {
     tl
       .to('#st-p2', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.70);
 
-    /* Phase A5: text stays visible until scene B scrolls it away. */
+    /* Text stays visible until scene B scrolls it away. */
   },
 };

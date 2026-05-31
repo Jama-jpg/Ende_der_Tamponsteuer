@@ -82,23 +82,24 @@ export function buildStage(mount, gsap) {
   refs.pieHl.setAttribute('d', sectorPath(CX, CY, PIE_R, 0, 93.6));
 
   /* 456 horizontal lines (x1/x2 expanded during Die Periode Phase 4) */
+  /* Start collapsed at rect centre (x=775, matching CX) so they burst outward on reveal. */
   const yMin = 70, yMax = 492;
   for (let i = 0; i < LINE_COUNT; i++) {
     const y = yMin + (yMax - yMin) * (i / (LINE_COUNT - 1));
     const ln = makeSvgEl('line', {
-      x1: 720, y1: y, x2: 730, y2: y,
+      x1: 770, y1: y, x2: 780, y2: y,
       stroke: PALETTE[i % PALETTE.length], 'stroke-width': '0.9',
     });
     refs.linesGrp.appendChild(ln);
     refs.lineEls.push(ln);
   }
 
-  /* 38 year-divider lines — span the rect width (x=650…800) during Die Periode Phase 3.
-     Start collapsed at the rect centre (x=725) so they radiate outward on reveal. */
+  /* 38 year-divider lines — span the rect width (x=700…850) during Die Periode Phase 3.
+     Start collapsed at the rect centre (x=775, matching CX) so they radiate outward on reveal. */
   for (let i = 0; i < LINE_38_COUNT; i++) {
     const y = yMin + (yMax - yMin) * (i / (LINE_38_COUNT - 1));
     const ln = makeSvgEl('line', {
-      x1: 725, y1: y, x2: 725, y2: y,
+      x1: 775, y1: y, x2: 775, y2: y,
       stroke: '#531416', 'stroke-width': '1.5',
     });
     refs.lines38Grp.appendChild(ln);

@@ -21,7 +21,7 @@
 
    Ends with the 12 circles in place for the Lifetime chapter.
 ═══════════════════════════════════════════════ */
-import { CX, CY, MC_X, MC_Y, MC_R } from '../../../core/constants.js';
+import { CX, CY, MC_X, MC_Y, MC_R, PIE_R } from '../../../core/constants.js';
 
 /* ── Split physics tuning ───────────────────────────────────────────── */
 const HOLD       = 0.18;  // hold — big circle pulses visibly before split begins
@@ -100,11 +100,13 @@ export default {
     });
 
     tl
+      /* Big circle contracts from PIE_R→R_START during hold — the "wird enger" moment. */
+      .fromTo(cFill, { attr: { r: PIE_R } }, { attr: { r: R_START }, ease: 'power2.in', duration: HOLD * 0.9 }, 0)
+      /* Month circles take over exactly as the contraction finishes. */
+      .set(mCircles, { opacity: 1 }, HOLD)
+      .to(cFill, { opacity: 0, duration: 0.04, ease: 'power1.out' }, HOLD)
       /* Previous scene text out just before circles settle. */
       .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.60)
-      /* Big circle pulses for the HOLD window, then month circles take over. */
-      .set(mCircles, { opacity: 1 }, HOLD)
-      .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.06, ease: 'power1.out' }, HOLD)
 
     render(0);
   },

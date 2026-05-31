@@ -27,21 +27,21 @@ export default {
         trigger: '#s-periode-b',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 2,
+        scrub: 1,
       },
     });
 
     /* Previous text out as scene B begins — explicit from/to so scrub-back works cleanly. */
     tl.fromTo('#st-p2', { opacity: 1 }, { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
 
-    /* 456 lines expand from rect centre (x≈720–730) to rect bounds (x≈650–800)
+    /* 456 lines expand from rect centre (x≈770–780) to rect bounds (x≈700–850)
        — layered on top of the 38 year-dividers for a barcode effect */
     tl
       .to(linesGrp, { opacity: 1, duration: 0.04 }, 0.15)
       .to(lineEls, {
         attr: () => ({
-          x1: 650 + Math.random() * 3,
-          x2: 797 + Math.random() * 3,
+          x1: 700 + Math.random() * 3,
+          x2: 847 + Math.random() * 3,
         }),
         stagger: { each: 0.0003, from: 'start' },
         ease: 'power2.out',
