@@ -44,11 +44,6 @@ export default {
   id: 's8',
   height: '1400vh',
   skipSnapStart: true,
-  overlay: {
-    id: 'st8',
-    html: `<p class="sl">UND DAS</p>
-           <p class="sh">JEDEN MONAT</p>`,
-  },
 
   init({ gsap, stage }) {
     const { cFill, mCircles, mcEls, gooeyBlur } = stage.refs;
@@ -110,9 +105,6 @@ export default {
       /* Big circle pulses for the HOLD window, then month circles take over. */
       .set(mCircles, { opacity: 1 }, HOLD)
       .to(cFill, { opacity: 0, scaleY: 1, svgOrigin: `${CX} ${CY}`, duration: 0.06, ease: 'power1.out' }, HOLD)
-      /* Text fades in right after circles are crisp (SPLIT_END=0.65). */
-      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.68);
-    /* Text stays visible until scene A scrolls it away. */
 
     render(0);
   },
