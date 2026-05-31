@@ -31,8 +31,8 @@ export default {
       },
     });
 
-    /* Previous text out as scene B begins — explicit from/to so scrub-back works cleanly. */
-    tl.fromTo('#st-p2', { opacity: 1 }, { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
+    /* Defensive reset — scene-a already fades #st-p2 out, but just in case. */
+    tl.set('#st-p2', { opacity: 0 }, 0);
 
     /* 456 lines expand from rect centre (x≈770–780) to rect bounds (x≈700–850)
        — layered on top of the 38 year-dividers for a barcode effect */
@@ -48,9 +48,10 @@ export default {
         duration: 0.38,
       }, 0.19);
 
-    /* "INSGESAMT 456 mal" text fades in after lines are fully built. */
-    tl.to('#st-p3', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.65);
-
-    /* Text stays visible until scene C scrolls it away. */
+    /* "INSGESAMT 456 mal" fades in, holds, then fades out — scene fully owns its text. */
+    tl
+      .to('#st-p3', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.65)
+      .to('#st-p3', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.88);
+    /* 0.96→1.00 hold — clean slate before scene C starts. */
   },
 };

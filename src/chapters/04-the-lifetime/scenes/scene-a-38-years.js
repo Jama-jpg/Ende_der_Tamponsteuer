@@ -53,10 +53,8 @@ export default {
     });
 
     tl.set('#st-periode', { opacity: 1 }, 0);
-    tl.set(['#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
-
-    /* "Jeden Monat" text from s8 fades out as scene A begins. */
-    tl.fromTo('#st8', { opacity: 1 }, { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
+    /* Defensive resets — any stale text from previous scenes is cleared at t=0. */
+    tl.set(['#st8', '#st5', '#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
 
     /* Phase A1 (0→0.22): circles grow and merge via gooey filter into a vertical bar,
        then the solid rect cross-dissolves in as the gooey blob fades out. */
@@ -94,10 +92,10 @@ export default {
         duration: 0.14,
       }, 0.50);
 
-    /* Phase A4 (0.70→0.82): "FÜR 38 JAHRE" text fades in */
+    /* Phase A4 (0.70→0.84): "FÜR 38 JAHRE" text fades in, holds, then fades out. */
     tl
-      .to('#st-p2', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.70);
-
-    /* Text stays visible until scene B scrolls it away. */
+      .to('#st-p2', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.70)
+      .to('#st-p2', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.88);
+    /* 0.96→1.00 hold — clean slate before scene B starts. */
   },
 };

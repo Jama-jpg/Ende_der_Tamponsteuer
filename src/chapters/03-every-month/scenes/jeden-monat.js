@@ -105,15 +105,17 @@ export default {
     });
 
     tl
-      /* "Jeden Monat" text fades in at the very start — announces what's about to happen. */
-      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.03)
-      /* "1,9 Milliarden" text hands off to "Jeden Monat" just before the split. */
-      .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.10)
+      /* "1,9 Milliarden" hands off quickly as the scene starts. */
+      .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04)
+      /* "Jeden Monat" appears shortly after — split is already in motion. */
+      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.10)
       /* Big circle contracts from PIE_R→R_START during hold — the "wird enger" moment. */
       .fromTo(cFill, { attr: { r: PIE_R } }, { attr: { r: R_START }, ease: 'power2.in', duration: HOLD * 0.9 }, 0)
       /* Month circles take over exactly as the contraction finishes. */
       .set(mCircles, { opacity: 1 }, HOLD)
       .to(cFill, { opacity: 0, duration: 0.04, ease: 'power1.out' }, HOLD)
+      /* Text fades out after split is settled — scene fully owns its text. */
+      .to('#st8', { opacity: 0, duration: 0.10, ease: 'power1.in' }, 0.75)
 
     render(0);
   },
