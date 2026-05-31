@@ -17,9 +17,9 @@
    reads the live scroll position on every gesture, so it stays in sync.
 ═══════════════════════════════════════════════════════════════════ */
 
-const DURATION  = 0.85;    // seconds per scene transition
+const DURATION  = 1.8;     // seconds per scene transition — slow enough to follow animation
 const EASE      = 'power2.inOut';
-const LOCK_TIME = 2000;    // ms total lock: covers anim (850ms) + max scrub lag (1000ms)
+const LOCK_TIME = 3500;    // ms total lock: covers anim (1800ms) + scrub lag (1000ms) + buffer
 const SWIPE     = 40;      // px of touch travel before it counts as a swipe
 
 // Wheel accumulator: prevents trackpad noise from triggering multiple snaps.

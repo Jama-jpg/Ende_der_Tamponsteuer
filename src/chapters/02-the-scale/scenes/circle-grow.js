@@ -13,7 +13,7 @@ export default {
   overlay: {
     id: 'st5',
     html: `<p class="sl">EIN ABO, DAS WELTWEIT ÜBER</p>
-           <p class="sh">1,9 MILLIONEN</p>
+           <p class="sh">1,9 MILLIARDEN</p>
            <p class="sl">MENSCHEN TEILEN:</p>
            <p class="sl">Die Menstruation</p>`,
   },

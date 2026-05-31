@@ -55,6 +55,9 @@ export default {
     tl.set('#st-periode', { opacity: 1 }, 0);
     tl.set(['#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
 
+    /* "Jeden Monat" text from s8 fades out as scene A begins. */
+    tl.fromTo('#st8', { opacity: 1 }, { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04);
+
     /* Phase A1 (0→0.22): circles grow and merge via gooey filter into a vertical bar,
        then the solid rect cross-dissolves in as the gooey blob fades out. */
     tl
