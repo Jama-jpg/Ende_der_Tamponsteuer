@@ -21,7 +21,7 @@
 
    Ends with the 12 circles in place for the Lifetime chapter.
 ═══════════════════════════════════════════════ */
-import { CX, CY, MC_X, MC_Y, MC_R, PIE_R } from '../../../core/constants.js';
+import { CX, CY, MC_X, MC_Y, MC_R } from '../../../core/constants.js';
 
 /* ── Split physics tuning ───────────────────────────────────────────── */
 const HOLD       = 0.18;  // hold — big circle pulses visibly before split begins
@@ -109,8 +109,9 @@ export default {
       .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04)
       /* "Jeden Monat" appears after st5 is gone ("erst weg, dann neu"). */
       .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.15)
-      /* Big circle contracts from PIE_R→R_START during hold — the "wird enger" moment. */
-      .fromTo(cFill, { attr: { r: PIE_R } }, { attr: { r: R_START }, ease: 'power2.in', duration: HOLD * 0.9 }, 0)
+      /* Big circle contracts to R_START during hold — captures current r (PIE_R, from s5)
+         when the tween first runs, so no stale state is applied at page-load. */
+      .to(cFill, { attr: { r: R_START }, ease: 'power2.in', duration: HOLD * 0.9 }, 0.001)
       /* Month circles take over exactly as the contraction finishes. */
       .set(mCircles, { opacity: 1 }, HOLD)
       .to(cFill, { opacity: 0, duration: 0.04, ease: 'power1.out' }, HOLD)

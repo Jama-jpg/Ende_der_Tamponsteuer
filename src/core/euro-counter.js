@@ -11,14 +11,14 @@ export function createEuroCounter({ gsap, ScrollTrigger }) {
   const fmt = (n) =>
     Math.round(n).toLocaleString('de-AT');
 
-  /* Count 0 → 20 500 from when the counter first appears (~65% into s3)
+  /* Count 0 → 20 500 from when the counter first appears (~50% into s3)
      to the text-reveal point in s8. scrub keeps the value linear to scroll. */
   gsap.to(counter, {
     value: 20500,
     ease: 'none',
     scrollTrigger: {
       trigger:    '#s3',
-      start:      '65% top',
+      start:      '50% top',
       endTrigger: '#s8',
       end:        '72% bottom',
       scrub:      1.5,
@@ -28,11 +28,11 @@ export function createEuroCounter({ gsap, ScrollTrigger }) {
     },
   });
 
-  /* Attention pulse — fires once just before the counter fully fades in.
-     The 0.3 s delay means it plays while the counter is becoming visible. */
+  /* Attention pulse — fires once as the counter becomes visible (~52% into s3).
+     The 0.3 s delay means it plays while the counter opacity is settling. */
   ScrollTrigger.create({
     trigger: '#s3',
-    start:   '60% top',
+    start:   '52% top',
     once:    true,
     onEnter: () => {
       gsap.delayedCall(0.3, () => {

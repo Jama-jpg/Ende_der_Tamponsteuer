@@ -33,7 +33,7 @@ export function buildStage(mount, gsap) {
     spineHit:      $('spine-hit'),
     cOutline:  $('c-outline'),
     cSpinner:  $('c-spinner'),
-    cFill:     $('c-fill'),
+    cFill:     $('c-outline'),  // same element — outline fills itself
     pieBg:     $('pie-bg'),
     pieHl:     $('pie-hl'),
     pieTxt:    $('pie-txt'),
@@ -109,7 +109,7 @@ export function buildStage(mount, gsap) {
   /* Initial hidden state — prevents any flash from scroll-restoration races.
      (Per-scene text overlays are hidden by .stext { opacity:0 } in CSS.) */
   gsap.set([
-    refs.cAxis, refs.cOutline, refs.cSpinner, refs.cFill, refs.pieBg, refs.pieHl,
+    refs.cAxis, refs.cOutline, refs.cSpinner, refs.pieBg, refs.pieHl,
     refs.pieTxt, refs.periodDots, refs.mCircles, refs.mRect, refs.rRect,
     refs.linesGrp, refs.lines38Grp, refs.liqFill, refs.liqStream, refs.vatBigTax,
     refs.cAxisProgress,
