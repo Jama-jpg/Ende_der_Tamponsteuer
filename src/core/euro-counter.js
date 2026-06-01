@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════
    EURO COUNTER — top-left corner
-   Appears with the spine in the S2→S3 intro transition (see countdown.js),
-   then counts from 0 → 20.500 € as the reader scrolls through Chapter 2.
+   Fades in with the circle fill (s3, ~68% scroll). Counts 0 → 20.500 € as
+   the reader scrolls from s3 (circle full) through Chapter 2.
 ═══════════════════════════════════════════════ */
 
 export function createEuroCounter({ gsap, ScrollTrigger }) {
@@ -11,15 +11,14 @@ export function createEuroCounter({ gsap, ScrollTrigger }) {
   const fmt = (n) =>
     Math.round(n).toLocaleString('de-AT');
 
-  /* Count 0 → 20 500 from the top of s4 to the text-reveal point in s8.
-     scrub ties the value directly to scroll position; ease: 'none' keeps
-     the mapping linear so the number grows at a steady pace per VH scrolled. */
+  /* Count 0 → 20 500 from when the counter first appears (~65% into s3)
+     to the text-reveal point in s8. scrub keeps the value linear to scroll. */
   gsap.to(counter, {
     value: 20500,
     ease: 'none',
     scrollTrigger: {
-      trigger:    '#s4',
-      start:      'top top',
+      trigger:    '#s3',
+      start:      '65% top',
       endTrigger: '#s8',
       end:        '72% bottom',
       scrub:      1.5,
@@ -29,13 +28,12 @@ export function createEuroCounter({ gsap, ScrollTrigger }) {
     },
   });
 
-  /* Attention pulse — fires once when the counter first appears (s4, ~92% of
-     the circle-fill scrub ≈ 55% of s4's height at the viewport top).
-     A short delay lets the counter finish fading in before pulsing red. */
+  /* Attention pulse — fires once just before the counter fully fades in.
+     The 0.3 s delay means it plays while the counter is becoming visible. */
   ScrollTrigger.create({
-    trigger:    '#s4',
-    start:      '55% top',
-    once:       true,
+    trigger: '#s3',
+    start:   '60% top',
+    once:    true,
     onEnter: () => {
       gsap.delayedCall(0.3, () => {
         gsap.timeline()

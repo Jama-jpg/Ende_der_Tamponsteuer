@@ -53,8 +53,10 @@ export default {
     });
 
     tl.set('#st-periode', { opacity: 1 }, 0);
-    /* Defensive resets — any stale text from previous scenes is cleared at t=0. */
+    /* Defensive resets — clear all text from previous scenes at t=0. */
     tl.set(['#st8', '#st5', '#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
+    /* st8 ("Jeden Monat") has already faded out inside s8, but reset here as
+       a hard guard so the rect animation plays with no competing text. */
 
     /* Phase A1 (0→0.22): circles grow and merge via gooey filter into a vertical bar,
        then the solid rect cross-dissolves in as the gooey blob fades out. */

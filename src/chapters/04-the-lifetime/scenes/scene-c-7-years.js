@@ -1,14 +1,14 @@
 /* ═══════════════════════════════════════════════════════════════════
-   SCENE C — 456 lines retract → 31 years fade → 7-year payoff text
-   Enters from scene-b's end state: rect + 38 dividers + 456 barcode
-   lines (st-p3 already gone, faded out at end of scene B).
+   SCENE C — 456 lines retract → top 31 years wipe to pink → 7-year payoff
+   Enters from scene-b's end state: rect + 38 dividers + 456 barcode lines
+   (st-p3 already faded out at end of scene B).
 
    Timeline (0 → 1 over 300vh):
+     0.08–0.18  "DAS SIND … 7 JAHRE" text fades in (parallel with animation)
      0.12–0.30  456 lines converge back to rect centre (from random)
      0.32–0.42  456-lines group fades out; 38 dividers remain visible
-     0.42–0.62  Light-pink rRect overlay fades in over bottom 31 years
-                (top 7-year strip stays solid red — the visual payoff)
-     0.65–0.82  Final text "DAS SIND … 7 JAHRE MENSTRUATION." fades in
+     0.42–0.72  rRect wipes top→bottom: pink overlay grows from y=70 downward
+                covering the upper 31 years; bottom 7 stay solid red
      0.82–1.00  Hold
 ═══════════════════════════════════════════════════════════════════ */
 
@@ -32,6 +32,9 @@ export default {
     /* Defensive reset — scene-b already fades #st-p3 out, but just in case. */
     tl.set('#st-p3', { opacity: 0 }, 0);
 
+    /* "7 JAHRE" text fades in early, parallel with the line retraction. */
+    tl.to('#st-p4', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.08);
+
     /* 456 lines converge back toward the rect centre (CX=775) */
     tl
       .to(lineEls, {
@@ -42,12 +45,15 @@ export default {
       }, 0.12)
       .to(linesGrp, { opacity: 0, duration: 0.10 }, 0.32);
 
-    /* Light-pink overlay fades in over bottom 31 years (top 7 stay red) */
-    tl.fromTo(rRect, { opacity: 0 }, { opacity: 1, duration: 0.22, ease: 'power1.out' }, 0.42);
+    /* Pink overlay wipes from top (y=70) downward to y=414, covering the upper
+       31 years. The bottom 7 years (y=414→492) remain as solid red mRect.
+       rRect starts at opacity 0 (buildStage), height 344, y 70 (markup). */
+    tl.fromTo(rRect,
+      { opacity: 1, attr: { height: 0 } },
+      { attr: { height: 344 }, duration: 0.30, ease: 'power1.inOut' },
+      0.42,
+    );
 
-    /* Final payoff text — only after rect animation is complete. */
-    tl
-      .to('#st-p4', { opacity: 1, duration: 0.16, ease: 'power1.out' }, 0.65)
-      .to({}, { duration: 0.02 }, 0.98);
+    tl.to({}, { duration: 0.02 }, 0.98);
   },
 };

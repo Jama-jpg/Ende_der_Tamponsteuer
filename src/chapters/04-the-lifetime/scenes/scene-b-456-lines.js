@@ -48,10 +48,10 @@ export default {
         duration: 0.38,
       }, 0.19);
 
-    /* "INSGESAMT 456 mal" fades in, holds, then fades out — scene fully owns its text. */
+    /* "INSGESAMT 456 mal" fades in early (parallel with lines expanding),
+       holds, then fades out — clean slate before scene C starts. */
     tl
-      .to('#st-p3', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.65)
+      .to('#st-p3', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.08)
       .to('#st-p3', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.88);
-    /* 0.96→1.00 hold — clean slate before scene C starts. */
   },
 };
