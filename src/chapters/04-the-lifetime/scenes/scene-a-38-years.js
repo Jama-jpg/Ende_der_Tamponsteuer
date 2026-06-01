@@ -94,10 +94,8 @@ export default {
         duration: 0.14,
       }, 0.50);
 
-    /* Phase A4 (0.70→0.84): "FÜR 38 JAHRE" text fades in, holds, then fades out. */
-    tl
-      .to('#st-p2', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.70)
-      .to('#st-p2', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.88);
-    /* 0.96→1.00 hold — clean slate before scene B starts. */
+    /* Phase A4 (0.70→1.00): "FÜR 38 JAHRE" text fades in and stays visible.
+       Scene B will fade it out at its own start when the user scrolls on. */
+    tl.to('#st-p2', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.70);
   },
 };

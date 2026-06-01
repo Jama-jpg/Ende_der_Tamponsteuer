@@ -85,9 +85,8 @@ scenes.forEach((scene) => scene.init?.(ctx));
 /* 5 ─ Wire the spine as the page scrollbar (overall scroll progress + seek) */
 createSpine({ ScrollTrigger, refs });
 
-/* 6 ─ Snap the page to scene boundaries so animations always run to
-       completion and a single scroll moves on to the next scene. */
-createSnap({ ScrollTrigger, gsap, scenes });
+/* 6 ─ Snap disabled — free scrolling so scrub animations are fully visible. */
+// createSnap({ ScrollTrigger, gsap, scenes });
 
 /* 7 ─ Euro counter — top-left corner, Chapter 2 → "Jeden Monat" */
 createEuroCounter({ gsap, ScrollTrigger });

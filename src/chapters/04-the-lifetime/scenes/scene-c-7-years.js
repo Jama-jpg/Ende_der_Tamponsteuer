@@ -29,11 +29,11 @@ export default {
       },
     });
 
-    /* Defensive reset — scene-b already fades #st-p3 out, but just in case. */
-    tl.set('#st-p3', { opacity: 0 }, 0);
+    /* "INSGESAMT 456 mal" (from scene B) fades out as user scrolls into scene C. */
+    tl.to('#st-p3', { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0);
 
-    /* "7 JAHRE" text fades in early, parallel with the line retraction. */
-    tl.to('#st-p4', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.08);
+    /* "7 JAHRE" text fades in after #st-p3 is gone, then stays visible. */
+    tl.to('#st-p4', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.18);
 
     /* 456 lines converge back toward the rect centre (CX=775) */
     tl
