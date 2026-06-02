@@ -21,13 +21,13 @@
 
    Ends with the 12 circles in place for the Lifetime chapter.
 ═══════════════════════════════════════════════ */
-import { CX, CY, MC_X, MC_Y, MC_R } from '../../../core/constants.js';
+import { CX, CY, PIE_R, MC_X, MC_Y, MC_R } from '../../../core/constants.js';
 
 /* ── Split physics tuning ───────────────────────────────────────────── */
 const HOLD       = 0.18;  // hold — big circle pulses visibly before split begins
 const PH1        = 0.40;  // end of "plastic stretch" (mass kept, barely shrinks)
 const PH2        = 0.72;  // end of "necking" (organic waves + thin threads)
-const R_START    = 90;    // matches the big red circle (#c-fill r)
+const R_START    = PIE_R; // start at full size so the gooey blob seamlessly replaces cFill
 const R_P1       = 72;    // radius after the plastic stretch — still massive
 const R_P2       = 45;    // radius after necking — thin connecting filaments
 const R_END      = MC_R;  // final month-circle radius (15)
@@ -62,10 +62,20 @@ export default {
       // Overall split progress, after the initial "full circle" hold.
       const sp = clamp((p - HOLD) / (1 - HOLD), 0, 1);
 
-      // Gooey blur resolves to 0 over the last third so the drops snap crisp.
-      const blur = sp <= PH2 ? FULL_BLUR
-        : FULL_BLUR * (1 - (sp - PH2) / (1 - PH2));
+      // Blur starts at 0 (12 overlapping circles = one circle, seamless with cFill),
+      // ramps up during the spread phase (gooey necks), then resolves to 0.
+      const BLUR_RAMP = 0.05;
+      const blur = sp < BLUR_RAMP
+        ? 0
+        : sp <= PH2
+          ? FULL_BLUR * Math.min((sp - BLUR_RAMP) / (PH2 - BLUR_RAMP), 1)
+          : FULL_BLUR * (1 - (sp - PH2) / (1 - PH2));
       gooeyBlur.setAttribute('stdDeviation', blur.toFixed(2));
+
+      // Only apply the gooey filter when blur is active. With blur=0, feColorMatrix
+      // sharpens anti-aliased edges and makes the stacked circles look different from
+      // cFill — disabling it gives a clean, seamless appearance at start and end.
+      mCircles.setAttribute('filter', blur >= 1 ? 'url(#gooey)' : 'none');
 
       for (let i = 0; i < mcEls.length; i++) {
         // Distance from centre drives inertia: outer circles lead (delay 0),
@@ -81,7 +91,11 @@ export default {
         else               r = lerp(R_P2, R_END, snapEase((t - PH2) / (1 - PH2)));
 
         // Position springs toward the month slot with an elastic overshoot.
-        const cy = CY + (MC_Y[i] - CY) * backOut(t);
+        // Clamped to keep every circle fully inside the SVG viewBox (0…562):
+        // back.out(4.5) can overshoot by ~45 %, which with r≈67 during necking
+        // would push the outermost circles outside y=0 / y=562 and clip them.
+        const rawCy = CY + (MC_Y[i] - CY) * backOut(t);
+        const cy    = clamp(rawCy, r + 2, 562 - r - 2);
 
         // Organic side wobble that vanishes exactly at the ends (sin(0)=sin(π)=0).
         const cx = MC_X + Math.sin(i * 1.7) * SWAY * Math.sin(Math.PI * t);
@@ -109,12 +123,11 @@ export default {
       .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04)
       /* "Jeden Monat" appears after st5 is gone ("erst weg, dann neu"). */
       .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.15)
-      /* Big circle contracts to R_START during hold — captures current r (PIE_R, from s5)
-         when the tween first runs, so no stale state is applied at page-load. */
-      .to(cFill, { attr: { r: R_START }, ease: 'power2.in', duration: HOLD * 0.9 }, 0.001)
-      /* Month circles take over exactly as the contraction finishes. */
-      .set(mCircles, { opacity: 1 }, HOLD)
-      .to(cFill, { opacity: 0, duration: 0.04, ease: 'power1.out' }, HOLD)
+      /* Month circles take over immediately — render(0) positions all 12 at
+         (775,281,r=198,blur=0) which is visually identical to cFill, so the
+         handoff is seamless and the split only begins once HOLD is reached. */
+      .set(mCircles, { opacity: 1 }, 0)
+      .to(cFill, { opacity: 0, duration: 0.01, ease: 'linear' }, 0)
       /* Text fades out after split is settled — scene fully owns its text. */
       .to('#st8', { opacity: 0, duration: 0.10, ease: 'power1.in' }, 0.75)
 

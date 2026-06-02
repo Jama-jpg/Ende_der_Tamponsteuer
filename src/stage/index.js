@@ -30,6 +30,7 @@ export function buildStage(mount, gsap) {
     /* SVG canvas — shapes */
     cAxis:     $('c-axis'),
     cAxisProgress: $('c-axis-progress'),
+    spineThick:    $('spine-thick'),
     spineHit:      $('spine-hit'),
     cOutline:  $('c-outline'),
     cSpinner:  $('c-spinner'),

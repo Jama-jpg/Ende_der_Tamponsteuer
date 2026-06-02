@@ -17,7 +17,7 @@ export default {
   height: '300vh',
   skipSnapStart: true,
 
-  init({ gsap, stage }) {
+  init({ gsap, ScrollTrigger, stage }) {
     const { linesGrp, lineEls, rRect } = stage.refs;
 
     const tl = gsap.timeline({

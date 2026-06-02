@@ -75,7 +75,7 @@ export const stageMarkup = /* html */ `
            overlapping circles merge into one liquid mass with stretchy necks.
            #gooey-blur's stdDeviation is animated to 0 over the last third of the
            split so the 12 circles end up perfectly round, sharp and precise. -->
-      <filter id="gooey" filterUnits="userSpaceOnUse" x="600" y="0" width="350" height="562"
+      <filter id="gooey" filterUnits="userSpaceOnUse" x="530" y="-50" width="480" height="662"
               color-interpolation-filters="sRGB">
         <feGaussianBlur id="gooey-blur" in="SourceGraphic" stdDeviation="0" result="blur"/>
         <feColorMatrix in="blur" type="matrix"
@@ -97,7 +97,7 @@ export const stageMarkup = /* html */ `
 
     <!-- Circle — hairline grey outline; fills itself red once the spinner draws -->
     <circle id="c-outline" cx="775" cy="281" r="90" fill="#D63335" fill-opacity="0"
-            stroke="#D0D0C7" stroke-width="0.8" opacity="0"/>
+            stroke="#D0D0C7" stroke-width="0.8" opacity="0" pointer-events="all"/>
 
     <!-- Liquid stream + fill (Scene 4) -->
     <rect id="liq-stream" x="772" y="50" width="6" height="0" fill="#D63335" opacity="0"/>
@@ -145,6 +145,9 @@ export const stageMarkup = /* html */ `
          scrollbar is hidden in base.css. -->
     <line id="c-axis-progress" x1="500" y1="42" x2="500" y2="42"
           stroke="#A9A99F" stroke-width="5" stroke-linecap="round" opacity="0"/>
+    <!-- Thick spine stroke — grows top→bottom during "7 Jahre" sections as progress indicator -->
+    <line id="spine-thick" x1="500" y1="42" x2="500" y2="42"
+          stroke="#D63335" stroke-width="3" stroke-linecap="round" opacity="0"/>
     <rect id="spine-hit" x="486" y="42" width="28" height="468" fill="transparent"/>
   </svg>
 

@@ -26,11 +26,11 @@ export default {
     });
 
     tl
-      /* Old text ("Abonnement") fades out first. */
-      .to('#st3', { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0)
-      /* New text fades in after a brief gap ("erst weg, dann neu"). */
-      .to('#st5', { opacity: 1, duration: 0.30, ease: 'power1.out' }, 0.22)
-      /* Circle grows from small to full pie radius, parallel with text. */
-      .to(cFill,  { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.62 }, 0.30);
+      /* Old text fades out immediately. */
+      .to('#st3', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0)
+      /* Circle grows from first scroll movement — no idle wait. */
+      .to(cFill,  { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.80 }, 0)
+      /* New text fades in right after old text is gone. */
+      .to('#st5', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.10);
   },
 };

@@ -15,7 +15,7 @@ export default {
            <p class="sl">MENSTRUATION. DURCHGEHEND.</p>`,
   },
 
-  init({ gsap, stage, shared }) {
+  init({ gsap, ScrollTrigger, stage, shared }) {
     const r = stage.refs;
     /* Same shrink scale the intro computed, so the pulse stays on-size. */
     const base = shared.vatScale ?? 0.056;
@@ -39,5 +39,13 @@ export default {
       .to('#st13',    { opacity: 1, duration: 0.25 }, 0.65)
       .to(r.vatBigEl, { scale: base * 1.45, color: '#D63335', duration: 0.1, ease: 'power2.out' }, 0.76)
       .to(r.vatBigEl, { scale: base, color: '#1a1a1a', duration: 0.12, ease: 'power2.in' }, 0.87);
+
+    /* Fill the first spine dot (Y=42) at the climax of "7 Jahre". */
+    ScrollTrigger.create({
+      trigger: '#s13',
+      start: '85% top',
+      onEnter:     () => r.periodDots?.children[0]?.setAttribute('fill', '#A9A99F'),
+      onLeaveBack: () => r.periodDots?.children[0]?.setAttribute('fill', 'white'),
+    });
   },
 };
