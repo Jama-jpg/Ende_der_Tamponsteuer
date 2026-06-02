@@ -24,6 +24,6 @@ export const DOT_YS = [42, 101, 159, 218, 276, 335, 393, 452, 510];
 export const LINE_COUNT = 456;
 
 /* Die Periode Phase 3: year-divider lines within the rect */
-export const LINE_38_COUNT = 38;
+export const LINE_38_COUNT = 39;  // 39 lines → 38 gaps = 38 years
 
 export const SVG_NS = 'http://www.w3.org/2000/svg';

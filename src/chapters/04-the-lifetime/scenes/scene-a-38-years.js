@@ -49,6 +49,10 @@ export default {
         start: 'top top',
         end: 'bottom bottom',
         scrub: 1,
+        /* Re-enable gooey filter on mCircles: jeden-monat.js sets it to 'none'
+           at split end, so the merge animation would be invisible without this. */
+        onEnter:     () => mCircles.setAttribute('filter', 'url(#gooey)'),
+        onEnterBack: () => mCircles.setAttribute('filter', 'url(#gooey)'),
       },
     });
 

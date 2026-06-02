@@ -40,12 +40,12 @@ export default {
       /* Spinner appears, then draws clockwise around the outline. */
       .to(cSpinner,   { opacity: 1, duration: 0.06 }, 0.08)
       .to(cSpinner,   { strokeDashoffset: 0, ease: 'power2.inOut', duration: 0.30 }, 0.12)
-      /* Fill the outline circle red and hide its grey stroke — same element, no size jump. */
-      .to(cFill, { attr: { 'fill-opacity': 1, 'stroke-opacity': 0 }, duration: 0.06, ease: 'power1.out' }, 0.44)
+      /* Make element visible, fill it red, hide grey stroke — all in one step. */
+      .to(cFill, { opacity: 1, attr: { 'fill-opacity': 1, 'stroke-opacity': 0 }, duration: 0.16, ease: 'power1.out' }, 0.44)
       /* Spinner fades out once the fill is visible (cOutline IS cFill — stays visible). */
       .to(cSpinner,   { opacity: 0, duration: 0.08 }, 0.50)
-      /* Euro counter appears the moment the circle is solid red (fill done at ~0.50). */
-      .to(euroContainer, { opacity: 1, duration: 0.08, ease: 'power1.out' }, 0.50)
+      /* Euro counter appears simultaneously as the circle fills. */
+      .to(euroContainer, { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.44)
       /* Hold: user reads text, circle pulses, euro counter is visible (~168vh). */
       .to({}, { duration: 0.42 }, 0.58);
 
