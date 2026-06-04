@@ -34,7 +34,7 @@ export default {
 
     /* scene-kosten-detail owns #st-ch5-detail fade-out. This scene controls only its own text. */
     tl.to('#st-ch5-grow', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
-    tl.to('#st-ch5-grow', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
+    tl.to('#st-ch5-grow', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 
     /* Grow each coin and scatter it */
     coinEls.forEach((g, i) => {

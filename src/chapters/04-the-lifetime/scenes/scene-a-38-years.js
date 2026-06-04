@@ -101,10 +101,10 @@ export default {
         duration: 0.14,
       }, 0.50);
 
-    /* Phase A4: "FÜR 38 JAHRE" text fades in, holds, then fades out at the end
-       of this scene so no cross-scene property conflict occurs on reverse scroll. */
-    tl.to('#st-p2', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.70);
-    tl.to('#st-p2', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
+    /* Phase A4: "FÜR 38 JAHRE" text fades in early (lines finishing ~0.75),
+       holds long, then fades out late so the user has plenty of reading time. */
+    tl.to('#st-p2', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.63);
+    tl.to('#st-p2', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

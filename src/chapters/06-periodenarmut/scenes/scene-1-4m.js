@@ -61,7 +61,9 @@ export default {
     /* Big circle grows in */
     tl.to(povCircle, { opacity: 1, attr: { r: POV_R }, ease: 'power2.out', duration: 0.20 }, 0.32);
     tl.to('#st-ch6-14m-main', { opacity: 1, duration: 0.12 }, 0.47);
-    tl.to('#st-ch6-14m-main', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.89);
+    /* Fade out very late so the text remains visible during the entire hover zone.
+       The hover leave() restores this text — fading it earlier fights the scrub. */
+    tl.to('#st-ch6-14m-main', { opacity: 0, duration: 0.05, ease: 'power1.in' }, 0.93);
 
     tl.to({}, { duration: 0.02 }, 0.98);
 

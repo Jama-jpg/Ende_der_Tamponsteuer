@@ -47,10 +47,10 @@ export default {
         duration: 0.38,
       }, 0.19);
 
-    /* "INSGESAMT 456 mal" fades in, holds, then fades out at the end of this
-       scene so scene C starts with a clean slate (no cross-scene hand-off). */
-    tl.to('#st-p3', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.20);
-    tl.to('#st-p3', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.88);
+    /* "INSGESAMT 456 mal" fades in early as lines start appearing, holds long,
+       then fades out late so scene C starts with a clean slate. */
+    tl.to('#st-p3', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.12);
+    tl.to('#st-p3', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

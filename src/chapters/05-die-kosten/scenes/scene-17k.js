@@ -39,7 +39,7 @@ export default {
     /* Tampon appears; text fades in then fades out before scene-25k begins. */
     tl.to(tampon3d,      { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.18);
     tl.to('#st-ch5-17k', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.22);
-    tl.to('#st-ch5-17k', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
+    tl.to('#st-ch5-17k', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 
     tl.to({}, { duration: 0.02 }, 0.98);
 

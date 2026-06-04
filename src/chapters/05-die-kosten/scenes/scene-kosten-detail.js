@@ -30,7 +30,7 @@ export default {
 
     /* scene-25k owns #st-ch5-25k fade-out. This scene only controls its own text. */
     tl.to('#st-ch5-detail', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
-    tl.to('#st-ch5-detail', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
+    tl.to('#st-ch5-detail', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

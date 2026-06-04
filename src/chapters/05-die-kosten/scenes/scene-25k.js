@@ -96,7 +96,7 @@ export default {
     });
 
     /* Text fades out before scene-kosten-detail begins (owns its own lifecycle). */
-    tl.to('#st-ch5-25k', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.89);
+    tl.to('#st-ch5-25k', { opacity: 0, duration: 0.06, ease: 'power1.in' }, 0.92);
 
     tl.to({}, { duration: 0.02 }, 0.98);
 

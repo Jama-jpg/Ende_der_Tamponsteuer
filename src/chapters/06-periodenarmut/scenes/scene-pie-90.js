@@ -35,7 +35,7 @@ export default {
 
     /* scene-folgen owns #st-ch6-folgen fade-out. */
     tl.to('#st-ch6-pie90',  { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
-    tl.to('#st-ch6-pie90',  { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
+    tl.to('#st-ch6-pie90',  { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
     tl.to('#pov-pie-90',    { opacity: 1, duration: 0.01 }, 0.12);
 
     tl.to(proxy, {

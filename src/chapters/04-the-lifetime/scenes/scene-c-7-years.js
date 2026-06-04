@@ -29,9 +29,9 @@ export default {
       },
     });
 
-    /* "7 JAHRE" fades in, holds, then fades out before scene-17k begins. */
-    tl.to('#st-p4', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.08);
-    tl.to('#st-p4', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
+    /* "7 JAHRE" fades in quickly, holds long, fades out late before scene-17k begins. */
+    tl.to('#st-p4', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.06);
+    tl.to('#st-p4', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 
     /* 456 lines converge back toward the rect centre (CX=775) */
     tl

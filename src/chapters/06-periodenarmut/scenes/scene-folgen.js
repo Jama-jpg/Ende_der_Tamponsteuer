@@ -33,7 +33,7 @@ export default {
 
     /* scene-500k owns #st-ch6-500k fade-out. */
     tl.to('#st-ch6-folgen', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
-    tl.to('#st-ch6-folgen', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
+    tl.to('#st-ch6-folgen', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 
     tl.to([povCircle, povPie17], { opacity: 0, ease: 'power1.in', duration: 0.24 }, 0.14);
 
