@@ -9,7 +9,7 @@ export default {
   height: '200vh',
   overlay: {
     id: 'st10',
-    html: `<p class="sl">FÜR</p>
+    html: `<p class="sl">FÜR JEWEILS</p>
            <p class="sh">38 JAHRE</p>`,
   },
 

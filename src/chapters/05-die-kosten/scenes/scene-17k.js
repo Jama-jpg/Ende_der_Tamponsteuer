@@ -29,17 +29,17 @@ export default {
         trigger: '#s-ch5-17k',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7,
+        scrub: 0.4,
       },
     });
 
-    /* Fade out ch4 end state */
+    /* Fade out ch4 visual elements (scene-c owns #st-p4 fade-out). */
     tl.to([mRect, rRect, lines38Grp], { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0);
-    tl.to('#st-p4', { opacity: 0, duration: 0.10 }, 0);
 
-    /* Tampon and text appear */
+    /* Tampon appears; text fades in then fades out before scene-25k begins. */
     tl.to(tampon3d,      { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.18);
     tl.to('#st-ch5-17k', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.22);
+    tl.to('#st-ch5-17k', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
 
     tl.to({}, { duration: 0.02 }, 0.98);
 

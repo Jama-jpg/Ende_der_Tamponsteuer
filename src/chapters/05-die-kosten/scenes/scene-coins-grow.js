@@ -28,12 +28,13 @@ export default {
         trigger: '#s-ch5-grow',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7,
+        scrub: 0.4,
       },
     });
 
-    tl.to('#st-ch5-detail', { opacity: 0, duration: 0.10, ease: 'power1.in' }, 0);
-    tl.to('#st-ch5-grow',   { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
+    /* scene-kosten-detail owns #st-ch5-detail fade-out. This scene controls only its own text. */
+    tl.to('#st-ch5-grow', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
+    tl.to('#st-ch5-grow', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
 
     /* Grow each coin and scatter it */
     coinEls.forEach((g, i) => {

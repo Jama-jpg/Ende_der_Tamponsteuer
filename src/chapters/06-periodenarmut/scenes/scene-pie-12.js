@@ -28,11 +28,11 @@ export default {
         trigger: '#s-ch6-pie12',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7,
+        scrub: 0.4,
       },
     });
 
-    tl.to('#st-ch6-pie15', { opacity: 0, duration: 0.10 }, 0);
+    /* scene-pie-15 owns #st-ch6-pie15 fade-out. */
     tl.to('#st-ch6-pie12', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
     tl.to('#pov-pie-12',   { opacity: 1, duration: 0.01 }, 0.12);
 

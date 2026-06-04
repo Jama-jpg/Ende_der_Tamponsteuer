@@ -27,12 +27,11 @@ export default {
         trigger: '#s-periode-b',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7,
+        scrub: 0.4,
       },
     });
 
-    /* "FÜR 38 JAHRE" (from scene A) fades out as the user scrolls into scene B. */
-    tl.to('#st-p2', { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0);
+    /* Scene A owns the fade-out of #st-p2 — no cross-scene hand-off needed. */
 
     /* 456 lines expand from rect centre (x≈770–780) to rect bounds (x≈700–850)
        — layered on top of the 38 year-dividers for a barcode effect */
@@ -48,8 +47,11 @@ export default {
         duration: 0.38,
       }, 0.19);
 
-    /* "INSGESAMT 456 mal" fades in after #st-p2 is gone and stays visible.
-       Scene C will fade it out at its own start when the user scrolls on. */
+    /* "INSGESAMT 456 mal" fades in, holds, then fades out at the end of this
+       scene so scene C starts with a clean slate (no cross-scene hand-off). */
     tl.to('#st-p3', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.20);
+    tl.to('#st-p3', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.88);
+
+    tl.to({}, { duration: 0.02 }, 0.98);
   },
 };

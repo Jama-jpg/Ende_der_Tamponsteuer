@@ -48,7 +48,7 @@ export default {
         trigger: '#s-periode-a',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7,
+        scrub: 0.4,
         /* Re-enable gooey filter on mCircles: jeden-monat.js sets it to 'none'
            at split end, so the merge animation would be invisible without this. */
         onEnter:     () => mCircles.setAttribute('filter', 'url(#gooey)'),
@@ -101,8 +101,11 @@ export default {
         duration: 0.14,
       }, 0.50);
 
-    /* Phase A4 (0.70→1.00): "FÜR 38 JAHRE" text fades in and stays visible.
-       Scene B will fade it out at its own start when the user scrolls on. */
+    /* Phase A4: "FÜR 38 JAHRE" text fades in, holds, then fades out at the end
+       of this scene so no cross-scene property conflict occurs on reverse scroll. */
     tl.to('#st-p2', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.70);
+    tl.to('#st-p2', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
+
+    tl.to({}, { duration: 0.02 }, 0.98);
   },
 };

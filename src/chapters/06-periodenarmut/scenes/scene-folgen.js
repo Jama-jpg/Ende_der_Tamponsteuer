@@ -27,12 +27,13 @@ export default {
         trigger: '#s-ch6-folgen',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7,
+        scrub: 0.4,
       },
     });
 
-    tl.to('#st-ch6-500k',   { opacity: 0, duration: 0.10 }, 0);
+    /* scene-500k owns #st-ch6-500k fade-out. */
     tl.to('#st-ch6-folgen', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
+    tl.to('#st-ch6-folgen', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
 
     tl.to([povCircle, povPie17], { opacity: 0, ease: 'power1.in', duration: 0.24 }, 0.14);
 

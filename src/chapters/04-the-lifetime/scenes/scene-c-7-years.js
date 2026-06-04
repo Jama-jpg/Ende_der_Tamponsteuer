@@ -1,10 +1,10 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE C — 456 lines retract → top 31 years wipe to pink → 7-year payoff
-   Enters from scene-b's end state: rect + 38 dividers + 456 barcode lines
-   (st-p3 already faded out at end of scene B).
+   Enters from scene-b's end state: rect + 38 dividers (lines still visible),
+   st-p3 was faded out by scene B at its end.
 
-   Timeline (0 → 1 over 300vh):
-     0.08–0.18  "DAS SIND … 7 JAHRE" text fades in (parallel with animation)
+   Timeline (0 → 1 over 150vh):
+     0.08–0.18  "DAS SIND … 7 JAHRE" text fades in
      0.12–0.30  456 lines converge back to rect centre (from random)
      0.32–0.42  456-lines group fades out; 38 dividers remain visible
      0.42–0.72  rRect wipes top→bottom: pink overlay grows from y=70 downward
@@ -25,15 +25,13 @@ export default {
         trigger: '#s-periode-c',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7,
+        scrub: 0.4,
       },
     });
 
-    /* "INSGESAMT 456 mal" (from scene B) fades out as user scrolls into scene C. */
-    tl.to('#st-p3', { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0);
-
-    /* "7 JAHRE" text fades in after #st-p3 is gone, then stays visible. */
-    tl.to('#st-p4', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.18);
+    /* "7 JAHRE" fades in, holds, then fades out before scene-17k begins. */
+    tl.to('#st-p4', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.08);
+    tl.to('#st-p4', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
 
     /* 456 lines converge back toward the rect centre (CX=775) */
     tl

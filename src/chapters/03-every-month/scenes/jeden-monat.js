@@ -104,7 +104,7 @@ export default {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 0.7,
+        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 0.4,
 
         onUpdate(self) {
           const p       = Math.min(self.progress / SPLIT_END, 1);
@@ -132,12 +132,10 @@ export default {
     });
 
     tl
-      /* "1,9 Milliarden" fades out first. */
-      .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.04)
-      /* "Jeden Monat" appears. */
+      /* "1,9 Milliarden" is faded out by circle-grow (s5) — no hand-off needed. */
+      /* "Jeden Monat" appears, then fades out after split is settled. */
       .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.15)
-      /* Text fades out after split is settled. */
-      .to('#st8', { opacity: 0, duration: 0.10, ease: 'power1.in' }, 0.75);
+      .to('#st8', { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.75);
 
     /* Initial position: all 12 circles stacked at (775,281,r=PIE_R) — visually
        identical to cFill. prevInHold=true so no opacity change here. */

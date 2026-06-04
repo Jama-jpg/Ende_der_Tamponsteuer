@@ -26,11 +26,10 @@ export default {
     });
 
     tl
-      /* Old text fades out immediately. */
-      .to('#st3', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0)
-      /* Circle grows from first scroll movement — no idle wait. */
+      /* Circle grows (s3 owns its own text fade-out — no cross-scene hand-off). */
       .to(cFill,  { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.80 }, 0)
-      /* New text fades in right after old text is gone. */
-      .to('#st5', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.10);
+      /* New text fades in, holds, then fades out before s8 begins. */
+      .to('#st5', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.10)
+      .to('#st5', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.88);
   },
 };

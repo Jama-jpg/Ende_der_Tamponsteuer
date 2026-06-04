@@ -21,7 +21,7 @@ export default {
     });
 
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: '#s4', start: 'top top', end: 'bottom bottom', scrub: 1 },
+      scrollTrigger: { trigger: '#s4', start: 'top top', end: 'bottom bottom', scrub: 0.4 },
     });
 
     tl

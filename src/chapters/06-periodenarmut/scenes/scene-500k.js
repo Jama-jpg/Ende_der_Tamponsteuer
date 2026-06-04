@@ -30,13 +30,14 @@ export default {
         trigger: '#s-ch6-500k',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7,
+        scrub: 0.4,
       },
     });
 
-    tl.to('#st-ch6-14m-main', { opacity: 0, duration: 0.10 }, 0);
-    tl.to('#st-ch6-hover17',  { opacity: 0, duration: 0.10 }, 0);
-    tl.to('#st-ch6-500k',     { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.10);
+    /* scene-1-4m owns #st-ch6-14m-main fade-out. #st-ch6-hover17 is hover-driven
+       and reset by scene-1-4m's onLeaveBack — no cross-scene control needed. */
+    tl.to('#st-ch6-500k', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.10);
+    tl.to('#st-ch6-500k', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.89);
 
     tl.to(povSub, { opacity: 1, attr: { r: POV_SUB_R }, ease: 'power2.out', duration: 0.30 }, 0.18);
 

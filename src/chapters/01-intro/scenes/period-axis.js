@@ -32,7 +32,7 @@ export default {
     });
 
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: '#s3', start: 'top top', end: 'bottom bottom', scrub: 1.2 },
+      scrollTrigger: { trigger: '#s3', start: 'top top', end: 'bottom bottom', scrub: 0.4 },
     });
 
     tl
@@ -48,7 +48,9 @@ export default {
       /* Euro counter appears simultaneously as the circle fills. */
       .to(euroContainer, { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.44)
       /* Short hold so everything is visible before moving on. */
-      .to({}, { duration: 0.06 }, 0.58);
+      .to({}, { duration: 0.06 }, 0.58)
+      /* Text fades out before circle-grow begins — scene owns its lifecycle. */
+      .to('#st3', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.88);
 
     /* Pulse: starts when fill is visually complete, keeps running through
        the grow (s5) and pie-hover (s7) until the split in s8. */

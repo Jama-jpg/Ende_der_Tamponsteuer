@@ -42,11 +42,11 @@ export default {
         trigger: '#s-ch6-14m',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7,
+        scrub: 0.4,
       },
     });
 
-    tl.to('#st-ch5-grow', { opacity: 0, duration: 0.10 }, 0);
+    /* scene-coins-grow owns #st-ch5-grow fade-out. */
 
     /* Coins fall off-screen bottom.
        After scene-coins-grow, each coin's GSAP y = COIN_SCATTER[i][1] - COIN_POSITIONS[i][1].
@@ -61,6 +61,7 @@ export default {
     /* Big circle grows in */
     tl.to(povCircle, { opacity: 1, attr: { r: POV_R }, ease: 'power2.out', duration: 0.20 }, 0.32);
     tl.to('#st-ch6-14m-main', { opacity: 1, duration: 0.12 }, 0.47);
+    tl.to('#st-ch6-14m-main', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.89);
 
     tl.to({}, { duration: 0.02 }, 0.98);
 

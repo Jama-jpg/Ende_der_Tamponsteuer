@@ -51,12 +51,12 @@ export default {
         trigger: '#s-ch5-25k',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.7,
+        scrub: 0.4,
       },
     });
 
-    tl.to(tampon3d,      { opacity: 0, duration: 0.10 }, 0);
-    tl.to('#st-ch5-17k', { opacity: 0, duration: 0.10 }, 0);
+    tl.to(tampon3d, { opacity: 0, duration: 0.10 }, 0);
+    /* scene-17k owns #st-ch5-17k fade-out — no hand-off needed. */
 
     /* Counter ticks up; coins become visible once counter starts */
     tl.set(coinsGrp, { opacity: 1 }, 0.10);
@@ -90,27 +90,36 @@ export default {
       tl.to(g, {
         x: 0,
         y: 0,
-        ease: 'bounce.out',
+        ease: 'power2.out',
         duration: 0.18,
       }, 0.18 + order * 0.022);
     });
 
+    /* Text fades out before scene-kosten-detail begins (owns its own lifecycle). */
+    tl.to('#st-ch5-25k', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.89);
+
     tl.to({}, { duration: 0.02 }, 0.98);
 
-    /* Enable drag-and-snap-back after coins have landed */
+    /* Enable drag-and-snap-back after coins have landed.
+       Kill instances when scrolling backward so the scrub can reclaim x/y. */
+    let draggables = [];
     ScrollTrigger.create({
       trigger: '#s-ch5-25k',
       start: '80% top',
       endTrigger: '#s-ch5-grow',
       end: 'bottom bottom',
       onEnter() {
-        Draggable.create(coinEls, {
+        draggables = Draggable.create(coinEls, {
           type: 'x,y',
           bounds: { minX: -300, maxX: 300, minY: -300, maxY: 300 },
           onDragEnd() {
-            gsap.to(this.target, { x: 0, y: 0, ease: 'bounce.out', duration: 1.2 });
+            gsap.to(this.target, { x: 0, y: 0, ease: 'power2.out', duration: 1.2 });
           },
         });
+      },
+      onLeaveBack() {
+        draggables.forEach(d => d.kill());
+        draggables = [];
       },
     });
   },
