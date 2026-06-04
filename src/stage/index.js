@@ -9,6 +9,7 @@ import { stageMarkup } from './markup.js';
 import { makeSvgEl, sectorPath } from '../core/svg.js';
 import {
   PALETTE, CX, CY, PIE_R, MC_X, MC_R, MC_Y, DOT_YS, LINE_COUNT, LINE_38_COUNT,
+  COIN_POSITIONS, COIN_SCATTER, POV_CX, POV_CY, POV_R, POV_SUB_R,
 } from '../core/constants.js';
 
 /* gsap — used only to apply the initial hidden state. */
@@ -47,6 +48,20 @@ export function buildStage(mount, gsap) {
     periodDots:$('period-dots'),
     lblXxxx:   $('lbl-xxxx'),
     lblPeriode:$('lbl-periode'),
+
+    /* Chapter 5 */
+    tampon3d:  $('tampon-3d'),
+    coinsGrp:  $('coins-grp'),
+    coinEls:   [],   // filled below
+
+    /* Chapter 6 */
+    povCircle: $('pov-circle'),
+    povPie17:  $('pov-pie-17'),
+    povSub:    $('pov-sub'),
+    povPie90:  $('pov-pie-90'),
+    povPie60:  $('pov-pie-60'),
+    povPie15:  $('pov-pie-15'),
+    povPie12:  $('pov-pie-12'),
 
     /* Liquid background */
     liquidBg:       $('liquid-bg'),
@@ -107,6 +122,47 @@ export function buildStage(mount, gsap) {
     refs.line38Els.push(ln);
   }
 
+  /* 25 euro coins for Chapter 5 — stacked positions defined in constants */
+  COIN_POSITIONS.forEach(([cx, cy], i) => {
+    const g = makeSvgEl('g', {});
+    const circle = makeSvgEl('circle', { cx, cy, r: '22', fill: '#D63335' });
+    const label = makeSvgEl('text', {
+      x: cx, y: cy,
+      'text-anchor': 'middle',
+      'dominant-baseline': 'middle',
+      'font-size': '7',
+      fill: 'white',
+      'font-family': 'var(--f-mono)',
+      'letter-spacing': '0.5',
+    });
+    label.textContent = '1000€';
+    g.appendChild(circle);
+    g.appendChild(label);
+    refs.coinsGrp.appendChild(g);
+    refs.coinEls.push(g);
+  });
+
+  /* Pre-calculate scatter positions on each coin element for scene-coins-grow */
+  COIN_SCATTER.forEach(([scx, scy], i) => {
+    if (refs.coinEls[i]) {
+      refs.coinEls[i].dataset.scatterX = scx;
+      refs.coinEls[i].dataset.scatterY = scy;
+    }
+  });
+
+  /* Pie sector paths for Chapter 6 poverty circle */
+  const PIE17_DEG = 61.2;   // 17% of 360
+  const PIE90_DEG = 324;    // 90% of 360
+  const PIE60_DEG = 216;    // 60% of 360
+  const PIE15_DEG = 54;     // 15% of 360
+  const PIE12_DEG = 43.2;   // 12% of 360
+
+  refs.povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R,   0, PIE17_DEG));
+  refs.povPie90.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_SUB_R, 0, PIE90_DEG));
+  refs.povPie60.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_SUB_R, 0, PIE60_DEG));
+  refs.povPie15.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_SUB_R, 0, PIE15_DEG));
+  refs.povPie12.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_SUB_R, 0, PIE12_DEG));
+
   /* Initial hidden state — prevents any flash from scroll-restoration races.
      (Per-scene text overlays are hidden by .stext { opacity:0 } in CSS.) */
   gsap.set([
@@ -114,6 +170,9 @@ export function buildStage(mount, gsap) {
     refs.pieTxt, refs.periodDots, refs.mCircles, refs.mRect, refs.rRect,
     refs.linesGrp, refs.lines38Grp, refs.liqFill, refs.liqStream, refs.vatBigTax,
     refs.cAxisProgress,
+    refs.tampon3d, refs.coinsGrp,
+    refs.povCircle, refs.povPie17, refs.povSub,
+    refs.povPie90, refs.povPie60, refs.povPie15, refs.povPie12,
   ], { opacity: 0 });
   gsap.set(refs.cAxis,   { strokeDashoffset: 468 });
   gsap.set(refs.cSpinner,{ strokeDashoffset: 565.5 });

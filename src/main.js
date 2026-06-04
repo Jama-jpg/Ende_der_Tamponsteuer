@@ -7,6 +7,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import { Draggable } from 'gsap/Draggable';
 
 import './styles/base.css';
 import './styles/overlays.css';
@@ -21,7 +22,7 @@ import { createSpine } from './core/spine.js';
 import { createSnap } from './core/snap.js';
 import { createEuroCounter } from './core/euro-counter.js';
 
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, Draggable);
 
 /* Force scroll to top before any ScrollTrigger initialises — prevents the
    browser's scroll-restoration from firing later scenes on reload. */
@@ -73,6 +74,7 @@ const controllers = {
 const ctx = {
   gsap,
   ScrollTrigger,
+  Draggable,
   stage: { refs },
   helpers,
   constants,
