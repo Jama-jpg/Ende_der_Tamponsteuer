@@ -9,7 +9,7 @@ import { stageMarkup } from './markup.js';
 import { makeSvgEl, sectorPath } from '../core/svg.js';
 import {
   PALETTE, CX, CY, PIE_R, MC_X, MC_R, MC_Y, DOT_YS, LINE_COUNT, LINE_38_COUNT,
-  COIN_POSITIONS, COIN_SCATTER, POV_CX, POV_CY, POV_R, POV_SUB_R,
+  COIN_POSITIONS, COIN_SCATTER, TAMPON_ROTATIONS, POV_CX, POV_CY, POV_R, POV_SUB_R,
 } from '../core/constants.js';
 
 /* gsap — used only to apply the initial hidden state. */
@@ -127,7 +127,7 @@ export function buildStage(mount, gsap) {
      Indices 0-16 → tampon infographic (pill + string + "1000"), with a hidden circle
                     and hidden "1000€" label that morph in during scene-25k.
      Indices 17-24 → regular euro coins that fall in during scene-25k. */
-  const TAMPON_ROTATIONS = [-35, 20, -15, 45, -25, 10, -40, 30, -20, 15, -30, 25, -45, 12, -22, 38, -18];
+  /* TAMPON_ROTATIONS imported from constants */
 
   COIN_POSITIONS.forEach(([cx, cy], i) => {
     const g = makeSvgEl('g', {});

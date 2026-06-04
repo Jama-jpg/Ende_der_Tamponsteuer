@@ -1,27 +1,23 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — 25.000 Euro (Chapter 5, Scene 2)
-   The 17 tampon infographics morph into red circles and their labels
-   change from "1000" to "1000€". Then 8 more circles fall from the
-   top to fill out 25 total (25 × 1000€ = 25.000€). A euro counter
-   ticks up in parallel. All 25 coins become draggable at scene bottom.
+   The 17 tampon infographics morph in-place into red circles with
+   "1000€" labels. Then 8 more circles rain down from above into the
+   right-half gravity pile. A euro counter ticks up in parallel.
+   All 25 coins become draggable at scene bottom.
 
    Timeline (0 → 1 over 300vh):
      0.05–0.20  Counter ticks 0 → 25000; text overlay fades in
      0.05–0.45  17 tampons morph to circles (pill fades, circle grows)
-     0.38–0.72  8 extra circles rain from top → stacked positions
+     0.38–0.72  8 extra circles fall from top into physics positions
      0.92–0.98  Text overlay fades out
 ═══════════════════════════════════════════════════════════════════ */
 import { COIN_POSITIONS } from '../../../core/constants.js';
+import { computeStack17, computeStack25 } from '../physics.js';
 
-/* Off-screen start positions for the 8 extra coins (indices 17-24) */
-const EXTRA_STARTS = [
-  [790, -60], [880, -75],
-  [700, -80], [790, -65], [880, -90],
-  [700, -70], [790, -80], [880, -60],
-];
-
-/* Land order for extra coins: bottom rows first (gravity stacking) */
-const EXTRA_FALL_ORDER = [5, 6, 7, 2, 3, 4, 0, 1]; // indices into slice(17)
+function startRng(seed) {
+  let s = (seed >>> 0) || 1;
+  return () => { s ^= s << 13; s ^= s >> 17; s ^= s << 5; return (s >>> 0) / 4294967296; };
+}
 
 export default {
   id: 's-ch5-25k',
@@ -39,11 +35,19 @@ export default {
     const { coinsGrp, coinEls, tamponPillEls } = stage.refs;
     const counterEl = document.getElementById('ch5-counter');
 
-    /* Position extra coins off-screen above their landing spots */
+    /* Recompute the same 17-tampon physics layout as scene-17k */
+    const stack17 = computeStack17();
+    /* Compute 8 new circles falling on top of the existing pile */
+    const stack25 = computeStack25(stack17);
+    const rng     = startRng(77777);
+
+    /* Position extra coins above screen ready to fall */
     coinEls.slice(17).forEach((g, j) => {
-      const [cx, cy] = COIN_POSITIONS[j + 17];
-      const [rx, ry] = EXTRA_STARTS[j];
-      gsap.set(g, { x: rx - cx, y: ry - cy });
+      const [cx0, cy0] = COIN_POSITIONS[j + 17];
+      const { dx } = stack25[j];
+      const startDx = dx + (rng() - 0.5) * 80;
+      const startDy = -(cy0 + 580 + rng() * 100);
+      gsap.set(g, { x: startDx, y: startDy });
     });
 
     const proxy = { val: 0 };
@@ -70,7 +74,7 @@ export default {
       },
     }, 0.05);
 
-    /* Morph each tampon → circle (staggered, bottom rows first) */
+    /* Morph each tampon → circle in-place (bottom rows first) */
     const MORPH_ORDER = [16, 13, 14, 15, 10, 11, 12, 7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
     MORPH_ORDER.forEach((idx, order) => {
       const g       = coinEls[idx];
@@ -84,13 +88,16 @@ export default {
       tl.to(euroLbl, { opacity: 1, duration: 0.10, ease: 'power1.out' }, t0 + 0.16);
     });
 
-    /* Extra 8 circles fall in — bottom-row first stacking */
-    const extraEls = coinEls.slice(17);
-    EXTRA_FALL_ORDER.forEach((j, order) => {
-      const g = extraEls[j];
-      tl.to(g, {
-        x: 0, y: 0, opacity: 1,
-        ease: 'power2.out',
+    /* 8 extra circles fall into physics positions — bottom-most land first */
+    const extraEls    = coinEls.slice(17);
+    const extraOrder  = Array.from({ length: 8 }, (_, j) => j)
+      .sort((a, b) => stack25[b].cy - stack25[a].cy);
+
+    extraOrder.forEach((j, order) => {
+      const { dx, dy } = stack25[j];
+      tl.to(extraEls[j], {
+        x: dx, y: dy, opacity: 1,
+        ease: 'power3.out',
         duration: 0.18,
       }, 0.38 + order * 0.046);
     });
@@ -98,8 +105,7 @@ export default {
     tl.to('#st-ch5-25k', { opacity: 0, duration: 0.06, ease: 'power1.in' }, 0.92);
     tl.to({}, { duration: 0.02 }, 0.98);
 
-    /* Enable drag-and-snap-back after all coins have landed.
-       Kill instances when scrolling backward so scrub can reclaim x/y. */
+    /* All 25 coins draggable; snap back to their physics positions */
     let draggables = [];
     ScrollTrigger.create({
       trigger: '#s-ch5-25k',
@@ -109,9 +115,11 @@ export default {
       onEnter() {
         draggables = Draggable.create(coinEls, {
           type: 'x,y',
-          bounds: { minX: -300, maxX: 300, minY: -300, maxY: 300 },
+          bounds: { minX: -500, maxX: 500, minY: -600, maxY: 400 },
           onDragEnd() {
-            gsap.to(this.target, { x: 0, y: 0, ease: 'power2.out', duration: 1.2 });
+            const i   = coinEls.indexOf(this.target);
+            const pos = i < 17 ? stack17[i] : stack25[i - 17];
+            gsap.to(this.target, { x: pos.dx, y: pos.dy, ease: 'power2.out', duration: 1.2 });
           },
         });
       },

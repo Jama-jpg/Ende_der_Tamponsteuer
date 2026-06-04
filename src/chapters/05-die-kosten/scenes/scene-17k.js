@@ -1,31 +1,27 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — 17.000 Periodenprodukte (Chapter 5, Scene 1)
    Transitions from ch4 end state (rect + rRect visible) to 17 tampon
-   infographic SVGs that fall from the top with gravity and stack.
-   User can grab and drop individual tampons while held at scene bottom.
+   infographic SVGs that fall from the top with gravity into the right
+   half of the screen (spine → right edge, floor at bottom).
+   Items stack randomly on each other.  User can grab and drop tampons
+   while held at scene bottom.
 
    Timeline (0 → 1 over 200vh):
      0.00–0.12  Ch4 rect / lines fade out
      0.12       Coins group becomes visible
      0.15–0.25  Text overlay fades in
-     0.18–0.90  17 tampons fall from top, bottom rows first (stagger)
+     0.18–0.90  17 tampons fall from top, bottom items first (gravity)
      0.92–0.98  Text overlay fades out
 ═══════════════════════════════════════════════════════════════════ */
 import { COIN_POSITIONS } from '../../../core/constants.js';
+import { computeStack17 }  from '../physics.js';
 
-/* Off-screen starting positions for each tampon (SVG absolute coords) */
-const TAMPON_STARTS = [
-  [790, -80],
-  [700, -95], [790, -80], [880, -90],
-  [700, -85], [790, -100], [880, -75],
-  [700, -90], [790, -85], [880, -95],
-  [700, -80], [790, -90], [880, -85],
-  [700, -95], [790, -80], [880, -90],
-  [700, -85],
-];
-
-/* Land order: highest y (bottom of screen) first → gravity stacking feel */
-const FALL_ORDER = [16, 13, 14, 15, 10, 11, 12, 7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
+/* Deterministic start-position variation so fall trajectories look random
+   but are identical on every page load (required for scroll-scrub). */
+function startRng(seed) {
+  let s = (seed >>> 0) || 1;
+  return () => { s ^= s << 13; s ^= s >> 17; s ^= s << 5; return (s >>> 0) / 4294967296; };
+}
 
 export default {
   id: 's-ch5-17k',
@@ -42,15 +38,27 @@ export default {
   init({ gsap, ScrollTrigger, stage, Draggable }) {
     const { mRect, rRect, lines38Grp, coinsGrp, coinEls } = stage.refs;
 
-    /* Position all 17 tampons off-screen above their resting spots */
+    /* Compute physics-based landing positions once */
+    const stackPos = computeStack17();
+    const rng      = startRng(55555);
+
+    /* Set each tampon to a start position above the screen */
     coinEls.slice(0, 17).forEach((g, i) => {
-      const [rx, ry] = TAMPON_STARTS[i];
-      const [cx, cy] = COIN_POSITIONS[i];
-      gsap.set(g, { x: rx - cx, y: ry - cy });
+      const [cx0, cy0] = COIN_POSITIONS[i];
+      const { dx } = stackPos[i];
+      /* Slight random horizontal spread around target x so fall looks natural */
+      const startDx = dx + (rng() - 0.5) * 90;
+      /* Start well above the SVG canvas */
+      const startDy = -(cy0 + 600 + rng() * 120);
+      gsap.set(g, { x: startDx, y: startDy });
     });
 
-    /* Keep the extra 8 coins (17-24) invisible while in this scene */
+    /* Extra 8 coins (scene-25k) stay hidden */
     gsap.set(coinEls.slice(17), { opacity: 0 });
+
+    /* Fall order: items with highest cy (closest to floor) land first */
+    const fallOrder = Array.from({ length: 17 }, (_, i) => i)
+      .sort((a, b) => stackPos[b].cy - stackPos[a].cy);
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -66,10 +74,11 @@ export default {
     tl.set(coinsGrp, { opacity: 1 }, 0.12);
     tl.to('#st-ch5-17k', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.15);
 
-    /* Tampons drop in — bottom rows land first, like gravity stacking */
-    FALL_ORDER.forEach((idx, order) => {
+    /* Tampons drop in — bottom-most land first, creating a gravity stack */
+    fallOrder.forEach((idx, order) => {
+      const { dx, dy } = stackPos[idx];
       tl.to(coinEls[idx], {
-        x: 0, y: 0,
+        x: dx, y: dy,
         ease: 'power3.out',
         duration: 0.18,
       }, 0.18 + order * 0.044);
@@ -78,15 +87,17 @@ export default {
     tl.to('#st-ch5-17k', { opacity: 0, duration: 0.06, ease: 'power1.in' }, 0.92);
     tl.to({}, { duration: 0.02 }, 0.98);
 
-    /* Draggable: user can pick up and drop tampons after they've landed */
+    /* Draggable: user can pick up and drop tampons; they snap back to physics position */
     let draggables = [];
 
     function createDraggables() {
       draggables = Draggable.create(coinEls.slice(0, 17), {
         type: 'x,y',
-        bounds: { minX: -500, maxX: 500, minY: -600, maxY: 350 },
+        bounds: { minX: -500, maxX: 500, minY: -600, maxY: 400 },
         onDragEnd() {
-          gsap.to(this.target, { x: 0, y: 0, ease: 'power2.out', duration: 1.0 });
+          const idx = coinEls.indexOf(this.target);
+          const { dx, dy } = stackPos[idx];
+          gsap.to(this.target, { x: dx, y: dy, ease: 'power2.out', duration: 1.0 });
         },
       });
     }

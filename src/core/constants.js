@@ -40,6 +40,9 @@ export const COIN_POSITIONS = [
   [700, 528], [790, 528], [880, 528],
 ];
 
+/* Chapter 5: tampon rotation angles (used by stage builder + physics sim) */
+export const TAMPON_ROTATIONS = [-35, 20, -15, 45, -25, 10, -40, 30, -20, 15, -30, 25, -45, 12, -22, 38, -18];
+
 /* Chapter 5: scattered positions used when coins grow to fill right half */
 export const COIN_SCATTER = [
   [555, 65],  [670, 38],  [790, 58],  [910, 48],  [1015, 78],
