@@ -105,6 +105,7 @@ export default {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 0.4,
+        snap: { snapTo: [0.67], duration: { min: 0.2, max: 0.5 }, delay: 0.1 },
 
         onUpdate(self) {
           const p       = Math.min(self.progress / SPLIT_END, 1);
