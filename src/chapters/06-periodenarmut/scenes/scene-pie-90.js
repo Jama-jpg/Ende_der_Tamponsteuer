@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — 90% Pie (Chapter 6, Scene 4)
-   90% of the dark sub-circle fills with red.
+   90% of the dark sub-circle sweeps in with an arc animation.
 ═══════════════════════════════════════════════════════════════════ */
 
 export default {
@@ -14,7 +14,16 @@ export default {
            <p class="sl">finden dass sie Periodenprodukte<br>im Handel zu teuer sind</p>`,
   },
 
-  init({ gsap }) {
+  init({ gsap, stage, helpers, constants }) {
+    const { povPie90 } = stage.refs;
+    const { sectorPath } = helpers;
+    const { POV_CX, POV_CY, POV_SUB_R } = constants;
+
+    /* Reset sector to empty so the sweep starts from 0 */
+    povPie90.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_SUB_R, 0, 0.01));
+
+    const proxy = { angle: 0 };
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-ch6-pie90',
@@ -25,8 +34,17 @@ export default {
     });
 
     tl.to('#st-ch6-folgen', { opacity: 0, duration: 0.10 }, 0);
-    tl.to('#st-ch6-pie90',  { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.08);
-    tl.to('#pov-pie-90',    { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.18);
+    tl.to('#st-ch6-pie90',  { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
+    tl.to('#pov-pie-90',    { opacity: 1, duration: 0.01 }, 0.12);
+
+    tl.to(proxy, {
+      angle: 324,   // 90% of 360°
+      duration: 0.30,
+      ease: 'power2.out',
+      onUpdate() {
+        povPie90.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_SUB_R, 0, Math.max(0.01, proxy.angle)));
+      },
+    }, 0.15);
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

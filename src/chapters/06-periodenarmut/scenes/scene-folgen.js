@@ -32,7 +32,7 @@ export default {
     });
 
     tl.to('#st-ch6-500k',   { opacity: 0, duration: 0.10 }, 0);
-    tl.to('#st-ch6-folgen', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.08);
+    tl.to('#st-ch6-folgen', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
 
     tl.to([povCircle, povPie17], { opacity: 0, ease: 'power1.in', duration: 0.24 }, 0.14);
 

@@ -33,7 +33,7 @@ export default {
     });
 
     tl.to('#st-ch5-detail', { opacity: 0, duration: 0.10, ease: 'power1.in' }, 0);
-    tl.to('#st-ch5-grow',   { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.08);
+    tl.to('#st-ch5-grow',   { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
 
     /* Grow each coin and scatter it */
     coinEls.forEach((g, i) => {

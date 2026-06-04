@@ -29,7 +29,7 @@ export default {
     });
 
     tl.to('#st-ch5-25k',  { opacity: 0, duration: 0.10, ease: 'power1.in' }, 0);
-    tl.to('#st-ch5-detail', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.08);
+    tl.to('#st-ch5-detail', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

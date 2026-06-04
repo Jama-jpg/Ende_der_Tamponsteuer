@@ -46,54 +46,41 @@ export default {
     /* Interactive 3D rotation on mouse move while this scene is active */
     let mouseHandler = null;
 
+    function attachMouse() {
+      mouseHandler = (e) => {
+        const rotY = (e.clientX / window.innerWidth  - 0.5) * 40;
+        const rotX = (e.clientY / window.innerHeight - 0.5) * -22;
+        gsap.to(tampon3d, {
+          rotationY: rotY,
+          rotationX: rotX,
+          svgOrigin: '790 267',
+          duration: 0.55,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+      };
+      document.addEventListener('mousemove', mouseHandler);
+    }
+
+    function detachMouse(reset = true) {
+      if (mouseHandler) {
+        document.removeEventListener('mousemove', mouseHandler);
+        mouseHandler = null;
+      }
+      if (reset) {
+        gsap.to(tampon3d, { rotationX: 0, rotationY: 0, duration: 0.4, ease: 'power2.out' });
+      }
+    }
+
     ScrollTrigger.create({
       trigger: '#s-ch5-17k',
       start: 'top top',
       endTrigger: '#s-ch5-25k',
       end: 'top top',
-      onEnter() {
-        mouseHandler = (e) => {
-          const dx = (e.clientX / window.innerWidth - 0.5) * 18;
-          const dy = (e.clientY / window.innerHeight - 0.5) * 10;
-          gsap.to(tampon3d, {
-            skewX: dx,
-            skewY: dy,
-            transformOrigin: '790px 280px',
-            duration: 0.4,
-            ease: 'power2.out',
-            overwrite: 'auto',
-          });
-        };
-        document.addEventListener('mousemove', mouseHandler);
-      },
-      onLeave() {
-        if (mouseHandler) {
-          document.removeEventListener('mousemove', mouseHandler);
-          mouseHandler = null;
-        }
-        gsap.to(tampon3d, { skewX: 0, skewY: 0, duration: 0.3 });
-      },
-      onEnterBack() {
-        mouseHandler = (e) => {
-          const dx = (e.clientX / window.innerWidth - 0.5) * 18;
-          const dy = (e.clientY / window.innerHeight - 0.5) * 10;
-          gsap.to(tampon3d, {
-            skewX: dx,
-            skewY: dy,
-            transformOrigin: '790px 280px',
-            duration: 0.4,
-            ease: 'power2.out',
-            overwrite: 'auto',
-          });
-        };
-        document.addEventListener('mousemove', mouseHandler);
-      },
-      onLeaveBack() {
-        if (mouseHandler) {
-          document.removeEventListener('mousemove', mouseHandler);
-          mouseHandler = null;
-        }
-      },
+      onEnter()     { attachMouse(); },
+      onLeave()     { detachMouse(true); },
+      onEnterBack() { attachMouse(); },
+      onLeaveBack() { detachMouse(false); },
     });
   },
 };
