@@ -8,7 +8,7 @@ import { PIE_R } from '../../../core/constants.js';
 
 export default {
   id: 's5',
-  height: '200vh',
+  height: '150vh',
   skipSnapStart: true,
   overlay: {
     id: 'st5',
@@ -22,7 +22,7 @@ export default {
     const { cFill } = stage.refs;
 
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: '#s5', start: 'top top', end: 'bottom bottom', scrub: 1 },
+      scrollTrigger: { trigger: '#s5', start: 'top top', end: 'bottom bottom', scrub: 0.4 },
     });
 
     tl

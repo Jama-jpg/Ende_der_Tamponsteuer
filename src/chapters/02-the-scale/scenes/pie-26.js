@@ -99,9 +99,12 @@ export default {
       if (inRange) setActive(parseFloat(r.cFill.getAttribute('r')) >= PIE_R - 1);
     });
 
+    /* inRange only when the circle is at full size: scroll ≥ s5's snap end
+       (bottom bottom) so there's no scrub-lag window where the circle looks
+       grown but hover is still disabled. */
     ScrollTrigger.create({
       trigger:     '#s5',
-      start:       'top top',
+      start:       'bottom bottom',
       endTrigger:  '#s8',
       end:         'top top',
       onEnter:     () => { inRange = true; },

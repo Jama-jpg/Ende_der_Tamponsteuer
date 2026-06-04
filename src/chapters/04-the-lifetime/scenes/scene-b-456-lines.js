@@ -16,7 +16,7 @@
 
 export default {
   id: 's-periode-b',
-  height: '300vh',
+  height: '150vh',
   skipSnapStart: true,
 
   init({ gsap, stage }) {
@@ -27,7 +27,7 @@ export default {
         trigger: '#s-periode-b',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1,
+        scrub: 0.7,
       },
     });
 

@@ -17,14 +17,14 @@
    reads the live scroll position on every gesture, so it stays in sync.
 ═══════════════════════════════════════════════════════════════════ */
 
-const DURATION  = 1.8;     // seconds per scene transition — slow enough to follow animation
+const DURATION  = 1.5;     // seconds per scene transition
 const EASE      = 'power2.inOut';
-const LOCK_TIME = 3500;    // ms total lock: covers anim (1800ms) + scrub lag (1000ms) + buffer
+const LOCK_TIME = 2500;    // ms total lock: covers anim (1500ms) + scrub lag + buffer
 const SWIPE     = 40;      // px of touch travel before it counts as a swipe
 
 // Wheel accumulator: prevents trackpad noise from triggering multiple snaps.
 // We sum raw deltaY events; once the total exceeds this threshold we fire once.
-const ACCUM_THRESHOLD = 40;  // px accumulated before triggering
+const ACCUM_THRESHOLD = 25;  // px accumulated before triggering
 const ACCUM_RESET     = 200; // ms of wheel silence to reset the accumulator
 
 export function createSnap({ ScrollTrigger, gsap, scenes }) {

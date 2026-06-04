@@ -14,7 +14,7 @@
 
 export default {
   id: 's-periode-c',
-  height: '300vh',
+  height: '150vh',
   skipSnapStart: true,
 
   init({ gsap, ScrollTrigger, stage }) {
@@ -25,7 +25,7 @@ export default {
         trigger: '#s-periode-c',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1,
+        scrub: 0.7,
       },
     });
 

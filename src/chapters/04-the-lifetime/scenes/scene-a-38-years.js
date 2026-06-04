@@ -16,7 +16,7 @@ const GROW_R     = 22;  // circles grow to this radius so neighbours merge via g
 
 export default {
   id: 's-periode-a',
-  height: '350vh',
+  height: '200vh',
   skipSnapStart: true,
 
   overlay: {
@@ -48,7 +48,7 @@ export default {
         trigger: '#s-periode-a',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1,
+        scrub: 0.7,
         /* Re-enable gooey filter on mCircles: jeden-monat.js sets it to 'none'
            at split end, so the merge animation would be invisible without this. */
         onEnter:     () => mCircles.setAttribute('filter', 'url(#gooey)'),
@@ -59,6 +59,9 @@ export default {
     tl.set('#st-periode', { opacity: 1 }, 0);
     /* Defensive resets — clear all text from previous scenes at t=0. */
     tl.set(['#st8', '#st5', '#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
+    /* Size mRect/rRect to match the gooey-merged circles (r=22 → width=44, x=753)
+       so the crossfade from circles to rect looks like a true morph, not an insert. */
+    tl.set([mRect, rRect], { attr: { x: 753, width: 44 } }, 0);
     /* st8 ("Jeden Monat") has already faded out inside s8, but reset here as
        a hard guard so the rect animation plays with no competing text. */
 

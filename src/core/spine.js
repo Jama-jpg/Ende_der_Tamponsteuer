@@ -1,10 +1,12 @@
 /* ═══════════════════════════════════════════════════════════════════
    SPINE SCROLL INDICATOR
-   Turns the central axis into the page's scrollbar: a red fill grows down
-   the spine and the period dots fill in as it passes them, both tracking
-   overall scroll progress through the whole story. The spine can be
-   clicked / dragged to seek. The native scrollbar is hidden in base.css.
-   Interaction is disabled while the intro locks scrolling.
+   Turns the central axis into the page's scrollbar: a grey fill grows down
+   the spine tracking scroll progress from s3 onward (where user scrolling
+   begins). The nine period dots fill independently at chapter milestones
+   rather than by linear position — dot 0 is filled by the intro, dots 1-8
+   fill progressively through chapter 4 (die Periode).
+   The spine can be clicked / dragged to seek. The native scrollbar is
+   hidden in base.css. Interaction is disabled while intro locks scrolling.
 ═══════════════════════════════════════════════════════════════════ */
 
 /* Spine endpoints in #main-svg viewBox coords (match #c-axis y1/y2). */
@@ -20,26 +22,37 @@ export function createSpine({ ScrollTrigger, refs }) {
   const { cAxisProgress, spineHit, periodDots } = refs;
   if (!cAxisProgress || !spineHit) return;
 
-  /* The period dots become the scrollbar's "ticks". */
   const dots = periodDots ? Array.from(periodDots.children) : [];
 
-  /* Grow the red fill down the spine and fill every dot it has passed. */
+  /* Grow the progress line only — dots are filled via ScrollTriggers below. */
   function render(progress) {
     const y = Y_TOP + (Y_BOT - Y_TOP) * clamp01(progress);
     cAxisProgress.setAttribute('y2', y);
-    for (const dot of dots) {
-      const dy = parseFloat(dot.getAttribute('cy'));
-      dot.setAttribute('fill', dy <= y + 0.5 ? FILLED : EMPTY);
-    }
   }
 
-  /* Drive the indicator from overall page scroll. */
+  /* Drive from s3 (where user scrolling begins) to page end, so progress=0
+     right after the intro and progress=1 at the very last scene. */
   ScrollTrigger.create({
-    trigger: document.body,
-    start: 'top top',
-    end: 'bottom bottom',
-    onUpdate: (self) => render(self.progress),
+    trigger:    '#s3',
+    start:      'top top',
+    endTrigger: document.body,
+    end:        'bottom bottom',
+    onUpdate:  (self) => render(self.progress),
     onRefresh: (self) => render(self.progress),
+  });
+
+  /* ── Dot filling ────────────────────────────────────────────────────
+     Dot 0 is filled during the intro by countdown.js.
+     Dot 1 fills only when the user reaches the very end of chapter 4
+     (s-periode-c snap end = "bottom bottom"). No other dots fill. */
+  const fill  = (i) => dots[i]?.setAttribute('fill', FILLED);
+  const empty = (i) => dots[i]?.setAttribute('fill', EMPTY);
+
+  ScrollTrigger.create({
+    trigger:     '#s-periode-c',
+    start:       'bottom bottom',
+    onEnter:     () => fill(1),
+    onLeaveBack: () => empty(1),
   });
 
   /* ── Click / drag the spine to seek ────────────────────────────────

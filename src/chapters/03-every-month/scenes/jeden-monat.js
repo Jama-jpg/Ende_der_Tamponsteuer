@@ -21,14 +21,14 @@
 import { CX, CY, PIE_R, MC_X, MC_Y, MC_R } from '../../../core/constants.js';
 
 /* ── Split physics tuning ───────────────────────────────────────────── */
-const HOLD       = 0.18;  // hold — big circle visible before split begins
+const HOLD       = 0.06;  // hold — big circle visible before split begins
 const PH1        = 0.40;  // end of "plastic stretch"
 const PH2        = 0.72;  // end of "necking"
 const R_START    = PIE_R; // start at full size — seamlessly replaces cFill
 const R_P1       = 72;
 const R_P2       = 45;
 const R_END      = MC_R;
-const STAGGER    = 0.16;
+const STAGGER    = 0.12;
 const BOUNCE     = 4.5;
 const SWAY       = 5;
 const FULL_BLUR  = 10;
@@ -39,7 +39,7 @@ const lerp  = (a, b, t)  => a + (b - a) * t;
 
 export default {
   id: 's8',
-  height: '1400vh',
+  height: '500vh',
   skipSnapStart: true,
   overlay: {
     id: 'st8',
@@ -104,7 +104,7 @@ export default {
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 1,
+        trigger: '#s8', start: 'top top', end: 'bottom bottom', scrub: 0.7,
 
         onUpdate(self) {
           const p       = Math.min(self.progress / SPLIT_END, 1);

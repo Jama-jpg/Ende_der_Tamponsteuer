@@ -9,7 +9,8 @@
 
 export default {
   id: 's3',
-  height: '400vh',
+  height: '250vh',
+  skipSnapStart: true,
   overlay: {
     id: 'st3',
     html: `<p class="sl">STELL DIR VOR, DEIN KÖRPER<br>HAT EIN ABONNEMENT<br>ABGESCHLOSSEN, DAS DU NICHT<br>BEENDEN KANNST.</p>`,
@@ -31,7 +32,7 @@ export default {
     });
 
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: '#s3', start: 'top top', end: 'bottom bottom', scrub: 1.5 },
+      scrollTrigger: { trigger: '#s3', start: 'top top', end: 'bottom bottom', scrub: 1.2 },
     });
 
     tl
@@ -46,14 +47,14 @@ export default {
       .to(cSpinner,   { opacity: 0, duration: 0.08 }, 0.50)
       /* Euro counter appears simultaneously as the circle fills. */
       .to(euroContainer, { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.44)
-      /* Hold: user reads text, circle pulses, euro counter is visible (~168vh). */
-      .to({}, { duration: 0.42 }, 0.58);
+      /* Short hold so everything is visible before moving on. */
+      .to({}, { duration: 0.06 }, 0.58);
 
-    /* Pulse: starts when fill is visually complete (~48% scroll, fill done at 0.50),
-       keeps running through the grow (s5) and pie-hover (s7) until the split in s8. */
+    /* Pulse: starts when fill is visually complete, keeps running through
+       the grow (s5) and pie-hover (s7) until the split in s8. */
     ScrollTrigger.create({
       trigger:     '#s3',
-      start:       '48% top',
+      start:       '50% top',
       endTrigger:  '#s8',
       end:         'center bottom',
       onEnter:     pulse.start,
