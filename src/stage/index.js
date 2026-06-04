@@ -50,9 +50,10 @@ export function buildStage(mount, gsap) {
     lblPeriode:$('lbl-periode'),
 
     /* Chapter 5 */
-    tampon3d:  $('tampon-3d'),
-    coinsGrp:  $('coins-grp'),
-    coinEls:   [],   // filled below
+    tampon3d:      $('tampon-3d'),
+    coinsGrp:      $('coins-grp'),
+    coinEls:       [],   // filled below
+    tamponPillEls: [],   // pill groups for coinEls[0..16], filled below
 
     /* Chapter 6 */
     povCircle: $('pov-circle'),
@@ -122,22 +123,79 @@ export function buildStage(mount, gsap) {
     refs.line38Els.push(ln);
   }
 
-  /* 25 euro coins for Chapter 5 — stacked positions defined in constants */
+  /* 25 elements for Chapter 5:
+     Indices 0-16 → tampon infographic (pill + string + "1000"), with a hidden circle
+                    and hidden "1000€" label that morph in during scene-25k.
+     Indices 17-24 → regular euro coins that fall in during scene-25k. */
+  const TAMPON_ROTATIONS = [-35, 20, -15, 45, -25, 10, -40, 30, -20, 15, -30, 25, -45, 12, -22, 38, -18];
+
   COIN_POSITIONS.forEach(([cx, cy], i) => {
     const g = makeSvgEl('g', {});
-    const circle = makeSvgEl('circle', { cx, cy, r: '22', fill: '#D63335' });
-    const label = makeSvgEl('text', {
-      x: cx, y: cy,
-      'text-anchor': 'middle',
-      'dominant-baseline': 'middle',
-      'font-size': '7',
-      fill: 'white',
-      'font-family': 'var(--f-mono)',
-      'letter-spacing': '0.5',
-    });
-    label.textContent = '1000€';
-    g.appendChild(circle);
-    g.appendChild(label);
+
+    if (i < 17) {
+      /* Hidden circle — revealed during scene-25k morph */
+      const circle = makeSvgEl('circle', { cx, cy, r: '0', fill: '#D63335', opacity: '0' });
+      /* "1000€" label — appears after morph (first <text> in group for scene-coins-grow) */
+      const euroLabel = makeSvgEl('text', {
+        x: cx, y: cy,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'middle',
+        'font-size': '7',
+        fill: 'white',
+        'font-family': 'var(--f-mono)',
+        'letter-spacing': '0.5',
+        opacity: '0',
+      });
+      euroLabel.textContent = '1000€';
+
+      /* Tampon pill group — rotated at build time, visible during scene-17k */
+      const pillG = makeSvgEl('g', {
+        transform: `rotate(${TAMPON_ROTATIONS[i]}, ${cx}, ${cy})`,
+      });
+      const pill = makeSvgEl('rect', {
+        x: cx - 40, y: cy - 20,
+        width: '80', height: '40', rx: '20',
+        fill: '#D63335',
+      });
+      const str = makeSvgEl('path', {
+        d: `M ${cx + 40},${cy + 5} C ${cx + 52},${cy + 16} ${cx + 50},${cy + 30} ${cx + 54},${cy + 40}`,
+        stroke: '#8B1A1A', 'stroke-width': '2.2', fill: 'none', 'stroke-linecap': 'round',
+      });
+      const pillLabel = makeSvgEl('text', {
+        x: cx, y: cy,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'middle',
+        'font-size': '9',
+        fill: 'white',
+        'font-family': 'var(--f-mono)',
+        'letter-spacing': '0.5',
+      });
+      pillLabel.textContent = '1000';
+      pillG.appendChild(pill);
+      pillG.appendChild(str);
+      pillG.appendChild(pillLabel);
+
+      g.appendChild(circle);
+      g.appendChild(euroLabel);
+      g.appendChild(pillG);
+      refs.tamponPillEls.push(pillG);
+    } else {
+      /* Regular euro coin — starts hidden, falls in during scene-25k */
+      const circle = makeSvgEl('circle', { cx, cy, r: '22', fill: '#D63335' });
+      const label = makeSvgEl('text', {
+        x: cx, y: cy,
+        'text-anchor': 'middle',
+        'dominant-baseline': 'middle',
+        'font-size': '7',
+        fill: 'white',
+        'font-family': 'var(--f-mono)',
+        'letter-spacing': '0.5',
+      });
+      label.textContent = '1000€';
+      g.appendChild(circle);
+      g.appendChild(label);
+    }
+
     refs.coinsGrp.appendChild(g);
     refs.coinEls.push(g);
   });

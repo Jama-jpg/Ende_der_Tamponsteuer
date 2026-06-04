@@ -1,25 +1,27 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — 25.000 Euro (Chapter 5, Scene 2)
-   Tampon fades out. A euro counter ticks up to 25.000 as the number
-   in the text overlay. 25 red coins rain from the top-right and stack
-   in a pyramid on the right half.
+   The 17 tampon infographics morph into red circles and their labels
+   change from "1000" to "1000€". Then 8 more circles fall from the
+   top to fill out 25 total (25 × 1000€ = 25.000€). A euro counter
+   ticks up in parallel. All 25 coins become draggable at scene bottom.
 
    Timeline (0 → 1 over 300vh):
-     0.00–0.12  Tampon + #st-ch5-17k fade out
-     0.10–0.25  Counter ticks 0 → 25000; text fades in
-     0.18–0.75  25 coins rain from top-right → stacked positions (stagger)
-     0.75–1.00  Hold
+     0.05–0.20  Counter ticks 0 → 25000; text overlay fades in
+     0.05–0.45  17 tampons morph to circles (pill fades, circle grows)
+     0.38–0.72  8 extra circles rain from top → stacked positions
+     0.92–0.98  Text overlay fades out
 ═══════════════════════════════════════════════════════════════════ */
 import { COIN_POSITIONS } from '../../../core/constants.js';
 
-/* Off-screen starting positions for the rain effect (top-right area) */
-const RAIN_STARTS = [
-  [955, -65], [1025, -82], [1105, -72], [985, -52], [1065, -92],
-  [928, -72], [1042, -62], [1082, -82], [1015, -67], [952, -78],
-  [1102, -57], [975, -87], [1035, -72], [1092, -62], [942, -82],
-  [1055, -67], [1005, -78], [962, -57], [1072, -88], [1025, -72],
-  [1082, -62], [942, -77], [1052, -82], [992, -67], [1035, -57],
+/* Off-screen start positions for the 8 extra coins (indices 17-24) */
+const EXTRA_STARTS = [
+  [790, -60], [880, -75],
+  [700, -80], [790, -65], [880, -90],
+  [700, -70], [790, -80], [880, -60],
 ];
+
+/* Land order for extra coins: bottom rows first (gravity stacking) */
+const EXTRA_FALL_ORDER = [5, 6, 7, 2, 3, 4, 0, 1]; // indices into slice(17)
 
 export default {
   id: 's-ch5-25k',
@@ -34,13 +36,13 @@ export default {
   },
 
   init({ gsap, ScrollTrigger, stage, Draggable }) {
-    const { tampon3d, coinsGrp, coinEls } = stage.refs;
+    const { coinsGrp, coinEls, tamponPillEls } = stage.refs;
     const counterEl = document.getElementById('ch5-counter');
 
-    /* Move all coins off-screen to their rain starting positions */
-    coinEls.forEach((g, i) => {
-      const [rx, ry] = RAIN_STARTS[i] || [990, -70];
-      const [cx, cy] = COIN_POSITIONS[i];
+    /* Position extra coins off-screen above their landing spots */
+    coinEls.slice(17).forEach((g, j) => {
+      const [cx, cy] = COIN_POSITIONS[j + 17];
+      const [rx, ry] = EXTRA_STARTS[j];
       gsap.set(g, { x: rx - cx, y: ry - cy });
     });
 
@@ -55,53 +57,48 @@ export default {
       },
     });
 
-    tl.to(tampon3d, { opacity: 0, duration: 0.10 }, 0);
-    /* scene-17k owns #st-ch5-17k fade-out — no hand-off needed. */
-
-    /* Counter ticks up; coins become visible once counter starts */
-    tl.set(coinsGrp, { opacity: 1 }, 0.10);
-    tl.to('#st-ch5-25k', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.10);
+    /* Counter ticks up alongside the morph */
+    tl.to('#st-ch5-25k', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.05);
     tl.to(proxy, {
       val: 25000,
       duration: 0.15,
       ease: 'power2.inOut',
       onUpdate() {
         if (!counterEl) return;
-        const v = Math.round(proxy.val);
-        counterEl.textContent = v.toLocaleString('de-AT');
+        counterEl.textContent = Math.round(proxy.val).toLocaleString('de-AT');
       },
-    }, 0.10);
+    }, 0.05);
 
-    /* Coins rain in with stagger — bottom rows land first (gravity stacking) */
-    const ORDER = [
-      22, 23, 24,        // row 8 (bottom)
-      19, 20, 21,        // row 7
-      16, 17, 18,        // row 6
-      13, 14, 15,        // row 5
-      10, 11, 12,        // row 4
-       7,  8,  9,        // row 3
-       4,  5,  6,        // row 2
-       1,  2,  3,        // row 1
-       0,                 // top
-    ];
+    /* Morph each tampon → circle (staggered, bottom rows first) */
+    const MORPH_ORDER = [16, 13, 14, 15, 10, 11, 12, 7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
+    MORPH_ORDER.forEach((idx, order) => {
+      const g       = coinEls[idx];
+      const pillG   = tamponPillEls[idx];
+      const circle  = g.querySelector('circle');
+      const euroLbl = g.querySelector('text');
+      const t0 = 0.05 + order * 0.016;
 
-    ORDER.forEach((idx, order) => {
-      const g = coinEls[idx];
-      tl.to(g, {
-        x: 0,
-        y: 0,
-        ease: 'power2.out',
-        duration: 0.18,
-      }, 0.18 + order * 0.022);
+      tl.to(pillG,   { opacity: 0, duration: 0.12, ease: 'power1.in' }, t0);
+      tl.to(circle,  { attr: { r: 22 }, opacity: 1, duration: 0.18, ease: 'power2.out' }, t0 + 0.06);
+      tl.to(euroLbl, { opacity: 1, duration: 0.10, ease: 'power1.out' }, t0 + 0.16);
     });
 
-    /* Text fades out before scene-kosten-detail begins (owns its own lifecycle). */
-    tl.to('#st-ch5-25k', { opacity: 0, duration: 0.06, ease: 'power1.in' }, 0.92);
+    /* Extra 8 circles fall in — bottom-row first stacking */
+    const extraEls = coinEls.slice(17);
+    EXTRA_FALL_ORDER.forEach((j, order) => {
+      const g = extraEls[j];
+      tl.to(g, {
+        x: 0, y: 0, opacity: 1,
+        ease: 'power2.out',
+        duration: 0.18,
+      }, 0.38 + order * 0.046);
+    });
 
+    tl.to('#st-ch5-25k', { opacity: 0, duration: 0.06, ease: 'power1.in' }, 0.92);
     tl.to({}, { duration: 0.02 }, 0.98);
 
-    /* Enable drag-and-snap-back after coins have landed.
-       Kill instances when scrolling backward so the scrub can reclaim x/y. */
+    /* Enable drag-and-snap-back after all coins have landed.
+       Kill instances when scrolling backward so scrub can reclaim x/y. */
     let draggables = [];
     ScrollTrigger.create({
       trigger: '#s-ch5-25k',
