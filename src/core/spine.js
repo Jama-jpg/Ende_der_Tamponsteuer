@@ -12,7 +12,7 @@
 import { DOT_YS } from './constants.js';
 
 /* Spine endpoints in #main-svg viewBox coords (match #c-axis y1/y2). */
-const Y_TOP = 42;
+const Y_TOP = 50;
 /* The grey progress line travels only to dot 1 — end of Kapitel 1. */
 const Y_END = DOT_YS[1];
 

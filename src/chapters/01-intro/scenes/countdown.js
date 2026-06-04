@@ -56,9 +56,8 @@ export default {
         .to(r.sceneTitle, { opacity: 0, y: -16, duration: 0.5, ease: 'power2.in' }, 0)
         .to(r.vatBigEl,   { scale: vatScale, duration: 0.9, ease: 'power3.inOut' }, 0.1)
         .to(r.lblGoodNews,{ opacity: 0, duration: 0.25, ease: 'power1.in' }, 0.3)
-        .call(() => { r.lblGoodNews.textContent = 'DIE  PERIODE'; }, [], 0.56)
-        .to(r.lblGoodNews,{ opacity: 1, duration: 0.3, ease: 'power1.out' }, 0.57)
         .to(r.cAxis,      { opacity: 1, strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' }, 0.3)
+        .to([r.lblKapitel, r.lblPeriode], { opacity: 1, duration: 0.5, ease: 'power1.out' }, 0.4)
         .to(r.cAxisProgress, { opacity: 1, duration: 0.8, ease: 'power1.out' }, 0.8)
         .to(r.periodDots, { opacity: 1, duration: 0.01 }, 0.32)
         .call(() => {

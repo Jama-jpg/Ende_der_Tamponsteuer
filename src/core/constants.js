@@ -18,7 +18,7 @@ export const MC_X = 775;
 export const MC_R = 15;
 
 /* Spine: 4 dots — top, 2 middle, bottom (evenly spaced from 42→510) */
-export const DOT_YS = [42, 198, 354, 510];
+export const DOT_YS = [50, 198, 354, 510];
 
 /* Scene 12: number of horizontal lines that burst out */
 export const LINE_COUNT = 456;
