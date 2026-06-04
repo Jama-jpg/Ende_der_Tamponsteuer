@@ -47,6 +47,7 @@ export function buildStage(mount, gsap) {
     lines38Grp:$('lines-38'),
     periodDots:$('period-dots'),
     lblXxxx:   $('lbl-xxxx'),
+    lblKapitel:$('lbl-kapitel'),
     lblPeriode:$('lbl-periode'),
 
     /* Chapter 5 */

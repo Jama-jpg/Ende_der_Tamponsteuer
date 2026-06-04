@@ -17,8 +17,8 @@ export const MC_Y = [70, 108, 147, 185, 223, 261, 300, 338, 376, 415, 454, 492];
 export const MC_X = 775;
 export const MC_R = 15;
 
-/* Scene 3: 9 period dots on the center axis */
-export const DOT_YS = [42, 101, 159, 218, 276, 335, 393, 452, 510];
+/* Spine: 4 dots — top, 2 middle, bottom (evenly spaced from 42→510) */
+export const DOT_YS = [42, 198, 354, 510];
 
 /* Scene 12: number of horizontal lines that burst out */
 export const LINE_COUNT = 456;

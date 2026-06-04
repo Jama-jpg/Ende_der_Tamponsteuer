@@ -87,7 +87,9 @@ export const stageMarkup = /* html */ `
     <line id="c-axis" x1="500" y1="42" x2="500" y2="510" stroke="#C9C9C0"
           stroke-width="2" stroke-dasharray="468" stroke-dashoffset="468" opacity="0"/>
 
-    <text id="lbl-periode" x="500" y="11" text-anchor="middle" class="svg-mono"
+    <text id="lbl-kapitel" x="500" y="5" text-anchor="middle" class="svg-mono"
+          font-size="7" fill="#1a1a1a" letter-spacing="2" opacity="0">KAPITEL 1</text>
+    <text id="lbl-periode" x="500" y="14" text-anchor="middle" class="svg-mono"
           font-size="9" fill="#1a1a1a" letter-spacing="2" opacity="0">DIE PERIODE</text>
     <text id="lbl-xxxx" x="985" y="11" text-anchor="end" class="svg-mono svg-italic"
           font-size="9" fill="#1a1a1a" letter-spacing="1" opacity="0">XXXX</text>

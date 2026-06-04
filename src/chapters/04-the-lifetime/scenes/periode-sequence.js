@@ -50,7 +50,7 @@ export default {
   init({ gsap, stage }) {
     const r = stage.refs;
     const { mcEls, mCircles, mRect, rRect, linesGrp, lineEls, lines38Grp, line38Els,
-            lblPeriode, lblXxxx } = r;
+            lblKapitel, lblPeriode, lblXxxx } = r;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -63,7 +63,7 @@ export default {
 
     /* ── Always-on container + corner labels ──────────────────────── */
     tl.set('#st-periode', { opacity: 1 }, 0);
-    tl.set([lblPeriode, lblXxxx], { opacity: 1 }, 0);
+    tl.set([lblKapitel, lblPeriode, lblXxxx], { opacity: 1 }, 0);
 
     /* ── Phase 1 (0→0.20): 12 circles → thin rect ─────────────────
        Fade out the previous scene's "JEDEN MONAT" text, show state-1

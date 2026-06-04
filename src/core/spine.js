@@ -2,16 +2,19 @@
    SPINE SCROLL INDICATOR
    Turns the central axis into the page's scrollbar: a grey fill grows down
    the spine tracking scroll progress from s3 onward (where user scrolling
-   begins). The nine period dots fill independently at chapter milestones
-   rather than by linear position — dot 0 is filled by the intro, dots 1-8
-   fill progressively through chapter 4 (die Periode).
+   begins). There are 4 dots on the spine; dot 0 is filled by the intro,
+   dot 1 fills when the grey line reaches it at the end of chapter 6.
+   The line's maximum travel is from dot 0 to dot 1 — the lower two dots
+   represent future chapters not yet in this scrollytelling.
    The spine can be clicked / dragged to seek. The native scrollbar is
    hidden in base.css. Interaction is disabled while intro locks scrolling.
 ═══════════════════════════════════════════════════════════════════ */
+import { DOT_YS } from './constants.js';
 
 /* Spine endpoints in #main-svg viewBox coords (match #c-axis y1/y2). */
 const Y_TOP = 42;
-const Y_BOT = 510;
+/* The grey progress line travels only to dot 1 — end of Kapitel 1. */
+const Y_END = DOT_YS[1];
 
 const FILLED = '#A9A99F';
 const EMPTY  = 'white';
@@ -24,9 +27,9 @@ export function createSpine({ ScrollTrigger, refs }) {
 
   const dots = periodDots ? Array.from(periodDots.children) : [];
 
-  /* Grow the progress line only — dots are filled via ScrollTriggers below. */
+  /* Grow the progress line from dot 0 toward dot 1 only. */
   function render(progress) {
-    const y = Y_TOP + (Y_BOT - Y_TOP) * clamp01(progress);
+    const y = Y_TOP + (Y_END - Y_TOP) * clamp01(progress);
     cAxisProgress.setAttribute('y2', y);
   }
 
@@ -43,13 +46,13 @@ export function createSpine({ ScrollTrigger, refs }) {
 
   /* ── Dot filling ────────────────────────────────────────────────────
      Dot 0 is filled during the intro by countdown.js.
-     Dot 1 fills only when the user reaches the very end of chapter 4
-     (s-periode-c snap end = "bottom bottom"). No other dots fill. */
+     Dot 1 fills when the user reaches the last scene of chapter 6
+     (end of Kapitel 1 = end of this scrollytelling). */
   const fill  = (i) => dots[i]?.setAttribute('fill', FILLED);
   const empty = (i) => dots[i]?.setAttribute('fill', EMPTY);
 
   ScrollTrigger.create({
-    trigger:     '#s-periode-c',
+    trigger:     '#s-ch6-pie12',
     start:       'bottom bottom',
     onEnter:     () => fill(1),
     onLeaveBack: () => empty(1),
