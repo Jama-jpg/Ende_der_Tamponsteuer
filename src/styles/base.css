@@ -193,7 +193,7 @@ body {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-family: var(--f-mono);
+  font-family: var(--f-serif);
   font-size: clamp(11px, 1vw, 14px);
   letter-spacing: 0.2em;
   color: var(--ink);
