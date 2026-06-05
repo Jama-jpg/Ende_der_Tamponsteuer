@@ -13,7 +13,8 @@
      0.45–0.55  Text fades in
      0.55–1.00  Hold — hover active
 ═══════════════════════════════════════════════════════════════════ */
-import { COIN_POSITIONS, POV_R } from '../../../core/constants.js';
+import { COIN_POSITIONS, POV_CX, POV_CY, POV_R } from '../../../core/constants.js';
+import { sectorPath } from '../../../core/svg.js';
 
 export default {
   id: 's-ch6-14m',
@@ -39,6 +40,10 @@ export default {
   init({ gsap, ScrollTrigger, stage }) {
     const { coinsGrp, coinEls, povCircle, povPie17 } = stage.refs;
     const infoHint = document.getElementById('info-hint');
+    const PIE17_DEG = 61.2; // 17% of 360°
+
+    /* Pie starts as a tiny sliver at the top so it can sweep open on hover */
+    povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R, 0, 0.01));
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -62,24 +67,37 @@ export default {
 
     tl.to(coinsGrp, { opacity: 0, duration: 0.06 }, 0.30);
 
+    /* Make the overlay container visible (children control their own opacity) */
+    tl.to('#st-ch6-14m', { opacity: 1, duration: 0.01 }, 0);
+
     /* Big circle grows in */
     tl.to(povCircle, { opacity: 1, attr: { r: POV_R }, ease: 'power2.out', duration: 0.20 }, 0.32);
     tl.to('#st-ch6-14m-main', { opacity: 1, duration: 0.12 }, 0.47);
     /* Fade out very late so the text remains visible during the entire hover zone.
        The hover leave() restores this text — fading it earlier fights the scrub. */
     tl.to('#st-ch6-14m-main', { opacity: 0, duration: 0.05, ease: 'power1.in' }, 0.93);
+    tl.to('#st-ch6-14m',      { opacity: 0, duration: 0.05, ease: 'power1.in' }, 0.95);
 
     tl.to({}, { duration: 0.02 }, 0.98);
 
-    /* Hover interaction — 17% pie reveals on mouseenter */
+    /* Hover interaction — 17% pie sweeps in from the top on mouseenter */
     let active = false;
     let hovered = false;
+    const pieProxy = { angle: 0 };
 
     function enter() {
       if (!active || hovered) return;
       hovered = true;
       infoHint.classList.add('hover-active');
-      gsap.to(povPie17, { opacity: 1, duration: 0.4, ease: 'power1.out' });
+      gsap.set(povPie17, { opacity: 1 });
+      gsap.to(pieProxy, {
+        angle: PIE17_DEG,
+        duration: 0.5,
+        ease: 'power2.out',
+        onUpdate() {
+          povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R, 0, Math.max(0.01, pieProxy.angle)));
+        },
+      });
       gsap.to('#st-ch6-14m-main', { opacity: 0, duration: 0.25 });
       gsap.to('#st-ch6-hover17',  { opacity: 1, duration: 0.25, delay: 0.15 });
     }
@@ -88,7 +106,15 @@ export default {
       if (!hovered) return;
       hovered = false;
       infoHint.classList.remove('hover-active');
-      gsap.to(povPie17, { opacity: 0, duration: 0.3, ease: 'power1.in' });
+      gsap.to(pieProxy, {
+        angle: 0,
+        duration: 0.35,
+        ease: 'power1.in',
+        onUpdate() {
+          povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R, 0, Math.max(0.01, pieProxy.angle)));
+        },
+        onComplete() { gsap.set(povPie17, { opacity: 0 }); },
+      });
       gsap.to('#st-ch6-hover17',  { opacity: 0, duration: 0.25 });
       gsap.to('#st-ch6-14m-main', { opacity: 1, duration: 0.25, delay: 0.15 });
     }
