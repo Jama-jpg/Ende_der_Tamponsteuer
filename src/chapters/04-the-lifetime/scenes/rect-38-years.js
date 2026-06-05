@@ -6,7 +6,7 @@
 
 export default {
   id: 's10',
-  height: '200vh',
+  height: '320vh',
   overlay: {
     id: 'st10',
     html: `<p class="sl">FÜR JEWEILS</p>
@@ -29,6 +29,7 @@ export default {
       }, 0.02)
       .to(mCircles, { opacity: 0, duration: 0.08 }, 0.55)
       .to(mRect, { opacity: 1, duration: 0.18 }, 0.42)
-      .to('#st10', { opacity: 1, duration: 0.25 }, 0.62);
+      .to('#st10', { opacity: 1, duration: 0.25 }, 0.62)
+      .to({}, { duration: 0.6 });
   },
 };

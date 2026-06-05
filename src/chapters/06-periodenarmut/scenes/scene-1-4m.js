@@ -2,6 +2,8 @@
    SCENE — 1,4 Millionen (Chapter 6, Scene 1)
    Coins fall off-screen bottom, large red circle grows in.
    Hovering the circle reveals a 17% pie sector and info text.
+   Info-hint (top-right "i HOVER") appears when circle is at full
+   size, identical to the pie-26 pattern in Chapter 2.
 
    Timeline (0 → 1 over 250vh):
      0.00–0.10  Text swap
@@ -20,13 +22,13 @@ export default {
 
   overlay: {
     id: 'st-ch6-14m',
-    html: `<div style="display:grid;width:100%;text-align:center">
-             <div id="st-ch6-14m-main" style="grid-area:1/1;opacity:0;width:100%">
+    html: `<div style="display:grid;width:100%">
+             <div id="st-ch6-14m-main" style="grid-area:1/1;opacity:0">
                <p class="sl">ÜBER</p>
                <p class="sh">1,4 MILLIONEN</p>
                <p class="sl">MENSCHEN IN ÖSTERREICH<br>SIND ARMUTSGEFÄHRDET</p>
              </div>
-             <div id="st-ch6-hover17" style="grid-area:1/1;opacity:0;width:100%">
+             <div id="st-ch6-hover17" style="grid-area:1/1;opacity:0">
                <p class="sl">DAS SIND</p>
                <p class="sh">17%</p>
                <p class="sl">DER BEVÖLKERUNG IN ÖSTERREICH</p>
@@ -36,6 +38,7 @@ export default {
 
   init({ gsap, ScrollTrigger, stage }) {
     const { coinsGrp, coinEls, povCircle, povPie17 } = stage.refs;
+    const infoHint = document.getElementById('info-hint');
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -69,11 +72,13 @@ export default {
     tl.to({}, { duration: 0.02 }, 0.98);
 
     /* Hover interaction — 17% pie reveals on mouseenter */
+    let active = false;
     let hovered = false;
 
     function enter() {
-      if (hovered) return;
+      if (!active || hovered) return;
       hovered = true;
+      infoHint.classList.add('hover-active');
       gsap.to(povPie17, { opacity: 1, duration: 0.4, ease: 'power1.out' });
       gsap.to('#st-ch6-14m-main', { opacity: 0, duration: 0.25 });
       gsap.to('#st-ch6-hover17',  { opacity: 1, duration: 0.25, delay: 0.15 });
@@ -82,26 +87,42 @@ export default {
     function leave() {
       if (!hovered) return;
       hovered = false;
+      infoHint.classList.remove('hover-active');
       gsap.to(povPie17, { opacity: 0, duration: 0.3, ease: 'power1.in' });
       gsap.to('#st-ch6-hover17',  { opacity: 0, duration: 0.25 });
       gsap.to('#st-ch6-14m-main', { opacity: 1, duration: 0.25, delay: 0.15 });
     }
 
-    povCircle.style.pointerEvents = 'none'; // enabled by ScrollTrigger once circle is fully in
+    function setActive(on) {
+      if (on === active) return;
+      active = on;
+      povCircle.style.cursor = on ? 'pointer' : 'default';
+      povCircle.style.pointerEvents = on ? 'all' : 'none';
+      if (on) {
+        gsap.to(infoHint, { opacity: 1, duration: 0.5, ease: 'power1.out' });
+        infoHint.classList.add('visible');
+      } else {
+        leave();
+        infoHint.classList.remove('hover-active');
+        gsap.to(infoHint, { opacity: 0, duration: 0.3, ease: 'power1.in',
+          onComplete() { infoHint.classList.remove('visible'); } });
+      }
+    }
+
+    povCircle.style.pointerEvents = 'none';
     povCircle.addEventListener('mouseenter', enter);
     povCircle.addEventListener('mouseleave', leave);
-    povCircle.style.cursor = 'pointer';
 
-    /* Disable hover when out of range */
+    /* Enable hover + info-hint once circle is fully grown; disable when out of range */
     ScrollTrigger.create({
       trigger: '#s-ch6-14m',
       start: '60% top',
       endTrigger: '#s-ch6-500k',
       end: 'top top',
-      onLeave()     { leave(); povCircle.style.pointerEvents = 'none'; },
-      onLeaveBack() { leave(); povCircle.style.pointerEvents = 'none'; },
-      onEnter()     { povCircle.style.pointerEvents = 'all'; },
-      onEnterBack() { povCircle.style.pointerEvents = 'all'; },
+      onEnter()     { setActive(true); },
+      onEnterBack() { setActive(true); },
+      onLeave()     { setActive(false); },
+      onLeaveBack() { setActive(false); },
     });
   },
 };
