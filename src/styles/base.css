@@ -188,6 +188,30 @@ body {
   font-size: clamp(12px, 1.1vw, 16px);
 }
 
+#lbl-kapitel,
+#lbl-periode {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--f-mono);
+  font-size: clamp(11px, 1vw, 14px);
+  letter-spacing: 0.2em;
+  color: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  line-height: 1;
+  text-align: center;
+}
+
+#lbl-kapitel {
+  top: 22px;
+}
+
+#lbl-periode {
+  top: calc(22px + clamp(11px, 1vw, 14px) + 5px);
+}
+
 
 /* ─── Scroll hint (down arrow) ───────────────
    Centered in the left half (where the text will appear), clear of the

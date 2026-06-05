@@ -44,6 +44,10 @@ export const stageMarkup = /* html */ `
       </div>
       <span id="info-label">HOVER</span>
     </div>
+
+    <!-- Chapter + period labels — centered top, same height as date/euro counter -->
+    <div id="lbl-kapitel">KAPITEL 1</div>
+    <div id="lbl-periode">DIE PERIODE</div>
   </div>
 
   <!-- LIQUID BACKGROUND (Scenes 1–2) — drains as VAT counts 20→0 -->
@@ -84,13 +88,9 @@ export const stageMarkup = /* html */ `
     </defs>
 
     <!-- Center vertical axis (draws in Scene 3) -->
-    <line id="c-axis" x1="500" y1="50" x2="500" y2="510" stroke="#C9C9C0"
-          stroke-width="2" stroke-dasharray="460" stroke-dashoffset="460" opacity="0"/>
+    <line id="c-axis" x1="500" y1="70" x2="500" y2="510" stroke="#C9C9C0"
+          stroke-width="2" stroke-dasharray="440" stroke-dashoffset="440" opacity="0"/>
 
-    <text id="lbl-kapitel" x="500" y="11" text-anchor="middle" class="svg-mono"
-          font-size="7" fill="#1a1a1a" letter-spacing="2" opacity="0">KAPITEL 1</text>
-    <text id="lbl-periode" x="500" y="23" text-anchor="middle" class="svg-mono"
-          font-size="9" fill="#1a1a1a" letter-spacing="2" opacity="0">DIE PERIODE</text>
     <text id="lbl-xxxx" x="985" y="11" text-anchor="end" class="svg-mono svg-italic"
           font-size="9" fill="#1a1a1a" letter-spacing="1" opacity="0">XXXX</text>
 
@@ -232,12 +232,12 @@ export const stageMarkup = /* html */ `
          tracking overall scroll progress. An invisible hit-area lets you
          click / drag the spine to seek. Driven by core/spine.js; the native
          scrollbar is hidden in base.css. -->
-    <line id="c-axis-progress" x1="500" y1="50" x2="500" y2="50"
+    <line id="c-axis-progress" x1="500" y1="70" x2="500" y2="70"
           stroke="#A9A99F" stroke-width="5" stroke-linecap="round" opacity="0"/>
     <!-- Thick spine stroke — grows top→bottom during "7 Jahre" sections as progress indicator -->
-    <line id="spine-thick" x1="500" y1="50" x2="500" y2="50"
+    <line id="spine-thick" x1="500" y1="70" x2="500" y2="70"
           stroke="#D63335" stroke-width="3" stroke-linecap="round" opacity="0"/>
-    <rect id="spine-hit" x="486" y="50" width="28" height="460" fill="transparent"/>
+    <rect id="spine-hit" x="486" y="70" width="28" height="440" fill="transparent"/>
   </svg>
 
   <!-- Scroll spacer sections injected here by the engine -->

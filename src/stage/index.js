@@ -233,7 +233,7 @@ export function buildStage(mount, gsap) {
     refs.povCircle, refs.povPie17, refs.povSub,
     refs.povPie90, refs.povPie60, refs.povPie15, refs.povPie12,
   ], { opacity: 0 });
-  gsap.set(refs.cAxis,   { strokeDashoffset: 468 });
+  gsap.set(refs.cAxis,   { strokeDashoffset: 448 });
   gsap.set(refs.cSpinner,{ strokeDashoffset: 565.5 });
 
   return refs;
