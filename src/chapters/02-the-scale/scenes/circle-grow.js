@@ -28,8 +28,7 @@ export default {
     tl
       /* Circle grows (s3 owns its own text fade-out — no cross-scene hand-off). */
       .to(cFill,  { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.80 }, 0)
-      /* New text fades in, holds, then fades out before s8 begins. */
-      .to('#st5', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.10)
-      .to('#st5', { opacity: 0, duration: 0.05, ease: 'power1.in'  }, 0.93);
+      /* New text fades in — pie-26.js owns the fade-out once hover is active. */
+      .to('#st5', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.10);
   },
 };
