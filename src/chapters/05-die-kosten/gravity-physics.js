@@ -77,6 +77,7 @@ export function createGravityPhysics({ items, gsap, dropSeed = 12345, gravity = 
   /* Create one physics body per item ───────────────────────────── */
   const rand = seededRng(dropSeed);
   const bodies = [];
+  let dynamicCount = 0; // stagger only dynamic items; static bodies are already placed
 
   items.forEach(({ coinPosIdx, isTampon, isStatic, cx: initCx, cy: initCy }) => {
     let dropX, dropY;
@@ -87,7 +88,8 @@ export function createGravityPhysics({ items, gsap, dropSeed = 12345, gravity = 
       const margin = isTampon ? 55 : 30;
       dropX = ZONE_L + margin + rand() * (ZONE_R - ZONE_L - 2 * margin);
       /* Stagger start heights so items arrive well-spaced (one every ~0.4s) */
-      dropY = -(180 + bodies.length * 220 + rand() * 80);
+      dropY = -(180 + dynamicCount * 220 + rand() * 80);
+      dynamicCount++;
     }
 
     let body;

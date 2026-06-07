@@ -1,16 +1,16 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — 25.000 Euro (Chapter 5, Scene 2)
-   The 17 tampon infographics morph in-place into red circles with
-   "1000€" labels (scroll-driven). Then 8 more circles fall from
-   above onto the pile.
+   17 tampons morph to circles (scroll-scrub). Then 8 new circles fall
+   from above with real Matter.js physics, bouncing off the static pile.
 
    Timeline (0 → 1 over 300vh):
      0.05–0.20  Counter ticks 0 → 25000; text overlay fades in
      0.05–0.60  17 tampons morph to circles (pill fades, circle grows)
-     0.68–0.90  8 new circles fall from above onto the pile
+     ~0.68      8 new circles launch with Matter.js gravity + collisions
      0.92–0.98  Text overlay fades out
 ═══════════════════════════════════════════════════════════════════ */
-import { computeStack17, computeStack25 } from '../physics.js';
+import { computeStack17 } from '../physics.js';
+import { createGravityPhysics } from '../gravity-physics.js';
 
 export default {
   id: 's-ch5-25k',
@@ -30,9 +30,36 @@ export default {
     const counterEl = document.getElementById('ch5-counter');
 
     const stack17 = computeStack17();
-    const stack25 = computeStack25(stack17);
-
     const proxy = { val: 0 };
+    let physics25 = null;
+    let coinsLaunched = false;
+
+    const startCoinsPhysics = () => {
+      if (physics25) return;
+      const items = [
+        ...coinEls.slice(0, 17).map((el, i) => ({
+          el,
+          coinPosIdx: i,
+          isTampon: false,
+          isStatic: true,
+          cx: stack17[i].cx,
+          cy: stack17[i].cy,
+        })),
+        ...coinEls.slice(17).map((el, j) => ({
+          el,
+          coinPosIdx: 17 + j,
+          isTampon: false,
+          isStatic: false,
+        })),
+      ];
+      gsap.set(coinEls.slice(17), { opacity: 1 });
+      physics25 = createGravityPhysics({ items, gsap });
+    };
+
+    const destroyCoinsPhysics = () => {
+      if (physics25) { physics25.destroy(); physics25 = null; }
+      gsap.set(coinEls.slice(17), { opacity: 0 });
+    };
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -40,6 +67,24 @@ export default {
         start: 'top top',
         end: 'bottom bottom',
         scrub: 0.4,
+        /* Launch 8 coin physics at ~68% raw scroll progress.
+           Use window.scrollY + self.start/end so the check is based on
+           the real scroll position, not the scrub-smoothed animation progress. */
+        onUpdate(self) {
+          const raw = Math.min(1, Math.max(0,
+            (window.scrollY - self.start) / (self.end - self.start),
+          ));
+          if (!coinsLaunched && raw >= 0.68) {
+            coinsLaunched = true;
+            startCoinsPhysics();
+          } else if (coinsLaunched && raw < 0.68) {
+            coinsLaunched = false;
+            destroyCoinsPhysics();
+          }
+        },
+        onLeave() {
+          if (physics25) { physics25.destroy(); physics25 = null; }
+        },
       },
     });
 
@@ -67,17 +112,6 @@ export default {
       tl.to(euroLbl, { opacity: 1, duration: 0.10, ease: 'power1.out' }, t0 + 0.16);
     });
 
-    /* 8 new circles fall from above onto the pile */
-    stack25.forEach(({ dx, dy }, j) => {
-      const t0 = 0.68 + j * 0.025;
-      tl.fromTo(
-        coinEls[17 + j],
-        { opacity: 1, x: dx, y: -600 },
-        { opacity: 1, y: dy, duration: 0.10, ease: 'power2.in' },
-        t0,
-      );
-    });
-
     tl.to('#st-ch5-25k', { opacity: 0, duration: 0.06, ease: 'power1.in' }, 0.92);
     tl.to({}, { duration: 0.02 }, 0.98);
 
@@ -93,6 +127,7 @@ export default {
         gsap.set(coinsGrp, { opacity: 1 });
       },
       onLeaveBack() {
+        if (physics25) { physics25.destroy(); physics25 = null; coinsLaunched = false; }
         gsap.set(coinsGrp, { opacity: 0 });
         gsap.set(coinEls.slice(17), { opacity: 0 });
       },
