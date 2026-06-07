@@ -68,53 +68,41 @@ export default {
       if (counterEl) counterEl.textContent = '0';
     }
 
-    /* ── IntersectionObserver: physics + coins lifecycle ─────────── */
-    const section = document.getElementById('s-ch5-25k');
-
-    const observer = new IntersectionObserver((entries) => {
-      const { isIntersecting, boundingClientRect: { top } } = entries[0];
-
-      if (isIntersecting) {
-        /* Ensure physics is running (covers the edge case where the user
-           jumped directly into this section, skipping scene-17k). */
+    /* ── ScrollTrigger: coins enter on scene enter, clean up on leave ── */
+    ScrollTrigger.create({
+      trigger: '#s-ch5-25k',
+      start:   'top 70%',
+      onEnter() {
+        /* Edge case: user jumped directly here, skipping scene-17k */
         if (!ch5State.physics) {
           ch5State.hasPlayed = true;
           ch5State.physics = createPhysicsWorld({ tamponCount: 20, spawnIntervalMs: 300 });
         }
-
-        /* Add coins once per visit */
         if (!ch5State.coinsAdded) {
           ch5State.coinsAdded = true;
           ch5State.coinHandle = ch5State.physics.addCoins(8, 450);
           startCounter();
         }
-        return;
-      }
+      },
+    });
 
-      if (top < 0) {
-        /* Section is above viewport: user scrolled forward past this scene.
-           Tear down physics and reveal the SVG coins for scene-coins-grow. */
+    ScrollTrigger.create({
+      trigger: '#s-ch5-25k',
+      start:   'bottom top',   // section fully scrolled past
+      onEnter() {
+        /* User scrolled forward past scene — tear down physics, show SVG coins */
         if (ch5State.physics) {
           ch5State.physics.destroy();
-          ch5State.physics   = null;
+          ch5State.physics    = null;
           ch5State.coinHandle = null;
         }
         ch5State.coinsAdded = false;
-        /* SVG coins are at their natural COIN_POSITIONS — show them for
-           scene-kosten-detail and scene-coins-grow. */
         gsap.set(coinsGrp, { opacity: 1 });
-      } else {
-        /* top > 0: section is below viewport (user scrolled back up into 17k).
-           Remove the extra coins so scene-17k shows only tampons. */
-        if (ch5State.coinsAdded && ch5State.coinHandle) {
-          ch5State.coinHandle.remove();
-          ch5State.coinHandle = null;
-        }
-        ch5State.coinsAdded = false;
-        resetCounter();
-      }
-    }, { threshold: 0 });
-
-    observer.observe(section);
+      },
+      onLeaveBack() {
+        /* User scrolled back into scene from beyond — restore SVG coins hidden */
+        gsap.set(coinsGrp, { opacity: 0 });
+      },
+    });
   },
 };

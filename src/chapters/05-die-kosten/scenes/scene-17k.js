@@ -43,37 +43,17 @@ export default {
       onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 1, duration: 0.3, ease: 'power1.out' }),
     });
 
-    /* ── IntersectionObserver: physics lifecycle ─────────────────── */
-    const section = document.getElementById('s-ch5-17k');
-
-    function startPhysics() {
-      /* Hide ch4 holdover elements that may still be visible */
-      gsap.to([mRect, rRect, lines38Grp], { opacity: 0, duration: 0.4 });
-      ch5State.physics = createPhysicsWorld({ tamponCount: 20, spawnIntervalMs: 300 });
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      const { isIntersecting, boundingClientRect: { top } } = entries[0];
-
-      if (isIntersecting) {
-        /* Play once per page load — storyboard: animation triggers once and
-           stays frozen if user scrolls back. */
+    /* ── Physics trigger via ScrollTrigger (once per page load) ─── */
+    ScrollTrigger.create({
+      trigger: '#s-ch5-17k',
+      start:   'top 70%',
+      onEnter() {
         if (!ch5State.hasPlayed) {
           ch5State.hasPlayed = true;
-          startPhysics();
+          gsap.to([mRect, rRect, lines38Grp], { opacity: 0, duration: 0.4 });
+          ch5State.physics = createPhysicsWorld({ tamponCount: 20, spawnIntervalMs: 300 });
         }
-        /* Re-entry after scroll-back: physics canvas is position:fixed,
-           already visible — nothing to do. */
-        return;
-      }
-
-      /* top > 0: scrolled back above section — keep physics alive (frozen pile).
-         top < 0: scrolled into scene-25k — keep alive; scene-25k manages. */
-      if (top > 0) {
-        gsap.to('#st-ch5-17k', { opacity: 0, duration: 0.2 });
-      }
-    }, { threshold: 0.15 });
-
-    observer.observe(section);
+      },
+    });
   },
 };
