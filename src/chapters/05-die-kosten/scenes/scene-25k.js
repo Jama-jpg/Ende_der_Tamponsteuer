@@ -80,7 +80,7 @@ export default {
         }
         if (!ch5State.morphed) {
           ch5State.morphed = true;
-          ch5State.physics.morph();
+          ch5State.physics.morph({ extraBalls: 8, extraSpawnMs: 400 });
           startCounter();
         }
       },

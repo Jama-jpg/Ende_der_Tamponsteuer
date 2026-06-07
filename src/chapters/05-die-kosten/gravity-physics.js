@@ -300,8 +300,9 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
 
   /* ── Public API ──────────────────────────────────────────────── */
   return {
-    /** Animate each tampon pill morphing into a 1000€ red ball. */
-    morph() {
+    /** Animate each tampon pill morphing into a 1000€ red ball,
+     *  then drop `extraBalls` additional balls from the top. */
+    morph({ extraBalls = 0, extraSpawnMs = 400 } = {}) {
       if (morphDone || morphStartTime !== null) return;
       morphStartTime = Date.now();
 
@@ -334,6 +335,28 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
           Composite.add(world, b);
           ballBodies.push(b);
         });
+
+        /* Drop extra balls from above */
+        for (let i = 0; i < extraBalls; i++) {
+          const et = setTimeout(() => {
+            const { scale: sc2, lbX: lx } = getSVGLayout();
+            const r2      = 40 * sc2;
+            const sx      = lx + 500 * sc2;
+            const margin  = r2 + 8;
+            const bx      = sx + margin + Math.random() * (window.innerWidth - sx - 2 * margin);
+            const by      = -(r2 * 2 + 10 + Math.random() * 60);
+            const b = Bodies.circle(bx, by, r2, {
+              restitution:    0.1,
+              friction:       0.9,
+              frictionAir:    0.03,
+              label:          'ball1000',
+              render:         { fillStyle: '#D63335', strokeStyle: 'transparent', lineWidth: 0 },
+            });
+            Composite.add(world, b);
+            ballBodies.push(b);
+          }, i * extraSpawnMs + Math.random() * 80);
+          timers.push(et);
+        }
 
         morphDone      = true;
         morphStartTime = null;
