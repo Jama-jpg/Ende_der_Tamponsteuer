@@ -59,3 +59,10 @@ export const POV_R     = 180;   // big circle (1.4M people)
 export const POV_SUB_R = 108;   // sub-circle (500k ≈ sqrt(500/1400) * 180)
 
 export const SVG_NS = 'http://www.w3.org/2000/svg';
+
+/* ── CHAPTER 08: 3-column timeline layout ─────────────────────────── */
+export const SPINE_L_X   = 333;   // left spine (shifted from 500)
+export const SPINE_R_X   = 667;   // right spine (new)
+export const TL_COL_A_X  = 167;   // Spur A column centre
+export const TL_COL_B_X  = 500;   // Spur B column centre
+export const TL_COL_C_X  = 833;   // Spur C column centre

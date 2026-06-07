@@ -238,6 +238,115 @@ export const stageMarkup = /* html */ `
     <line id="spine-thick" x1="500" y1="70" x2="500" y2="70"
           stroke="#D63335" stroke-width="3" stroke-linecap="round" opacity="0"/>
     <rect id="spine-hit" x="486" y="70" width="28" height="440" fill="transparent"/>
+
+    <!-- ── CHAPTER 07: WAAGE (BALANCE SCALE) ────────────────────────
+         The spine doubles as the scale's mast. The beam pivots around
+         x=500/y=220; right side drops to show Tampons are taxed more. -->
+    <g id="waage-grp" opacity="0">
+      <!-- Chains -->
+      <line id="waage-chain-l" x1="180" y1="220" x2="180" y2="340"
+            stroke="#A9A99F" stroke-width="1.5" stroke-linecap="round"/>
+      <line id="waage-chain-r" x1="820" y1="220" x2="820" y2="340"
+            stroke="#A9A99F" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- Pans -->
+      <ellipse id="waage-pan-l" cx="180" cy="340" rx="62" ry="10"
+               fill="none" stroke="#A9A99F" stroke-width="1.5"/>
+      <ellipse id="waage-pan-r" cx="820" cy="340" rx="62" ry="10"
+               fill="none" stroke="#A9A99F" stroke-width="1.5"/>
+      <!-- Items left pan: Kaviar dot cluster -->
+      <g id="waage-items-l" opacity="0">
+        <circle cx="155" cy="330" r="6" fill="#C9C9C0"/>
+        <circle cx="172" cy="327" r="5" fill="#C9C9C0"/>
+        <circle cx="188" cy="330" r="7" fill="#C9C9C0"/>
+        <circle cx="165" cy="318" r="4" fill="#C9C9C0"/>
+        <circle cx="180" cy="315" r="5" fill="#C9C9C0"/>
+      </g>
+      <!-- Items right pan: Tampon simplified shape -->
+      <g id="waage-items-r" opacity="0">
+        <rect x="803" y="308" width="14" height="30" rx="7" fill="#D63335"/>
+        <rect x="821" y="311" width="14" height="27" rx="7" fill="#D63335"/>
+        <rect x="839" y="309" width="14" height="29" rx="7" fill="#D63335"/>
+        <line x1="810" y1="338" x2="810" y2="348" stroke="#D63335" stroke-width="1.5"/>
+        <line x1="828" y1="338" x2="828" y2="348" stroke="#D63335" stroke-width="1.5"/>
+        <line x1="846" y1="338" x2="846" y2="348" stroke="#D63335" stroke-width="1.5"/>
+      </g>
+      <!-- Beam (rotates around fulcrum 500/220) -->
+      <line id="waage-beam" x1="180" y1="220" x2="820" y2="220"
+            stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Fulcrum triangle -->
+      <polygon id="waage-fulcrum" points="500,230 490,248 510,248"
+               fill="#1a1a1a"/>
+      <!-- Mast (reuses spine visually, drawn on top) -->
+      <line id="waage-mast" x1="500" y1="80" x2="500" y2="228"
+            stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Top cap -->
+      <circle cx="500" cy="78" r="4" fill="#1a1a1a"/>
+      <!-- Labels left (10%) -->
+      <g id="waage-lbl-l" opacity="0">
+        <text x="180" y="368" text-anchor="middle" class="svg-mono"
+              font-size="7" fill="#4a4a3f" letter-spacing="1.5">KAVIAR · TRÜFFEL · WEINBERGSCHNECKEN</text>
+        <text x="180" y="381" text-anchor="middle" class="svg-serif svg-italic"
+              font-size="14" fill="#4a4a3f">10 % MwSt.</text>
+      </g>
+      <!-- Labels right (20%) -->
+      <g id="waage-lbl-r" opacity="0">
+        <text x="820" y="368" text-anchor="middle" class="svg-mono"
+              font-size="7" fill="#D63335" letter-spacing="1.5">TAMPONS · BINDEN · PERIODENPRODUKTE</text>
+        <text x="820" y="381" text-anchor="middle" class="svg-serif svg-italic"
+              font-size="14" fill="#D63335">20 % MwSt.</text>
+      </g>
+      <!-- Bottom explanation text -->
+      <text id="waage-caption" x="500" y="430" text-anchor="middle"
+            class="svg-mono" font-size="8" fill="#1a1a1a" letter-spacing="1.2" opacity="0">
+        NICHT WEIL JEMAND SO ENTSCHIEDEN HATTE —
+      </text>
+      <text id="waage-caption-2" x="500" y="444" text-anchor="middle"
+            class="svg-mono" font-size="8" fill="#1a1a1a" letter-spacing="1.2" opacity="0">
+        SONDERN WEIL NIEMAND JE DARAN GEDACHT HATTE, ES ANDERS ZU REGELN.
+      </text>
+      <text id="waage-tampon-tax" x="500" y="470" text-anchor="middle"
+            class="svg-serif svg-italic" font-size="20" fill="#D63335" opacity="0">
+        Die „Tamponsteuer"
+      </text>
+    </g>
+
+    <!-- ── CHAPTER 08: RIGHT SPINE (3-column timeline layout) ────────
+         Slides in from the right when the timeline's 3-column layout
+         activates. No dots, no progress indicator — decorative only. -->
+    <g id="spine-right-grp" opacity="0">
+      <line id="c-axis-right" x1="667" y1="70" x2="667" y2="510"
+            stroke="#C9C9C0" stroke-width="2" stroke-dasharray="440"
+            stroke-dashoffset="440" opacity="0"/>
+    </g>
+
+    <!-- ── CHAPTER 08: TIMELINE CARD CONTAINERS ─────────────────────
+         One group per era, each holding SVG cards for Spur A / B / C.
+         Injected by their scene's init(); cleared on scene exit. -->
+    <g id="tl-cards" opacity="0"></g>
+
+    <!-- ── CHAPTER 09: GLOBE ─────────────────────────────────────────
+         3D globe: circle silhouette + lat/lon lines + country markers
+         + legend. Driven by scene-globe.js. -->
+    <g id="globe-grp" opacity="0">
+      <!-- Globe silhouette -->
+      <circle id="globe-bg" cx="775" cy="281" r="190"
+              fill="#0d0d0d" fill-opacity="0.04" stroke="#C9C9C0" stroke-width="1"/>
+      <!-- Latitude lines (generated in scene-globe.js) -->
+      <g id="globe-lats"/>
+      <!-- Longitude lines (generated in scene-globe.js) -->
+      <g id="globe-lons"/>
+      <!-- Country markers (generated in scene-globe.js) -->
+      <g id="globe-markers"/>
+      <!-- Country labels (shown when rotation slows) -->
+      <g id="globe-labels" opacity="0"/>
+      <!-- Legend -->
+      <g id="globe-legend" opacity="0"/>
+    </g>
+
+    <!-- ── CHAPTER 10: PROTEST SIGNS ────────────────────────────────
+         Signs rise from below; slight sway loop after they land.
+         Generated entirely by scene-protest.js. -->
+    <g id="protest-grp" opacity="0"></g>
   </svg>
 
   <!-- Scroll spacer sections injected here by the engine -->

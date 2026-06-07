@@ -3,9 +3,8 @@
    Turns the central axis into the page's scrollbar: a grey fill grows down
    the spine tracking scroll progress from s3 onward (where user scrolling
    begins). There are 4 dots on the spine; dot 0 is filled by the intro,
-   dot 1 fills when the grey line reaches it at the end of chapter 6.
-   The line's maximum travel is from dot 0 to dot 1 — the lower two dots
-   represent future chapters not yet in this scrollytelling.
+   dot 1 fills after the Waage scene (ch 7), dot 2 at end of timeline (ch 8),
+   dot 3 at the very end of the website (ch 10).
    The spine can be clicked / dragged to seek. The native scrollbar is
    hidden in base.css. Interaction is disabled while intro locks scrolling.
 ═══════════════════════════════════════════════════════════════════ */
@@ -13,8 +12,8 @@ import { DOT_YS } from './constants.js';
 
 /* Spine endpoints in #main-svg viewBox coords (match #c-axis y1/y2). */
 const Y_TOP = 70;
-/* The grey progress line travels only to dot 1 — end of Kapitel 1. */
-const Y_END = DOT_YS[1];
+/* The grey progress line travels the full height of the spine. */
+const Y_END = DOT_YS[3];
 
 const FILLED = '#A9A99F';
 const EMPTY  = 'white';
@@ -27,7 +26,7 @@ export function createSpine({ ScrollTrigger, refs }) {
 
   const dots = periodDots ? Array.from(periodDots.children) : [];
 
-  /* Grow the progress line from dot 0 toward dot 1 only. */
+  /* Grow the progress line from dot 0 to dot 3 (full spine). */
   function render(progress) {
     const y = Y_TOP + (Y_END - Y_TOP) * clamp01(progress);
     cAxisProgress.setAttribute('y2', y);
@@ -46,16 +45,31 @@ export function createSpine({ ScrollTrigger, refs }) {
 
   /* ── Dot filling ────────────────────────────────────────────────────
      Dot 0 is filled during the intro by countdown.js.
-     Dot 1 fills when the user reaches the last scene of chapter 6
-     (end of Kapitel 1 = end of this scrollytelling). */
+     Dot 1 fills after the Waage scene (end of chapter 7).
+     Dot 2 fills at the end of the timeline chapter (chapter 8).
+     Dot 3 fills at the very end of the website (chapter 10). */
   const fill  = (i) => dots[i]?.setAttribute('fill', FILLED);
   const empty = (i) => dots[i]?.setAttribute('fill', EMPTY);
 
   ScrollTrigger.create({
-    trigger:     '#s-ch6-pie12',
+    trigger:     '#s-ch7-waage',
     start:       'bottom bottom',
     onEnter:     () => fill(1),
     onLeaveBack: () => empty(1),
+  });
+
+  ScrollTrigger.create({
+    trigger:     '#s-tl-layout-out',
+    start:       'bottom bottom',
+    onEnter:     () => fill(2),
+    onLeaveBack: () => empty(2),
+  });
+
+  ScrollTrigger.create({
+    trigger:     '#s-ch10-protest',
+    start:       'bottom bottom',
+    onEnter:     () => fill(3),
+    onLeaveBack: () => empty(3),
   });
 
   /* ── Click / drag the spine to seek ────────────────────────────────
