@@ -144,6 +144,7 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
   const tamponBodies = [];
   let   coinBodies   = [];
   let   ballBodies   = [];
+  let   iconBodies   = [];   // { body, type } — pill | pad | undies
   const timers       = [];
 
   for (let i = 0; i < tamponCount; i++) {
@@ -263,6 +264,67 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
       }
       ctx.restore();
     }
+
+    /* Icon bodies — pill / pad / undies */
+    if (iconBodies.length) {
+      const { scale: sc2 } = getSVGLayout();
+      for (const { body: b, type } of iconBodies) {
+        ctx.save();
+        ctx.translate(b.position.x, b.position.y);
+        ctx.rotate(b.angle);
+
+        if (type === 'pill') {
+          /* White capsule body (drawn by Matter.js). Add red seam + label. */
+          const ph = 20 * sc2;
+          ctx.strokeStyle = '#D63335';
+          ctx.lineWidth   = Math.max(1, 1.5 * sc2);
+          ctx.beginPath();
+          ctx.moveTo(0, -ph / 2);
+          ctx.lineTo(0,  ph / 2);
+          ctx.stroke();
+          const fs = Math.max(6, Math.round(7 * sc2));
+          ctx.font         = `bold ${fs}px dm-mono, monospace`;
+          ctx.fillStyle    = '#D63335';
+          ctx.textAlign    = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('SCHMERZ', 0, 0);
+
+        } else if (type === 'pad') {
+          /* Red body. Draw wings + label. */
+          const pw = 70 * sc2, ph = 25 * sc2;
+          const wingW = pw * 0.18, wingH = ph * 0.44;
+          ctx.fillStyle = '#D63335';
+          ctx.fillRect(-pw / 2 - wingW, -wingH / 2, wingW, wingH);
+          ctx.fillRect( pw / 2,         -wingH / 2, wingW, wingH);
+          const fs = Math.max(6, Math.round(7 * sc2));
+          ctx.font         = `bold ${fs}px dm-mono, monospace`;
+          ctx.fillStyle    = '#FFFFFF';
+          ctx.textAlign    = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('BINDE', 0, 0);
+
+        } else {
+          /* undies — dark red body. Draw U-arc + label. */
+          const bw = 58 * sc2, bh = 34 * sc2;
+          const uw = bw * 0.55, uh = bh * 0.42;
+          ctx.strokeStyle = '#FFFFFF';
+          ctx.lineWidth   = Math.max(1, 1.5 * sc2);
+          ctx.beginPath();
+          ctx.moveTo(-uw / 2, -uh / 2);
+          ctx.quadraticCurveTo(-uw / 2, uh / 2, 0, uh / 2);
+          ctx.quadraticCurveTo( uw / 2, uh / 2, uw / 2, -uh / 2);
+          ctx.stroke();
+          const fs = Math.max(6, Math.round(7 * sc2));
+          ctx.font         = `bold ${fs}px dm-mono, monospace`;
+          ctx.fillStyle    = '#FFFFFF';
+          ctx.textAlign    = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('WÄSCHE', 0, -bh * 0.2);
+        }
+
+        ctx.restore();
+      }
+    }
   });
 
   /* ── Mouse drag (wheel events must not block page scroll) ────── */
@@ -362,6 +424,76 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
         morphStartTime = null;
       }, MORPH_DURATION);
       timers.push(t);
+    },
+
+    /** Drop countPerType each of: pill (Schmerzmittel), pad (Binde), undies (Unterwäsche). */
+    addIcons(countPerType = 5, spawnMs = 280) {
+      const types = ['pill', 'pad', 'undies'];
+      const queue = [];
+      for (let i = 0; i < countPerType; i++) {
+        for (const t of types) queue.push(t);
+      }
+      /* Shuffle */
+      for (let i = queue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [queue[i], queue[j]] = [queue[j], queue[i]];
+      }
+
+      queue.forEach((type, idx) => {
+        const t = setTimeout(() => {
+          const { scale: sc, lbX: lx } = getSVGLayout();
+          const sx = lx + 500 * sc;
+
+          let body;
+          if (type === 'pill') {
+            const bw = 52 * sc, bh = 20 * sc;
+            const margin = bw / 2 + 8;
+            const x = sx + margin + Math.random() * (window.innerWidth - sx - 2 * margin);
+            const y = -(bh + 10 + Math.random() * 50);
+            body = Bodies.rectangle(x, y, bw, bh, {
+              angle:          (Math.random() - 0.5) * Math.PI * 0.4,
+              chamfer:        { radius: bh * 0.46 },
+              restitution:    0.1,
+              friction:       0.8,
+              frictionAir:    0.04,
+              label:          'icon-pill',
+              render:         { fillStyle: '#FFFFFF', strokeStyle: '#D63335', lineWidth: Math.max(1, 2 * sc) },
+            });
+          } else if (type === 'pad') {
+            const bw = 70 * sc, bh = 25 * sc;
+            const margin = bw / 2 + 8;
+            const x = sx + margin + Math.random() * (window.innerWidth - sx - 2 * margin);
+            const y = -(bh + 10 + Math.random() * 50);
+            body = Bodies.rectangle(x, y, bw, bh, {
+              angle:          (Math.random() - 0.5) * Math.PI * 0.3,
+              chamfer:        { radius: bh * 0.28 },
+              restitution:    0.1,
+              friction:       0.8,
+              frictionAir:    0.04,
+              label:          'icon-pad',
+              render:         { fillStyle: '#D63335', strokeStyle: 'transparent', lineWidth: 0 },
+            });
+          } else {
+            const bw = 58 * sc, bh = 34 * sc;
+            const margin = bw / 2 + 8;
+            const x = sx + margin + Math.random() * (window.innerWidth - sx - 2 * margin);
+            const y = -(bh + 10 + Math.random() * 50);
+            body = Bodies.rectangle(x, y, bw, bh, {
+              angle:          (Math.random() - 0.5) * Math.PI * 0.3,
+              chamfer:        { radius: bh * 0.38 },
+              restitution:    0.1,
+              friction:       0.8,
+              frictionAir:    0.04,
+              label:          'icon-undies',
+              render:         { fillStyle: '#531416', strokeStyle: 'transparent', lineWidth: 0 },
+            });
+          }
+
+          Composite.add(world, body);
+          iconBodies.push({ body, type });
+        }, idx * spawnMs + Math.random() * 80);
+        timers.push(t);
+      });
     },
 
     addCoins(count = 8, spawnMs = 400) {

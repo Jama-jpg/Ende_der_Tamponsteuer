@@ -28,8 +28,7 @@ export default {
            <p class="sl">EURO.<br>KOSTET DIE PERIODE ÜBER<br>EIN GANZES LEBEN HINWEG<br>UND WIRD SO ZU EINER<br>UNFREIWILLIGEN<br>FINANZIELLEN VERPFLICHTUNG</p>`,
   },
 
-  init({ gsap, ScrollTrigger, stage }) {
-    const { coinsGrp } = stage.refs;
+  init({ gsap, ScrollTrigger }) {
 
     /* ── Text overlay (non-scrub) ────────────────────────────────── */
     ScrollTrigger.create({
@@ -86,22 +85,5 @@ export default {
       },
     });
 
-    ScrollTrigger.create({
-      trigger: '#s-ch5-25k',
-      start:   'bottom top',   // section fully scrolled past
-      onEnter() {
-        /* User scrolled forward past scene — tear down physics, show SVG coins */
-        if (ch5State.physics) {
-          ch5State.physics.destroy();
-          ch5State.physics = null;
-        }
-        ch5State.morphed = false;
-        gsap.set(coinsGrp, { opacity: 1 });
-      },
-      onLeaveBack() {
-        /* User scrolled back into scene from beyond — restore SVG coins hidden */
-        gsap.set(coinsGrp, { opacity: 0 });
-      },
-    });
   },
 };

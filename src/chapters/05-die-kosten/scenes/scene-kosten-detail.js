@@ -1,12 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — Kosten Detail (Chapter 5, Scene 3)
-   Coins stay stacked. Text swaps to the breakdown of costs.
-   User can still grab and drop coins (Draggable active from scene-25k).
-
-   Timeline (0 → 1 over 150vh):
-     0.00–0.12  Swap overlay text
-     0.12–1.00  Hold (coins interactive)
+   25 balls stay on screen. When the breakdown text appears, icon
+   bodies representing Schmerzmittel (pill), Binde (pad), and
+   Unterwäsche fall from the top into the physics world.
+   Physics is destroyed when the section is fully scrolled past.
 ═══════════════════════════════════════════════════════════════════ */
+import { ch5State } from '../chapter5-state.js';
 
 export default {
   id: 's-ch5-detail',
@@ -19,7 +18,7 @@ export default {
     html: `<p class="sl">FÜR PERIODENPRODUKTE,<br>SCHMERZMITTEL, ERSATZKLEIDUNG,<br>MEDIKAMENTE UND BEGLEITKOSTEN.</p>`,
   },
 
-  init({ gsap }) {
+  init({ gsap, ScrollTrigger }) {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-ch5-detail',
@@ -29,10 +28,37 @@ export default {
       },
     });
 
-    /* scene-25k owns #st-ch5-25k fade-out. This scene only controls its own text. */
     tl.to('#st-ch5-detail', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
     tl.to('#st-ch5-detail', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
-
     tl.to({}, { duration: 0.02 }, 0.98);
+
+    /* Drop icon bodies when text enters */
+    ScrollTrigger.create({
+      trigger: '#s-ch5-detail',
+      start:   'top 70%',
+      onEnter() {
+        if (ch5State.physics && !ch5State.iconsAdded) {
+          ch5State.iconsAdded = true;
+          ch5State.physics.addIcons(5, 280);
+        }
+      },
+    });
+
+    /* Tear down physics when section is fully scrolled past */
+    ScrollTrigger.create({
+      trigger: '#s-ch5-detail',
+      start:   'bottom top',
+      onEnter() {
+        if (ch5State.physics) {
+          ch5State.physics.destroy();
+          ch5State.physics = null;
+        }
+        ch5State.morphed     = false;
+        ch5State.iconsAdded  = false;
+      },
+      onLeaveBack() {
+        /* scrolled back in — icons already exist from earlier trigger */
+      },
+    });
   },
 };
