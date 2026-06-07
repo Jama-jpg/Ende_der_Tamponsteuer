@@ -18,6 +18,7 @@ export default {
   id: 's-periode-a',
   height: '200vh',
   skipSnapStart: true,
+  snapPoints: [0.75],
 
   overlay: {
     id: 'st-periode',
@@ -49,7 +50,6 @@ export default {
         start: 'top top',
         end: 'bottom bottom',
         scrub: 0.4,
-        snap: { snapTo: [0.75], duration: { min: 0.2, max: 0.5 }, delay: 0.1 },
         /* Re-enable gooey filter on mCircles: jeden-monat.js sets it to 'none'
            at split end, so the merge animation would be invisible without this. */
         onEnter:     () => mCircles.setAttribute('filter', 'url(#gooey)'),

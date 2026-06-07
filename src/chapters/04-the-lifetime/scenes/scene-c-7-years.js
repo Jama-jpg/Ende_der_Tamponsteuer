@@ -16,6 +16,7 @@ export default {
   id: 's-periode-c',
   height: '150vh',
   skipSnapStart: true,
+  snapPoints: [0.75],
 
   init({ gsap, ScrollTrigger, stage }) {
     const { linesGrp, lineEls, rRect } = stage.refs;
@@ -26,7 +27,6 @@ export default {
         start: 'top top',
         end: 'bottom bottom',
         scrub: 0.4,
-        snap: { snapTo: [0.75], duration: { min: 0.2, max: 0.5 }, delay: 0.1 },
       },
     });
 

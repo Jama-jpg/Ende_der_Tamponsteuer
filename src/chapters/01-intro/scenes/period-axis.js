@@ -11,6 +11,7 @@ export default {
   id: 's3',
   height: '250vh',
   skipSnapStart: true,
+  snapPoints: [0.50],
   overlay: {
     id: 'st3',
     html: `<p class="sl">STELL DIR VOR, DEIN KÖRPER<br>HAT EIN ABONNEMENT<br>ABGESCHLOSSEN, DAS DU NICHT<br>BEENDEN KANNST.</p>`,

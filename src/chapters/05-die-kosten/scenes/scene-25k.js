@@ -16,6 +16,7 @@ export default {
   id: 's-ch5-25k',
   height: '300vh',
   skipSnapStart: true,
+  snapPoints: [0.80],
 
   overlay: {
     id: 'st-ch5-25k',

@@ -20,6 +20,7 @@ export default {
   id: 's-ch6-14m',
   height: '250vh',
   skipSnapStart: true,
+  snapPoints: [0.70],
 
   overlay: {
     id: 'st-ch6-14m',
@@ -51,7 +52,6 @@ export default {
         start: 'top top',
         end: 'bottom bottom',
         scrub: 0.4,
-        snap: { snapTo: [0.70], duration: { min: 0.2, max: 0.5 }, delay: 0.1 },
       },
     });
 

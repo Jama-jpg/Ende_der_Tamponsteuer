@@ -13,6 +13,7 @@ export default {
   id: 's-ch6-folgen',
   height: '150vh',
   skipSnapStart: true,
+  snapPoints: [0.65],
 
   overlay: {
     id: 'st-ch6-folgen',
@@ -28,7 +29,6 @@ export default {
         start: 'top top',
         end: 'bottom bottom',
         scrub: 0.4,
-        snap: { snapTo: [0.65], duration: { min: 0.2, max: 0.5 }, delay: 0.1 },
       },
     });
 
