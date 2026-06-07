@@ -1,9 +1,17 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — 17.000 Periodenprodukte (Chapter 5, Scene 1)
-   17 tampon SVGs fall from the top with real Matter.js physics,
-   stacking and colliding. Interactive drag after landing.
+
+   A fixed canvas overlay is created once when this section enters the
+   viewport (~15% visible). Matter.js runs on its own RAF loop —
+   completely independent of the page scroll. 20 tampon pills drop
+   from the top and stack in the right half of the viewport.
+
+   Text overlay fades in/out via non-scrub ScrollTrigger callbacks.
+   Physics persists into scene-25k (ch5State.physics is shared).
+   Animation plays once per page load; the pile freezes on scroll-back.
 ═══════════════════════════════════════════════════════════════════ */
-import { createGravityPhysics, buildItems } from '../gravity-physics.js';
+import { createPhysicsWorld } from '../gravity-physics.js';
+import { ch5State } from '../chapter5-state.js';
 
 export default {
   id: 's-ch5-17k',
@@ -19,46 +27,53 @@ export default {
   },
 
   init({ gsap, ScrollTrigger, stage }) {
-    const { mRect, rRect, lines38Grp, coinsGrp, coinEls } = stage.refs;
+    const { mRect, rRect, lines38Grp } = stage.refs;
 
-    gsap.set(coinEls.slice(17), { opacity: 0 });
-
-    let physics = null;
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#s-ch5-17k',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.4,
-      },
-    });
-
-    tl.to([mRect, rRect, lines38Grp], { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0);
-    tl.set(coinsGrp, { opacity: 1 }, 0.12);
-    tl.to('#st-ch5-17k', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.15);
-    tl.to('#st-ch5-17k', { opacity: 0, duration: 0.06, ease: 'power1.in' }, 0.88);
-    tl.to({}, { duration: 0.02 }, 0.98);
-
+    /* ── Text overlay: fade in when section is in view (no scrub) ── */
     ScrollTrigger.create({
-      trigger: '#s-ch5-17k',
-      start: 'top bottom',
-      end: 'bottom top',  // = scene17k bottom at viewport top → scrollY = scene17k.bottom
-      onEnter() {
-        gsap.set(coinEls.slice(17), { opacity: 0 });
-        gsap.set(coinsGrp, { opacity: 1 });
-        if (!physics) {
-          physics = createGravityPhysics({ items: buildItems(coinEls, 0, 17), gsap });
-        }
-      },
-      onLeave() {
-        if (physics) { physics.destroy(); physics = null; }
-      },
-      onLeaveBack() {
-        if (physics) { physics.destroy(); physics = null; }
-        gsap.set(coinsGrp, { opacity: 0 });
-        gsap.set(coinEls.slice(17), { opacity: 0 });
-      },
+      trigger:    '#s-ch5-17k',
+      start:      'top 65%',
+      onEnter:    () => gsap.to('#st-ch5-17k', { opacity: 1, duration: 0.5, ease: 'power1.out' }),
+      onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 0, duration: 0.3, ease: 'power1.in' }),
     });
+    ScrollTrigger.create({
+      trigger:    '#s-ch5-17k',
+      start:      'bottom 35%',
+      onEnter:    () => gsap.to('#st-ch5-17k', { opacity: 0, duration: 0.3, ease: 'power1.in' }),
+      onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 1, duration: 0.3, ease: 'power1.out' }),
+    });
+
+    /* ── IntersectionObserver: physics lifecycle ─────────────────── */
+    const section = document.getElementById('s-ch5-17k');
+
+    function startPhysics() {
+      /* Hide ch4 holdover elements that may still be visible */
+      gsap.to([mRect, rRect, lines38Grp], { opacity: 0, duration: 0.4 });
+      ch5State.physics = createPhysicsWorld({ tamponCount: 20, spawnIntervalMs: 300 });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      const { isIntersecting, boundingClientRect: { top } } = entries[0];
+
+      if (isIntersecting) {
+        /* Play once per page load — storyboard: animation triggers once and
+           stays frozen if user scrolls back. */
+        if (!ch5State.hasPlayed) {
+          ch5State.hasPlayed = true;
+          startPhysics();
+        }
+        /* Re-entry after scroll-back: physics canvas is position:fixed,
+           already visible — nothing to do. */
+        return;
+      }
+
+      /* top > 0: scrolled back above section — keep physics alive (frozen pile).
+         top < 0: scrolled into scene-25k — keep alive; scene-25k manages. */
+      if (top > 0) {
+        gsap.to('#st-ch5-17k', { opacity: 0, duration: 0.2 });
+      }
+    }, { threshold: 0.15 });
+
+    observer.observe(section);
   },
 };

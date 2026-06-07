@@ -1,216 +1,283 @@
 /* ═══════════════════════════════════════════════════════════════════
-   INTERACTIVE GRAVITY PHYSICS — Chapter 5
-   Matter.js wrapper: items fall from above, stack with real collisions,
-   and stay where the user drops them (no snap-back).
+   GRAVITY PHYSICS — Chapter 5 (canvas-based, scroll-independent)
 
-   Usage:
-     const phys = createGravityPhysics({ items, gsap });
-     // items: [{ el, coinPosIdx, isTampon }]
+   Creates a position:fixed <canvas> rendered by Matter.js Render.
+   The physics simulation runs on its own RAF loop (Matter.js Runner),
+   completely decoupled from the page scroll.
 
-   phys.destroy() — kills engine + RAF loop, resets pointer-events
+   Layout:
+     Left wall  = SVG spine (x = 500 SVG units → screen px)
+     Right wall = right edge of viewport
+     Floor      = bottom of viewport
+
+   Bodies:
+     Tampons  — chamfered rectangles (pill shape), #D63335,
+                drawn with "1000" label + wavy cord in afterRender
+     Coins    — circles, #531416, with a drawn '€' label
 ═══════════════════════════════════════════════════════════════════ */
 import Matter from 'matter-js';
-import { COIN_POSITIONS, TAMPON_ROTATIONS } from '../../core/constants.js';
 
-const { Engine, Bodies, Body, Composite, Mouse, MouseConstraint, Events } = Matter;
+const { Engine, Render, Runner, Bodies, Body, Composite, Mouse, MouseConstraint, Events } = Matter;
 
-const SVG_W     = 1000;
-const SVG_H     = 562;
-const ZONE_L    = 514;
-const ZONE_R    = 986;
-const ZONE_FLOOR= 550;
-const WALL      = 400;
+const SVG_W  = 1000;
+const SVG_H  = 562;
+const WALL_T = 60;
 
-/* ── helpers ──────────────────────────────────────────────────── */
+function getSVGLayout() {
+  const el    = document.getElementById('main-svg');
+  const r     = el.getBoundingClientRect();
+  const scale = Math.min(r.width / SVG_W, r.height / SVG_H);
+  const lbX   = (r.width - SVG_W * scale) / 2;
+  return { scale, lbX };
+}
 
 function seededRng(seed) {
   let s = (seed >>> 0) || 1;
   return () => { s ^= s << 13; s ^= s >> 17; s ^= s << 5; return (s >>> 0) / 4294967296; };
 }
 
-/* Convert screen coordinates to SVG viewBox coordinates */
-function syncMouseScale(mouse, svgEl) {
-  const rect = svgEl.getBoundingClientRect();
-  if (!rect.width) return;
-  const scale = Math.min(rect.width / SVG_W, rect.height / SVG_H);
-  const lbX = (rect.width  - SVG_W * scale) / 2;
-  const lbY = (rect.height - SVG_H * scale) / 2;
-  mouse.scale.x  = 1 / scale;
-  mouse.scale.y  = 1 / scale;
-  mouse.offset.x = -lbX;
-  mouse.offset.y = -lbY;
-}
-
-/* ── main export ──────────────────────────────────────────────── */
-
 /**
- * @param {Object}   opts
- * @param {Array}    opts.items      — [{ el, coinPosIdx, isTampon, isStatic? }]
- *                                    isStatic = true → frozen in place initially
- * @param {Function} opts.gsap
- * @param {number}   [opts.dropSeed]
- * @param {number}   [opts.gravity]  — default 2.0
+ * Creates a self-contained Matter.js physics world rendered on a
+ * fixed canvas overlay.  The caller is responsible for calling
+ * destroy() when the section leaves the viewport.
+ *
+ * @returns {{ addCoins(n, spawnMs): { remove() }, destroy() }}
  */
-export function createGravityPhysics({ items, gsap, dropSeed = 12345, gravity = 2.0 }) {
-  const svgEl = document.getElementById('main-svg');
+export function createPhysicsWorld({ tamponCount = 20, spawnIntervalMs = 300 } = {}) {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
 
-  /* Engine ─────────────────────────────────────────────────────── */
-  const engine = Engine.create({ gravity: { x: 0, y: gravity } });
+  /* Fixed canvas overlay — sits above #main-svg (z-index: 10).
+     Explicit CSS width/height prevent sizing issues in some browsers. */
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText =
+    `position:fixed;top:0;left:0;width:${W}px;height:${H}px;` +
+    `z-index:20;pointer-events:auto;cursor:grab;`;
+  document.body.appendChild(canvas);
+
+  const engine = Engine.create({ gravity: { x: 0, y: 1 }, enableSleeping: true });
   const world  = engine.world;
 
-  /* Static boundaries */
-  Composite.add(world, [
-    /* floor */
-    Bodies.rectangle((ZONE_L + ZONE_R) / 2, ZONE_FLOOR + WALL / 2,
-      ZONE_R - ZONE_L + WALL * 2, WALL,
-      { isStatic: true, friction: 0.95, frictionStatic: 1.0, label: 'floor' }),
-    /* left wall */
-    Bodies.rectangle(ZONE_L - WALL / 2, SVG_H / 2,
-      WALL, SVG_H * 3,
-      { isStatic: true, label: 'wallL' }),
-    /* right wall */
-    Bodies.rectangle(ZONE_R + WALL / 2, SVG_H / 2,
-      WALL, SVG_H * 3,
-      { isStatic: true, label: 'wallR' }),
-  ]);
-
-  /* Create one physics body per item ───────────────────────────── */
-  const rand = seededRng(dropSeed);
-  const bodies = [];
-  let dynamicCount = 0; // stagger only dynamic items; static bodies are already placed
-
-  items.forEach(({ coinPosIdx, isTampon, isStatic, cx: initCx, cy: initCy }) => {
-    let dropX, dropY;
-    if (initCx != null && initCy != null) {
-      dropX = initCx;
-      dropY = initCy;
-    } else {
-      const margin = isTampon ? 55 : 30;
-      dropX = ZONE_L + margin + rand() * (ZONE_R - ZONE_L - 2 * margin);
-      /* Stagger start heights so items arrive well-spaced (one every ~0.4s) */
-      dropY = -(180 + dynamicCount * 220 + rand() * 80);
-      dynamicCount++;
-    }
-
-    let body;
-    if (isTampon) {
-      body = Bodies.rectangle(dropX, dropY, 80, 40, {
-        angle: TAMPON_ROTATIONS[coinPosIdx] * Math.PI / 180,
-        restitution: 0,
-        friction: 0.90,
-        frictionAir: 0.08,
-        frictionStatic: 0.80,
-        isStatic: !!isStatic,
-      });
-    } else {
-      body = Bodies.circle(dropX, dropY, 22, {
-        restitution: 0.05,
-        friction: 0.80,
-        frictionAir: 0.05,
-        isStatic: !!isStatic,
-      });
-    }
-    body._itemIdx = bodies.length; // index into items[]
-    bodies.push(body);
-  });
-  Composite.add(world, bodies);
-
-  /* Set GSAP transforms for dynamic items to their drop positions.
-     Static items (with explicit cx/cy) keep their current visual position. */
-  items.forEach(({ el, coinPosIdx, isStatic }, idx) => {
-    if (isStatic) return;
-    const [cx0, cy0] = COIN_POSITIONS[coinPosIdx];
-    const b = bodies[idx];
-    gsap.set(el, {
-      x: b.position.x - cx0,
-      y: b.position.y - cy0,
-      rotation: 0,
-      transformOrigin: '50% 50%',
-      transformBox: 'fill-box',
-    });
+  const render = Render.create({
+    canvas,
+    engine,
+    options: {
+      width:      W,
+      height:     H,
+      pixelRatio: window.devicePixelRatio || 1,
+      wireframes: false,
+      background: 'transparent',
+    },
   });
 
-  /* Mouse constraint for drag-and-drop ───────────────────────── */
-  const mouse = Mouse.create(svgEl);
-  syncMouseScale(mouse, svgEl);
+  /* ── Walls ──────────────────────────────────────────────────── */
+  const { scale, lbX } = getSVGLayout();
+  const spineX = lbX + 500 * scale;
+
+  const floor = Bodies.rectangle(
+    (spineX + W) / 2, H + WALL_T / 2, W - spineX + WALL_T * 2, WALL_T,
+    { isStatic: true, label: 'floor', render: { visible: false }, friction: 1, restitution: 0 },
+  );
+  const wallL = Bodies.rectangle(
+    spineX - WALL_T / 2, H / 2, WALL_T, H * 4,
+    { isStatic: true, label: 'wallL', render: { visible: false }, friction: 1 },
+  );
+  const wallR = Bodies.rectangle(
+    W + WALL_T / 2, H / 2, WALL_T, H * 4,
+    { isStatic: true, label: 'wallR', render: { visible: false }, friction: 1 },
+  );
+  Composite.add(world, [floor, wallL, wallR]);
+
+  /* ── Shared spawn-queue (one beforeUpdate handler for all batches) ── */
+  const spawnQueues = [];
+
+  Events.on(engine, 'beforeUpdate', (ev) => {
+    for (const q of spawnQueues) {
+      if (q.released >= q.bodies.length) continue;
+      if (q.startTs === null) q.startTs = ev.timestamp;
+      const n = Math.floor((ev.timestamp - q.startTs) / q.intervalMs);
+      while (q.released < n && q.released < q.bodies.length) {
+        Body.setStatic(q.bodies[q.released], false);
+        q.released++;
+      }
+    }
+  });
+
+  /* ── Body factory ────────────────────────────────────────────── */
+  const rand = seededRng(42);
+
+  function makeBodies(count, isTampon) {
+    const { scale: sc, lbX: lx } = getSVGLayout();
+    const sx   = lx + 500 * sc;
+    const bw   = 80 * sc;
+    const bh   = 28 * sc;
+    const cr   = 22 * sc;
+    const out  = [];
+
+    for (let i = 0; i < count; i++) {
+      const margin = (isTampon ? bw : cr) / 2 + 8;
+      const x = sx + margin + rand() * (window.innerWidth - sx - 2 * margin);
+      const y = -(40 + rand() * 60);
+
+      const body = isTampon
+        ? Bodies.rectangle(x, y, bw, bh, {
+            angle:          (rand() - 0.5) * Math.PI * 0.6,
+            chamfer:        { radius: bh * 0.46 },
+            isStatic:       true,
+            restitution:    0.05,
+            friction:       0.9,
+            frictionAir:    0.04,
+            frictionStatic: 0.8,
+            label:          'tampon',
+            render:         { fillStyle: '#D63335', strokeStyle: '#531416', lineWidth: 1.5 },
+          })
+        : Bodies.circle(x, y, cr, {
+            isStatic:       true,
+            restitution:    0.05,
+            friction:       0.9,
+            frictionAir:    0.03,
+            label:          'coin',
+            render:         { fillStyle: '#531416', strokeStyle: '#D63335', lineWidth: 1.5 },
+          });
+      out.push(body);
+    }
+    return out;
+  }
+
+  /* Spawn initial tampons — kept in outer scope for afterRender */
+  let tamponBodies = makeBodies(tamponCount, true);
+  Composite.add(world, tamponBodies);
+  spawnQueues.push({ bodies: tamponBodies, released: 0, startTs: null, intervalMs: spawnIntervalMs });
+
+  /* ── Coin '€' labels and tampon cord+"1000" drawn after each render ── */
+  let coinBodies = [];
+
+  Events.on(render, 'afterRender', () => {
+    const ctx = render.context;
+    const { scale: sc } = getSVGLayout();
+
+    /* Tampon bodies: draw wavy cord + "1000" text */
+    if (tamponBodies.length) {
+      const bw      = 80 * sc;
+      const bh      = 28 * sc;
+      const cordLen = bw * 0.55;
+      const textSz  = Math.round(9 * sc);
+
+      ctx.font         = `bold ${textSz}px dm-mono, monospace`;
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+
+      for (const b of tamponBodies) {
+        ctx.save();
+        ctx.translate(b.position.x, b.position.y);
+        ctx.rotate(b.angle);
+
+        /* Wavy cord from the right end of the pill */
+        ctx.beginPath();
+        ctx.moveTo(bw * 0.5, 0);
+        ctx.bezierCurveTo(
+          bw * 0.5 + cordLen * 0.3,  -bh * 0.5,
+          bw * 0.5 + cordLen * 0.7,   bh * 0.5,
+          bw * 0.5 + cordLen,         0,
+        );
+        ctx.strokeStyle = '#D63335';
+        ctx.lineWidth   = Math.max(1.5, 2 * sc);
+        ctx.lineCap     = 'round';
+        ctx.stroke();
+
+        /* "1000" label */
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillText('1000', 0, 0);
+
+        ctx.restore();
+      }
+    }
+
+    /* Coin bodies: draw '€' label */
+    if (coinBodies.length) {
+      const { scale: sc2 } = getSVGLayout();
+      const fs = Math.round(7 * sc2);
+      ctx.save();
+      ctx.font         = `bold ${fs}px dm-mono, monospace`;
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle    = '#F4DEDB';
+      for (const b of coinBodies) {
+        ctx.fillText('€', b.position.x, b.position.y);
+      }
+      ctx.restore();
+    }
+  });
+
+  /* ── Mouse (canvas as hit target; wheel events pass through) ─── */
+  const mouse = Mouse.create(canvas);
+  /* Remove Matter.js wheel handlers that would call preventDefault,
+     blocking the snap-scroll system from receiving wheel events. */
+  ['wheel', 'mousewheel', 'DOMMouseScroll'].forEach(ev => {
+    try { canvas.removeEventListener(ev, mouse.mousewheel); } catch (_) {}
+  });
 
   const mc = MouseConstraint.create(engine, {
     mouse,
-    constraint: { stiffness: 0.14, damping: 0.12 },
+    constraint: { stiffness: 0.2, render: { visible: false } },
   });
   Composite.add(world, mc);
+  Events.on(mc, 'startdrag', () => { canvas.style.cursor = 'grabbing'; });
+  Events.on(mc, 'enddrag',   () => { canvas.style.cursor = 'grab'; });
 
-  Events.on(mc, 'startdrag', () => { svgEl.style.cursor = 'grabbing'; });
-  Events.on(mc, 'enddrag',   () => { svgEl.style.cursor = 'grab'; });
+  /* ── Runner + Render (both independent of page scroll) ──────── */
+  const runner = Runner.create();
+  Runner.run(runner, engine);
+  Render.run(render);
 
-  /* Enable pointer events on SVG so mouse events reach Matter ── */
-  svgEl.style.pointerEvents = 'all';
-  svgEl.style.cursor = 'grab';
-
-  /* RAF loop: step engine + sync positions to SVG elements ────── */
-  let rafId, lastTs;
-
-  function frame(ts) {
-    rafId = requestAnimationFrame(frame);
-    const dt = lastTs ? Math.min(ts - lastTs, 50) : 16.67;
-    lastTs = ts;
-
-    syncMouseScale(mouse, svgEl);
-    Engine.update(engine, dt);
-
-    items.forEach(({ el, coinPosIdx, isTampon, isStatic }, idx) => {
-      if (isStatic) return;
-      const [cx0, cy0] = COIN_POSITIONS[coinPosIdx];
-      const b = bodies[idx];
-      const angleDeg = b.angle * 180 / Math.PI;
-      /* Compensate for the SVG-attribute rotation baked into pillG */
-      const rot = isTampon ? angleDeg - TAMPON_ROTATIONS[coinPosIdx] : angleDeg;
-
-      gsap.set(el, {
-        x: b.position.x - cx0,
-        y: b.position.y - cy0,
-        rotation: rot,
-        transformOrigin: '50% 50%',
-        transformBox: 'fill-box',
-      });
-    });
+  /* ── Resize: reposition walls, update canvas size ────────────── */
+  function onResize() {
+    const { scale: sc, lbX: lx } = getSVGLayout();
+    const sx  = lx + 500 * sc;
+    const nW  = window.innerWidth;
+    const nH  = window.innerHeight;
+    canvas.style.width  = nW + 'px';
+    canvas.style.height = nH + 'px';
+    Render.setSize(render, nW, nH);
+    Body.setPosition(floor, { x: (sx + nW) / 2, y: nH + WALL_T / 2 });
+    Body.setPosition(wallL,  { x: sx - WALL_T / 2, y: nH / 2 });
+    Body.setPosition(wallR,  { x: nW + WALL_T / 2, y: nH / 2 });
   }
+  window.addEventListener('resize', onResize);
 
-  rafId = requestAnimationFrame(frame);
-
-  /* Public API ─────────────────────────────────────────────────── */
+  /* ── Public API ──────────────────────────────────────────────── */
   return {
-    bodies,
-    engine,
+    /**
+     * Drop `count` coin circles into the live world (scene-25k).
+     * Returns a handle with remove() to undo if the user scrolls back.
+     */
+    addCoins(count = 8, spawnMs = 400) {
+      const newBodies = makeBodies(count, false);
+      Composite.add(world, newBodies);
+      const q = { bodies: newBodies, released: 0, startTs: null, intervalMs: spawnMs };
+      spawnQueues.push(q);
+      coinBodies = coinBodies.concat(newBodies);
 
-    /* Make a previously-static body dynamic (for deferred activation) */
-    activate(idx) {
-      Body.setStatic(bodies[idx], false);
-    },
-
-    /* Teleport a body to a new (cx, cy) in SVG coords and wake it */
-    teleport(idx, cx, cy) {
-      Body.setPosition(bodies[idx], { x: cx, y: cy });
-      Body.setVelocity(bodies[idx], { x: 0, y: 0 });
+      return {
+        remove() {
+          Composite.remove(world, newBodies);
+          coinBodies = coinBodies.filter(b => !newBodies.includes(b));
+          const qi = spawnQueues.indexOf(q);
+          if (qi !== -1) spawnQueues.splice(qi, 1);
+        },
+      };
     },
 
     destroy() {
-      cancelAnimationFrame(rafId);
+      Runner.stop(runner);
+      Render.stop(render);
+      window.removeEventListener('resize', onResize);
+      Events.off(engine);
+      Events.off(render);
       Events.off(mc);
       Composite.clear(world, false);
       Engine.clear(engine);
-      svgEl.style.pointerEvents = '';
-      svgEl.style.cursor = '';
+      canvas.remove();
     },
   };
-}
-
-/* ── Preset builders (convenience) ───────────────────────────── */
-
-/** Build item descriptors for the first N coinEls (tampons for 0-16, coins 17+) */
-export function buildItems(coinEls, from = 0, to = coinEls.length, isStatic = false) {
-  return coinEls.slice(from, to).map((el, j) => {
-    const coinPosIdx = from + j;
-    return { el, coinPosIdx, isTampon: coinPosIdx < 17, isStatic };
-  });
 }
