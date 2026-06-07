@@ -160,6 +160,12 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
   let morphStartTime = null;
   let morphDone      = false;
 
+  /* ── Grow state (balls pack into grid and expand) ────────────── */
+  let growFactor  = 0;       // 0 → 1 driven by scroll
+  let growEntries = [];      // { startX, startY, targetX, targetY }
+  let growBaseR   = 0;
+  let growTargetR = 0;
+
   /* ── Custom afterRender: cord + text on tampons, text on balls ── */
   Events.on(render, 'afterRender', () => {
     const ctx         = render.context;
@@ -235,8 +241,8 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
       }
     }
 
-    /* Morphed balls — "1000€" text */
-    if (ballBodies.length) {
+    /* Morphed balls — "1000€" text (only before freeze/grow takes over) */
+    if (ballBodies.length && !growEntries.length) {
       const { scale: sc2 } = getSVGLayout();
       const ballR  = 40 * sc2;
       const ballFs = Math.max(9, Math.round(ballR * 0.32));
@@ -247,6 +253,29 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
       ctx.fillStyle    = '#FFFFFF';
       for (const b of ballBodies) {
         ctx.fillText('1000€', b.position.x, b.position.y);
+      }
+      ctx.restore();
+    }
+
+    /* Balls animate into packed grid and grow (growFactor 0 → 1) */
+    if (growEntries.length && growFactor > 0) {
+      /* smoothstep for position, linear for radius */
+      const pt   = growFactor * growFactor * (3 - 2 * growFactor);
+      const drawR = growBaseR + (growTargetR - growBaseR) * growFactor;
+      const fs    = Math.max(8, Math.round(drawR * 0.28));
+      ctx.save();
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      for (const e of growEntries) {
+        const x = e.startX + (e.targetX - e.startX) * pt;
+        const y = e.startY + (e.targetY - e.startY) * pt;
+        ctx.beginPath();
+        ctx.arc(x, y, drawR, 0, Math.PI * 2);
+        ctx.fillStyle = '#D63335';
+        ctx.fill();
+        ctx.font      = `bold ${fs}px dm-mono, monospace`;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillText('1000€', x, y);
       }
       ctx.restore();
     }
@@ -265,8 +294,8 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
       ctx.restore();
     }
 
-    /* Icon bodies — pill / pad / undies */
-    if (iconBodies.length) {
+    /* Icon bodies — pill / pad / undies (hidden during grow) */
+    if (iconBodies.length && growFactor === 0) {
       const { scale: sc2 } = getSVGLayout();
       for (const { body: b, type } of iconBodies) {
         ctx.save();
@@ -362,6 +391,77 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
 
   /* ── Public API ──────────────────────────────────────────────── */
   return {
+    /** Freeze all bodies and compute the target grid for the grow animation. */
+    freeze() {
+      engine.gravity.y = 0;
+      const all = [
+        ...tamponBodies,
+        ...ballBodies,
+        ...iconBodies.map(e => e.body),
+        ...coinBodies,
+      ];
+      all.forEach(b => {
+        Body.setStatic(b, true);
+        Body.setVelocity(b, { x: 0, y: 0 });
+        Body.setAngularVelocity(b, 0);
+      });
+
+      if (!ballBodies.length) return;
+
+      /* ── Compute tight grid that fills the right half ──────────── */
+      const { lbX: lx, scale: sc } = getSVGLayout();
+      const spineX = lx + 500 * sc;
+      const availW = window.innerWidth  - spineX;
+      const availH = window.innerHeight;
+      const n      = ballBodies.length;
+
+      /* Choose cols so the grid aspect ratio matches the available area */
+      const cols = Math.round(Math.sqrt(n * (availW / availH)));
+      const rows = Math.ceil(n / cols);
+
+      const colSpacing = availW / cols;
+      const rowSpacing = availH / rows;
+
+      /* Radius: largest that fits without overlap, with a hair of breathing room */
+      growBaseR   = 40 * sc;
+      growTargetR = Math.min(colSpacing, rowSpacing) / 2 * 0.98;
+
+      /* Build target positions row-major, centred in each cell */
+      const targets = [];
+      for (let row = 0; row < rows && targets.length < n; row++) {
+        for (let col = 0; col < cols && targets.length < n; col++) {
+          targets.push({
+            x: spineX + colSpacing * (col + 0.5),
+            y: rowSpacing * (row + 0.5),
+          });
+        }
+      }
+
+      /* Assign each ball to the nearest target (greedy by sorted row then x) */
+      const rowH = availH / rows;
+      const sorted = [...ballBodies].sort((a, b) => {
+        const ra = Math.floor(a.position.y / rowH);
+        const rb = Math.floor(b.position.y / rowH);
+        return ra !== rb ? ra - rb : a.position.x - b.position.x;
+      });
+
+      growEntries = sorted.map((b, i) => ({
+        startX:  b.position.x,
+        startY:  b.position.y,
+        targetX: targets[i].x,
+        targetY: targets[i].y,
+      }));
+
+      /* Hide original body renders — custom afterRender takes over */
+      ballBodies.forEach(b => { b.render.opacity = 0; });
+      iconBodies.forEach(e => { e.body.render.opacity = 0; });
+    },
+
+    /** Drive the grow animation (0 = original positions, 1 = full grid). */
+    setGrowFactor(t) {
+      growFactor = t;
+    },
+
     /** Animate each tampon pill morphing into a 1000€ red ball,
      *  then drop `extraBalls` additional balls from the top. */
     morph({ extraBalls = 0, extraSpawnMs = 400 } = {}) {

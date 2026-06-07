@@ -1,14 +1,15 @@
 /* ═══════════════════════════════════════════════════════════════════
-   SCENE — Coins Grow (Chapter 5, Scene 4)
-   The 25 stacked coins grow in radius and scatter to fill the right
-   half of the screen.
+   SCENE — Balls Grow (Chapter 5, Scene 4)
 
-   Timeline (0 → 1 over 200vh):
-     0.00–0.12  Text swap
-     0.15–0.70  Each coin's circle grows r: 22 → 82 and moves to scatter position
-     0.70–1.00  Hold
+   The 25 physics balls freeze in place and grow via canvas to fill
+   the right half of the screen as the user scrolls. No SVG involved.
+
+   Timeline driven by scroll progress (0 → 1 over 200vh):
+     enter   → physics frozen
+     0 → 1   → growFactor sent to physics, balls expand in afterRender
+     bottom  → physics world destroyed
 ═══════════════════════════════════════════════════════════════════ */
-import { COIN_POSITIONS, COIN_SCATTER } from '../../../core/constants.js';
+import { ch5State } from '../chapter5-state.js';
 
 export default {
   id: 's-ch5-grow',
@@ -21,36 +22,56 @@ export default {
     html: `<p class="sl">FÜR VIELE MENSCHEN SIND DIE KOSTEN<br>FÜR PERIODENPRODUKTE EIN REALES PROBLEM.</p>`,
   },
 
-  init({ gsap, stage }) {
-    const { coinEls } = stage.refs;
+  init({ gsap, ScrollTrigger }) {
+    /* ── Text (non-scrub) ────────────────────────────────────────── */
+    ScrollTrigger.create({
+      trigger:    '#s-ch5-grow',
+      start:      'top 65%',
+      onEnter:    () => gsap.to('#st-ch5-grow', { opacity: 1, duration: 0.5, ease: 'power1.out' }),
+      onLeaveBack:() => gsap.to('#st-ch5-grow', { opacity: 0, duration: 0.3, ease: 'power1.in' }),
+    });
+    ScrollTrigger.create({
+      trigger:    '#s-ch5-grow',
+      start:      'bottom 35%',
+      onEnter:    () => gsap.to('#st-ch5-grow', { opacity: 0, duration: 0.3, ease: 'power1.in' }),
+      onLeaveBack:() => gsap.to('#st-ch5-grow', { opacity: 1, duration: 0.3, ease: 'power1.out' }),
+    });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#s-ch5-grow',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.4,
+    /* ── Freeze physics when scene becomes visible ───────────────── */
+    ScrollTrigger.create({
+      trigger: '#s-ch5-grow',
+      start:   'top 90%',
+      onEnter() {
+        if (ch5State.physics) ch5State.physics.freeze();
       },
     });
 
-    /* scene-kosten-detail owns #st-ch5-detail fade-out. This scene controls only its own text. */
-    tl.to('#st-ch5-grow', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
-    tl.to('#st-ch5-grow', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
-
-    /* Grow each coin and scatter it */
-    coinEls.forEach((g, i) => {
-      const circle = g.querySelector('circle');
-      const label  = g.querySelector('text');
-      const [cx, cy] = COIN_POSITIONS[i];
-      const [scx, scy] = COIN_SCATTER[i];
-      const tx = scx - cx;
-      const ty = scy - cy;
-
-      tl.to(g, { x: tx, y: ty, ease: 'power2.inOut', duration: 0.35 }, 0.15 + i * 0.01);
-      tl.to(circle, { attr: { r: 82 }, ease: 'power2.inOut', duration: 0.35 }, 0.15 + i * 0.01);
-      tl.to(label,  { attr: { 'font-size': 12 }, ease: 'power2.inOut', duration: 0.35 }, 0.15 + i * 0.01);
+    /* ── Grow balls via scroll progress ─────────────────────────── */
+    ScrollTrigger.create({
+      trigger:  '#s-ch5-grow',
+      start:    'top top',
+      end:      'bottom bottom',
+      scrub:    0.6,
+      onUpdate(self) {
+        if (ch5State.physics) ch5State.physics.setGrowFactor(self.progress);
+      },
+      onLeaveBack() {
+        if (ch5State.physics) ch5State.physics.setGrowFactor(0);
+      },
     });
 
-    tl.to({}, { duration: 0.02 }, 0.98);
+    /* ── Destroy physics when scene is fully scrolled past ───────── */
+    ScrollTrigger.create({
+      trigger: '#s-ch5-grow',
+      start:   'bottom top',
+      onEnter() {
+        if (ch5State.physics) {
+          ch5State.physics.destroy();
+          ch5State.physics    = null;
+          ch5State.morphed    = false;
+          ch5State.iconsAdded = false;
+        }
+      },
+    });
   },
 };

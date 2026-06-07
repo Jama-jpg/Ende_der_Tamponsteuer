@@ -44,21 +44,5 @@ export default {
       },
     });
 
-    /* Tear down physics when section is fully scrolled past */
-    ScrollTrigger.create({
-      trigger: '#s-ch5-detail',
-      start:   'bottom top',
-      onEnter() {
-        if (ch5State.physics) {
-          ch5State.physics.destroy();
-          ch5State.physics = null;
-        }
-        ch5State.morphed     = false;
-        ch5State.iconsAdded  = false;
-      },
-      onLeaveBack() {
-        /* scrolled back in — icons already exist from earlier trigger */
-      },
-    });
   },
 };
