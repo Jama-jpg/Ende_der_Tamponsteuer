@@ -68,7 +68,7 @@ export default {
       if (counterEl) counterEl.textContent = '0';
     }
 
-    /* ── ScrollTrigger: coins enter on scene enter, clean up on leave ── */
+    /* ── ScrollTrigger: morph tampons → balls on scene enter ────── */
     ScrollTrigger.create({
       trigger: '#s-ch5-25k',
       start:   'top 70%',
@@ -76,11 +76,11 @@ export default {
         /* Edge case: user jumped directly here, skipping scene-17k */
         if (!ch5State.physics) {
           ch5State.hasPlayed = true;
-          ch5State.physics = createPhysicsWorld({ tamponCount: 20, spawnIntervalMs: 300 });
+          ch5State.physics = createPhysicsWorld({ tamponCount: 17, spawnIntervalMs: 300 });
         }
-        if (!ch5State.coinsAdded) {
-          ch5State.coinsAdded = true;
-          ch5State.coinHandle = ch5State.physics.addCoins(8, 450);
+        if (!ch5State.morphed) {
+          ch5State.morphed = true;
+          ch5State.physics.morph();
           startCounter();
         }
       },
@@ -93,10 +93,9 @@ export default {
         /* User scrolled forward past scene — tear down physics, show SVG coins */
         if (ch5State.physics) {
           ch5State.physics.destroy();
-          ch5State.physics    = null;
-          ch5State.coinHandle = null;
+          ch5State.physics = null;
         }
-        ch5State.coinsAdded = false;
+        ch5State.morphed = false;
         gsap.set(coinsGrp, { opacity: 1 });
       },
       onLeaveBack() {

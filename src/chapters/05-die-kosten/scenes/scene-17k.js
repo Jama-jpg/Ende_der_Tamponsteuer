@@ -51,7 +51,7 @@ export default {
         if (!ch5State.hasPlayed) {
           ch5State.hasPlayed = true;
           gsap.to([mRect, rRect, lines38Grp], { opacity: 0, duration: 0.4 });
-          ch5State.physics = createPhysicsWorld({ tamponCount: 20, spawnIntervalMs: 300 });
+          ch5State.physics = createPhysicsWorld({ tamponCount: 17, spawnIntervalMs: 300 });
         }
       },
     });

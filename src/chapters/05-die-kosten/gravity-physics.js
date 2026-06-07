@@ -23,6 +23,8 @@ const SVG_W = 1000;
 const SVG_H = 562;
 const WALL_T = 60;
 
+const MORPH_DURATION = 900; // ms for tampon → ball animation
+
 function getSVGLayout() {
   const el    = document.getElementById('main-svg');
   const r     = el.getBoundingClientRect();
@@ -33,9 +35,9 @@ function getSVGLayout() {
 
 /**
  * Creates a self-contained Matter.js physics world on a fixed canvas.
- * @returns {{ addCoins(n, spawnMs): { remove() }, destroy() }}
+ * @returns {{ morph(), destroy() }}
  */
-export function createPhysicsWorld({ tamponCount = 20, spawnIntervalMs = 300 } = {}) {
+export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } = {}) {
   const W = window.innerWidth;
   const H = window.innerHeight;
 
@@ -86,61 +88,97 @@ export function createPhysicsWorld({ tamponCount = 20, spawnIntervalMs = 300 } =
   Composite.add(world, [floor, wallL, wallR]);
 
   /* ── Body factory ────────────────────────────────────────────── */
-  function makeBody(isTampon) {
+  function makeBody(type) {
     const { scale: sc, lbX: lx } = getSVGLayout();
-    const sx     = lx + 500 * sc;
-    const bw     = 80 * sc;
-    const bh     = 28 * sc;
-    const cr     = 22 * sc;
-    const margin = (isTampon ? bw : cr) / 2 + 8;
-    const x      = sx + margin + Math.random() * (window.innerWidth - sx - 2 * margin);
-    const y      = -(bh + 10 + Math.random() * 40);   // just above viewport top
+    const sx = lx + 500 * sc;
 
-    return isTampon
-      ? Bodies.rectangle(x, y, bw, bh, {
-          angle:          (Math.random() - 0.5) * Math.PI * 0.5,
-          chamfer:        { radius: bh * 0.46 },
-          restitution:    0.05,
-          friction:       0.9,
-          frictionAir:    0.04,
-          frictionStatic: 0.8,
-          label:          'tampon',
-          render:         { fillStyle: '#D63335', strokeStyle: '#531416', lineWidth: 1.5 },
-        })
-      : Bodies.circle(x, y, cr, {
-          restitution:    0.05,
-          friction:       0.9,
-          frictionAir:    0.03,
-          label:          'coin',
-          render:         { fillStyle: '#531416', strokeStyle: '#D63335', lineWidth: 1.5 },
-        });
+    if (type === 'tampon') {
+      const bw     = 120 * sc;
+      const bh     = 42 * sc;
+      const margin = bw / 2 + 8;
+      const x      = sx + margin + Math.random() * (window.innerWidth - sx - 2 * margin);
+      const y      = -(bh + 10 + Math.random() * 40);
+      return Bodies.rectangle(x, y, bw, bh, {
+        angle:          (Math.random() - 0.5) * Math.PI * 0.5,
+        chamfer:        { radius: bh * 0.46 },
+        restitution:    0.05,
+        friction:       0.9,
+        frictionAir:    0.04,
+        frictionStatic: 0.8,
+        label:          'tampon',
+        render:         { fillStyle: '#D63335', strokeStyle: 'transparent', lineWidth: 0 },
+      });
+    }
+
+    if (type === 'ball') {
+      const { scale: sc2, lbX: lx2 } = getSVGLayout();
+      const sx2 = lx2 + 500 * sc2;
+      const cr  = 40 * sc2;
+      const margin2 = cr + 8;
+      const x2 = sx2 + margin2 + Math.random() * (window.innerWidth - sx2 - 2 * margin2);
+      const y2 = -(cr * 2 + 10 + Math.random() * 40);
+      return Bodies.circle(x2, y2, cr, {
+        restitution:    0.05,
+        friction:       0.9,
+        frictionAir:    0.03,
+        label:          'ball1000',
+        render:         { fillStyle: '#D63335', strokeStyle: 'transparent', lineWidth: 0 },
+      });
+    }
+
+    /* coin */
+    const cr     = 22 * sc;
+    const margin = cr + 8;
+    const x      = sx + margin + Math.random() * (window.innerWidth - sx - 2 * margin);
+    const y      = -(cr * 2 + 10 + Math.random() * 40);
+    return Bodies.circle(x, y, cr, {
+      restitution:    0.05,
+      friction:       0.9,
+      frictionAir:    0.03,
+      label:          'coin',
+      render:         { fillStyle: '#531416', strokeStyle: '#D63335', lineWidth: 1.5 },
+    });
   }
 
   /* ── Spawn tampons one at a time with setTimeout ─────────────── */
   const tamponBodies = [];
   let   coinBodies   = [];
+  let   ballBodies   = [];
   const timers       = [];
 
   for (let i = 0; i < tamponCount; i++) {
     const t = setTimeout(() => {
-      const b = makeBody(true);
+      const b = makeBody('tampon');
       Composite.add(world, b);
       tamponBodies.push(b);
     }, i * spawnIntervalMs + Math.random() * 50);
     timers.push(t);
   }
 
-  /* ── Custom afterRender: cord + "1000" on tampons, € on coins ── */
-  Events.on(render, 'afterRender', () => {
-    const ctx       = render.context;
-    const { scale: sc } = getSVGLayout();
-    const bw        = 80 * sc;
-    const bh        = 28 * sc;
-    const cordLen   = bw * 0.55;
-    const textSz    = Math.max(8, Math.round(9 * sc));
+  /* ── Morph state ─────────────────────────────────────────────── */
+  let morphStartTime = null;
+  let morphDone      = false;
 
-    /* Tampons */
+  /* ── Custom afterRender: cord + text on tampons, text on balls ── */
+  Events.on(render, 'afterRender', () => {
+    const ctx         = render.context;
+    const { scale: sc } = getSVGLayout();
+    const bw          = 120 * sc;
+    const bh          = 42 * sc;
+    const cordLen     = bw * 0.55;
+    const textSz      = Math.max(10, Math.round(12 * sc));
+
+    /* Compute morph progress (0 → 1) */
+    let morphT = 0;
+    if (morphStartTime !== null) {
+      morphT = Math.min(1, (Date.now() - morphStartTime) / MORPH_DURATION);
+    }
+
+    /* Tampons — cord + "1000" text (fade out during morph) */
     if (tamponBodies.length) {
+      const alpha = 1 - morphT;
+      ctx.save();
+      ctx.globalAlpha  = alpha;
       ctx.font         = `bold ${textSz}px dm-mono, monospace`;
       ctx.textAlign    = 'center';
       ctx.textBaseline = 'middle';
@@ -169,6 +207,47 @@ export function createPhysicsWorld({ tamponCount = 20, spawnIntervalMs = 300 } =
 
         ctx.restore();
       }
+      ctx.restore();
+
+      /* Growing circle overlay during morph */
+      if (morphT > 0) {
+        const targetR = 40 * sc;
+        const r       = targetR * morphT;
+        ctx.save();
+        for (const b of tamponBodies) {
+          ctx.beginPath();
+          ctx.arc(b.position.x, b.position.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = '#D63335';
+          ctx.fill();
+
+          if (r > 14) {
+            const fs = Math.max(8, Math.round(r * 0.32));
+            ctx.font         = `bold ${fs}px dm-mono, monospace`;
+            ctx.fillStyle    = '#FFFFFF';
+            ctx.textAlign    = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.globalAlpha  = morphT;
+            ctx.fillText('1000€', b.position.x, b.position.y);
+          }
+        }
+        ctx.restore();
+      }
+    }
+
+    /* Morphed balls — "1000€" text */
+    if (ballBodies.length) {
+      const { scale: sc2 } = getSVGLayout();
+      const ballR  = 40 * sc2;
+      const ballFs = Math.max(9, Math.round(ballR * 0.32));
+      ctx.save();
+      ctx.font         = `bold ${ballFs}px dm-mono, monospace`;
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle    = '#FFFFFF';
+      for (const b of ballBodies) {
+        ctx.fillText('1000€', b.position.x, b.position.y);
+      }
+      ctx.restore();
     }
 
     /* Coins */
@@ -221,11 +300,52 @@ export function createPhysicsWorld({ tamponCount = 20, spawnIntervalMs = 300 } =
 
   /* ── Public API ──────────────────────────────────────────────── */
   return {
+    /** Animate each tampon pill morphing into a 1000€ red ball. */
+    morph() {
+      if (morphDone || morphStartTime !== null) return;
+      morphStartTime = Date.now();
+
+      const t = setTimeout(() => {
+        const { scale: sc } = getSVGLayout();
+        const ballR = 40 * sc;
+
+        /* Capture live positions/velocities before removing bodies */
+        const saved = tamponBodies.map(b => ({
+          x:  b.position.x,
+          y:  b.position.y,
+          vx: b.velocity.x,
+          vy: b.velocity.y,
+        }));
+
+        /* Remove tampon bodies */
+        [...tamponBodies].forEach(b => Composite.remove(world, b));
+        tamponBodies.length = 0;
+
+        /* Add ball bodies at tampon positions */
+        saved.forEach(({ x, y, vx, vy }) => {
+          const b = Bodies.circle(x, y, ballR, {
+            restitution:    0.1,
+            friction:       0.9,
+            frictionAir:    0.03,
+            label:          'ball1000',
+            render:         { fillStyle: '#D63335', strokeStyle: 'transparent', lineWidth: 0 },
+          });
+          Body.setVelocity(b, { x: vx, y: vy });
+          Composite.add(world, b);
+          ballBodies.push(b);
+        });
+
+        morphDone      = true;
+        morphStartTime = null;
+      }, MORPH_DURATION);
+      timers.push(t);
+    },
+
     addCoins(count = 8, spawnMs = 400) {
       const newBodies = [];
       for (let i = 0; i < count; i++) {
         const t = setTimeout(() => {
-          const b = makeBody(false);
+          const b = makeBody('coin');
           Composite.add(world, b);
           newBodies.push(b);
           coinBodies = coinBodies.concat([b]);
