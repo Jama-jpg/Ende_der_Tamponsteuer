@@ -8,12 +8,15 @@
      Fulcrum  : (FX=500, FY=198)  — spine dot 2
      Beam left: (BL=200, FY)       Beam right: (BR=800, FY)
      Arm length: ARM_LEN = 82 px
-     Circle r  : 85 px  (circle centre = arm-end + r along Y)
+     Circle r  : 140 px  (circle centre = arm-end + r along Y)
+     Circle origins in markup: (200, 420) and (800, 420)
 ═══════════════════════════════════════════════════════════════════ */
 
 const FX = 500, FY = 198;
 const BL = 200, BR = 800;
 export const ARM_LEN = 82;
+const CIRCLE_R = 140;
+const SVG_BOTTOM = 562;
 
 /**
  * @param {number} rotDeg  Current beam rotation in degrees (positive = CW).
@@ -36,9 +39,14 @@ export function applyGravity(rotDeg, { armL, armR, circleL, circleR }) {
   armR.setAttribute('x1', rx);  armR.setAttribute('y1', ry);
   armR.setAttribute('x2', rx);  armR.setAttribute('y2', ry + ARM_LEN);
 
-  /* Circles follow the arm ends (translate from their markup origin).
-     Left  origin: (BL=200, FY+ARM_LEN+85=365)  → translate(300(1−c), −300s)
-     Right origin: (BR=800, FY+ARM_LEN+85=365)  → translate(−300(1−c), 300s) */
-  circleL.setAttribute('transform', `translate(${300 * (1 - c)},${-300 * s})`);
-  circleR.setAttribute('transform', `translate(${-300 * (1 - c)},${300 * s})`);
+  /* Circle centres: arm-end + CIRCLE_R below, clamped so the circle
+     never exits the bottom of the SVG viewport. */
+  const rawLcy = ly + ARM_LEN + CIRCLE_R;
+  const lcy    = Math.min(rawLcy, SVG_BOTTOM - CIRCLE_R);
+  const rawRcy = ry + ARM_LEN + CIRCLE_R;
+  const rcy    = Math.min(rawRcy, SVG_BOTTOM - CIRCLE_R);
+
+  /* Translate from markup origins (200, 420) and (800, 420). */
+  circleL.setAttribute('transform', `translate(${lx - 200},${lcy - 420})`);
+  circleR.setAttribute('transform', `translate(${rx - 800},${rcy - 420})`);
 }

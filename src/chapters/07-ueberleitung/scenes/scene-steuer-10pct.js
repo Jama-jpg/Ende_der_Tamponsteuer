@@ -8,7 +8,7 @@ import { applyGravity } from '../waage-gravity.js';
 
 export default {
   id: 's-ch7-steuer-10pct',
-  height: '200vh',
+  height: '300vh',
   skipSnapStart: true,
 
   overlay: {
@@ -42,34 +42,34 @@ export default {
         trigger: '#s-ch7-steuer-10pct',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.4,
+        scrub: 1.0,
       },
     });
 
     /* Steuer-intro text out */
-    tl.to('#st-ch7-steuer-intro', { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0.0);
+    tl.to('#st-ch7-steuer-intro', { opacity: 0, duration: 0.10, ease: 'power1.in' }, 0.0);
 
-    /* Right-side text in — stays until scene-steuer-20pct fades it out */
-    tl.to('#st-ch7-steuer-10pct', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.12);
+    /* Right-side text in — stays visible until scene-steuer-20pct fades it out */
+    tl.to('#st-ch7-steuer-10pct', { opacity: 1, duration: 0.18, ease: 'power1.out' }, 0.05);
 
     /* Scale structure appears (beam + both arms become visible) */
-    tl.to(waage, { opacity: 1, duration: 0.22, ease: 'power1.out' }, 0.22);
+    tl.to(waage, { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.18);
 
     /* Left pan fades in */
-    tl.to(circleL, { opacity: 1, duration: 0.22, ease: 'power1.out' }, 0.40);
+    tl.to(circleL, { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.32);
 
-    /* Beam tips LEFT 20° (counter-clockwise); arms always stay vertical */
+    /* Beam tips LEFT 15° (counter-clockwise); arms always stay vertical */
     tl.fromTo(beamGrp,
       { rotation: 0,   svgOrigin: '500 198' },
       {
-        rotation: -20, svgOrigin: '500 198',
-        duration: 0.38,
+        rotation: -15, svgOrigin: '500 198',
+        duration: 0.45,
         ease: 'power3.inOut',
         onUpdate() {
           applyGravity(gsap.getProperty(beamGrp, 'rotation'), elems);
         },
       },
-      0.55,
+      0.48,
     );
   },
 };

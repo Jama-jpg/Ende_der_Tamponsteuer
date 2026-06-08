@@ -9,7 +9,7 @@ import { applyGravity } from '../waage-gravity.js';
 
 export default {
   id: 's-ch7-steuer-20pct',
-  height: '200vh',
+  height: '300vh',
   skipSnapStart: true,
 
   overlay: {
@@ -37,33 +37,32 @@ export default {
         trigger: '#s-ch7-steuer-20pct',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.4,
+        scrub: 1.0,
       },
     });
 
-    /* Right-side 10pct text out */
-    tl.to('#st-ch7-steuer-10pct', { opacity: 0, duration: 0.12, ease: 'power1.in' }, 0.0);
+    /* Right pan fades in immediately */
+    tl.to(circleR, { opacity: 1, duration: 0.18, ease: 'power1.out' }, 0.05);
 
-    /* Left-side text in → out */
-    tl.to('#st-ch7-steuer-20pct', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.12);
-    tl.to('#st-ch7-steuer-20pct', { opacity: 0, duration: 0.15, ease: 'power1.in'  }, 0.82);
-
-    /* Right pan fades in */
-    tl.to(circleR, { opacity: 1, duration: 0.22, ease: 'power1.out' }, 0.18);
-
-    /* Beam swings from −20° → +20° (40° total); arms stay vertical via gravity.
-       fromTo makes the start state explicit — safe even if user jumps here. */
+    /* Beam swings from −15° → +15°; arms stay vertical via gravity. */
     tl.fromTo(beamGrp,
-      { rotation: -20, svgOrigin: '500 198' },
+      { rotation: -15, svgOrigin: '500 198' },
       {
-        rotation:  20, svgOrigin: '500 198',
-        duration: 0.42,
+        rotation:  15, svgOrigin: '500 198',
+        duration: 0.45,
         ease: 'power3.inOut',
         onUpdate() {
           applyGravity(gsap.getProperty(beamGrp, 'rotation'), elems);
         },
       },
-      0.35,
+      0.12,
     );
+
+    /* 10pct text stays visible while scale swings, then fades out */
+    tl.to('#st-ch7-steuer-10pct', { opacity: 0, duration: 0.15, ease: 'power1.in' }, 0.35);
+
+    /* 20pct text fades in → out */
+    tl.to('#st-ch7-steuer-20pct', { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.45);
+    tl.to('#st-ch7-steuer-20pct', { opacity: 0, duration: 0.15, ease: 'power1.in'  }, 0.82);
   },
 };

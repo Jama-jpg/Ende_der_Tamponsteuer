@@ -259,54 +259,54 @@ export const stageMarkup = /* html */ `
               stroke="#A9A99F" stroke-width="5" stroke-linecap="round"/>
       </g>
 
-      <!-- Left arm — hidden; kept in DOM so applyGravity() refs don't break -->
+      <!-- Left arm — hangs from beam end to pan top -->
       <line id="waage-arm-l" x1="200" y1="198" x2="200" y2="280"
-            stroke="#A9A99F" stroke-width="5" stroke-linecap="round" opacity="0"/>
+            stroke="#A9A99F" stroke-width="5" stroke-linecap="round"/>
 
-      <!-- Right arm — hidden; kept in DOM so applyGravity() refs don't break -->
+      <!-- Right arm — hangs from beam end to pan top -->
       <line id="waage-arm-r" x1="800" y1="198" x2="800" y2="280"
-            stroke="#A9A99F" stroke-width="5" stroke-linecap="round" opacity="0"/>
+            stroke="#A9A99F" stroke-width="5" stroke-linecap="round"/>
 
       <!-- LEFT pan: Bücher / Kaviar / Honig + "10%"
-           translate() set each frame by applyGravity(); original center (200, 365) -->
+           translate() set each frame by applyGravity(); original center (200, 420) -->
       <g id="waage-circle-l" opacity="0">
-        <circle cx="200" cy="365" r="110" fill="#C9C9C0"/>
+        <circle cx="200" cy="420" r="140" fill="#C9C9C0"/>
         <!-- Buch -->
-        <text x="165" y="305" text-anchor="middle"
+        <text x="165" y="360" text-anchor="middle"
               class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">BUCH</text>
-        <rect x="145" y="312" width="38" height="48" rx="3"   fill="#D63335"/>
-        <rect x="145" y="312" width="8"  height="48" rx="2" fill="#AA2020"/>
+        <rect x="145" y="367" width="38" height="48" rx="3"   fill="#D63335"/>
+        <rect x="145" y="367" width="8"  height="48" rx="2" fill="#AA2020"/>
         <!-- Kaviar dots -->
-        <text x="203" y="305" text-anchor="middle"
+        <text x="203" y="360" text-anchor="middle"
               class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">KAVIAR</text>
-        <circle cx="187" cy="322" r="10" fill="#D63335"/>
-        <circle cx="203" cy="313" r="9"  fill="#D63335"/>
-        <circle cx="219" cy="324" r="10" fill="#D63335"/>
-        <circle cx="210" cy="341" r="8.5" fill="#D63335"/>
-        <circle cx="194" cy="339" r="8.5" fill="#D63335"/>
+        <circle cx="187" cy="377" r="10" fill="#D63335"/>
+        <circle cx="203" cy="368" r="9"  fill="#D63335"/>
+        <circle cx="219" cy="379" r="10" fill="#D63335"/>
+        <circle cx="210" cy="396" r="8.5" fill="#D63335"/>
+        <circle cx="194" cy="394" r="8.5" fill="#D63335"/>
         <!-- Honig (honey jar): body + lid -->
-        <text x="243" y="305" text-anchor="middle"
+        <text x="243" y="360" text-anchor="middle"
               class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">HONIG</text>
-        <rect x="226" y="335" width="36" height="30" rx="5" fill="#D63335"/>
-        <rect x="230" y="320" width="26" height="18" rx="4" fill="#AA2020"/>
+        <rect x="226" y="390" width="36" height="30" rx="5" fill="#D63335"/>
+        <rect x="230" y="375" width="26" height="18" rx="4" fill="#AA2020"/>
         <!-- "10%" label -->
-        <text x="200" y="432" text-anchor="middle"
+        <text x="200" y="487" text-anchor="middle"
               class="svg-mono" font-size="20" fill="#1a1a1a" letter-spacing="2">10%</text>
       </g>
 
       <!-- RIGHT pan: Tampon + "20%"
-           translate() set each frame by applyGravity(); original center (800, 365) -->
+           translate() set each frame by applyGravity(); original center (800, 420) -->
       <g id="waage-circle-r" opacity="0">
-        <circle cx="800" cy="365" r="110" fill="#C9C9C0"/>
+        <circle cx="800" cy="420" r="140" fill="#C9C9C0"/>
         <!-- Tampon body (pill shape) -->
-        <text x="800" y="295" text-anchor="middle"
+        <text x="800" y="350" text-anchor="middle"
               class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">TAMPON</text>
-        <rect x="778" y="302" width="46" height="75" rx="23" fill="#D63335"/>
+        <rect x="778" y="357" width="46" height="75" rx="23" fill="#D63335"/>
         <!-- Tampon string -->
-        <path d="M800,377 C806,395 799,412 805,428"
+        <path d="M800,432 C806,450 799,467 805,483"
               stroke="#AA2020" stroke-width="3.5" fill="none" stroke-linecap="round"/>
         <!-- "20%" label -->
-        <text x="800" y="445" text-anchor="middle"
+        <text x="800" y="500" text-anchor="middle"
               class="svg-mono" font-size="20" fill="#1a1a1a" letter-spacing="2">20%</text>
       </g>
 
