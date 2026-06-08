@@ -19,7 +19,6 @@ import * as constants from './core/constants.js';
 import { createWave } from './core/wave.js';
 import { createPulse } from './core/pulse.js';
 import { createSpine } from './core/spine.js';
-import { createSnap } from './core/snap.js';
 import { createEuroCounter } from './core/euro-counter.js';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, Draggable);
@@ -87,8 +86,5 @@ scenes.forEach((scene) => scene.init?.(ctx));
 /* 5 ─ Wire the spine as the page scrollbar (overall scroll progress + seek) */
 createSpine({ ScrollTrigger, refs });
 
-/* 6 ─ Snap to scene edges + mid-scene text/animation rest points. */
-createSnap({ ScrollTrigger, gsap, scenes });
-
-/* 7 ─ Euro counter — top-left corner, Chapter 2 → "Jeden Monat" */
+/* 6 ─ Euro counter — top-left corner, Chapter 2 → "Jeden Monat" */
 createEuroCounter({ gsap, ScrollTrigger });

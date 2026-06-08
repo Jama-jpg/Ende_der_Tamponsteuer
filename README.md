@@ -3,8 +3,9 @@
 A scroll-driven data story ("scrollytelling") about Austria's path to abolishing
 VAT on period products. As you scroll, a single animated SVG canvas morphs through
 a narrative: a VAT counter draining 20 → 0%, the scale of menstruation worldwide
-(1.9 billion people, 26% of the world), and what it adds up to over a lifetime
-(38 years, 456 periods, ≈ 7 continuous years).
+(1.9 billion people, 26% of the world), a lifetime of costs (17 000 products,
+≈ €25 000), period poverty in Austria (500 000 affected), 150 years of taxation
+history, a world comparison, and what still needs to change.
 
 Built with **[GSAP](https://gsap.com/) + ScrollTrigger** and bundled with **[Vite](https://vitejs.dev/)**.
 The animation code is plain, imperative GSAP — there is no UI framework. Instead the
@@ -49,29 +50,86 @@ images/                     Static assets
 src/
   main.js                   Engine: register GSAP, build stage, assemble scenes
   registry.js               Ordered list of chapters
+
   core/
-    constants.js            Palette + SVG geometry (CX/CY, radii, month/dot positions)
+    constants.js            Palette + SVG geometry (CX/CY, radii, coin/dot positions)
     svg.js                  makeSvgEl, polarToCartesian, sectorPath
     wave.js                 Liquid wave background controller
     pulse.js                Breathing circle pulse controller
+    euro-counter.js         Persistent top-left euro counter (counts 0 → 25 000)
+    snap.js                 Scroll-snap engine (wheel/touch → scene edges)
+    spine.js                Spine scroll indicator + click/drag seek
+
   stage/
     markup.js               Persistent #ui / #liquid-bg / #main-svg template
     index.js                buildStage(): inject markup, generate shapes, return refs
+
   styles/
     base.css                Reset, variables, stage + UI styling
     overlays.css            Scene text overlays (.stext)
+
   chapters/
-    01-intro/               Countdown → period axis
-    02-the-scale/           Circle fills, grows, pulses, 26% pie
-    03-every-month/         Twelve month circles
-    04-the-lifetime/        38 years → 456 lines → 7 years payoff
+    01-intro/               Countdown → title → period axis
+    02-the-scale/           Circle grows to 1.9 billion, 26% pie
+    03-every-month/         12 month circles → lifetime sequence (ch 3+4 merged)
+    04-the-lifetime/        38 years → 456 lines → 7-year payoff (standalone copy)
+    05-die-kosten/          17 000 products, €25 000 lifetime cost, physics coins
+    06-periodenarmut/       1.4 M at risk → 500 k period poverty → consequences
+    07-ueberleitung/        Balance scale: structural inequality in VAT
+    08-timeline/            150-year history across 6 eras, two-track timeline
+    09-vergleich/           Reality check Jan 2026, 3D globe, EU comparison table
+    10-abschluss/           Fazit, what remains, protest signs
 ```
 
 ## The story, chapter by chapter
 
 | Chapter | Scenes | Beats |
 | --- | --- | --- |
-| **1 — Intro** | `s1`–`s3` | Auto-played VAT countdown 20 → 0%, draining liquid, title, period axis reveal |
-| **2 — The Scale** | `s4`–`s7` | Spinner → solid circle, grows to 1.9 billion, pulses, hover-reveal 26% pie |
-| **3 — Every Month** | `s8`–`s9` | "Jeden Monat", the circle splits into twelve month circles |
-| **4 — The Lifetime** | `s10`–`s13` | 38-year rect, 456 lines burst, lines fall, 7-year payoff, VAT locks at 0% |
+| **1 — Intro** | countdown, title-transition, period-axis | Auto-played VAT countdown 20 → 0%, draining liquid, title card, period axis + circle fill |
+| **2 — The Scale** | circle-grow, pie-26 | Circle grows to 1.9 billion; hover reveals 26% of the world menstruates |
+| **3 — Die Periode** | jeden-monat, scene-a, scene-b, scene-c | "Jeden Monat" → 12 month circles → rect widens → 38 years → 456 barcode lines → 7-year payoff |
+| **5 — Die Kosten** | scene-17k, scene-25k, scene-coins-grow | 17 000 products drop via Matter.js physics; euro counter flies to €25 000; coins converge into poverty circle |
+| **6 — Periodenarmut** | scene-1-4m, scene-500k, scene-folgen, scene-pie-90/60/15/12 | 1.4 M at-risk circle (hover: 17%); 500 k sub-circle grows; consequences; pie slices show % affected |
+| **7 — Die Überleitung** | steuer-intro, steuer-10pct, steuer-20pct, steuer-frage | Structural inequality framing; balance scale tips under 10% vs 20% VAT weights |
+| **8 — Die Timeline** | layout-transition, era-1–6, layout-exit | Two-track timeline (products + stigma/activism) from ~Steinzeit to 2026 across 6 eras |
+| **9 — Der Vergleich** | realitaetscheck, globe, eu-comparison | Jan 2026 retailer check (362 products, 10 chains); scroll-driven 3D globe; EU VAT table |
+| **10 — Abschluss** | fazit-a, fazit-b, was-bleibt, protest | "End of 150 years of discrimination"; remaining burdens (88% suffer period pain); protest signs rise |
+
+## Key data points
+
+| Fact | Value |
+| --- | --- |
+| People who menstruate worldwide | 1.9 billion — ~26% of world population |
+| Average menstruating lifetime | 38 years, 456 periods, ≈ 7 continuous years |
+| Lifetime period products | 17 000+ (tampons, pads, painkillers, spare clothing) |
+| Lifetime cost | ≈ €25 000 |
+| At poverty risk in Austria | 1.4 million (17% of population) |
+| Affected by period poverty in Austria | 500 000 women |
+| VAT abolished | 0% from 1 January 2026 |
+
+## Core modules
+
+| Module | Purpose |
+| --- | --- |
+| `euro-counter.js` | Floating counter top-left; counts 0 → 20 000 via scroll scrub, then flies into the ch5 overlay and finishes at 25 000 |
+| `snap.js` | Intercepts wheel/touch/keyboard input and eases the scroll position to the nearest scene edge so animations always play to completion |
+| `spine.js` | The central SVG axis acts as a scrubable scrollbar; four dots fill as the reader advances; click or drag to seek |
+| `wave.js` | Animated liquid background that drains as the VAT counter drops |
+| `pulse.js` | Breathing pulse animation on the main circle |
+
+## Physics (Chapter 5)
+
+Chapter 5 runs a live **Matter.js** simulation alongside the GSAP scroll animation:
+
+- `gravity-physics.js` — creates the Matter.js world, drops tampon pills and coin circles
+- `chapter5-state.js` — shared state so scene-17k, scene-25k, and scene-coins-grow hand off the same physics world
+- Physics runs on its own `requestAnimationFrame` loop, independent of scroll
+- When scene-coins-grow ends, the world is destroyed and the SVG coin group takes over for the GSAP-driven convergence animation
+
+## Balance scale (Chapter 7)
+
+`waage-gravity.js` drives a custom gravity simulation for the balance scale:
+
+- Two pans connected by an arm that pivots around a fulcrum
+- The scale tips depending on the VAT weight placed on each pan
+- Used in scene-steuer-10pct and scene-steuer-20pct to illustrate the structural tax inequality on period products

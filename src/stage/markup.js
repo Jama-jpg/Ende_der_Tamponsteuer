@@ -36,15 +36,6 @@ export const stageMarkup = /* html */ `
       </svg>
     </div>
 
-    <!-- Info icon — appears top-right of the big circle when hover is active
-         (driven by pie-26.js). Tooltip mirrors the scroll-hint style. -->
-    <div id="info-hint" aria-hidden="true">
-      <div id="info-icon-btn">
-        <span class="info-i">i</span>
-      </div>
-      <span id="info-label">HOVER</span>
-    </div>
-
     <!-- Chapter + period labels — centered top, same height as date/euro counter -->
     <div id="lbl-kapitel">KAPITEL 1</div>
     <div id="lbl-periode">DIE PERIODE</div>
