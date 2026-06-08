@@ -262,24 +262,27 @@ export const stageMarkup = /* html */ `
            translate() set each frame by applyGravity(); original center (200, 338) -->
       <g id="waage-circle-l" opacity="0">
         <circle cx="200" cy="338" r="140" fill="#C9C9C0"/>
-        <!-- Buch -->
-        <text x="165" y="278" text-anchor="middle"
-              class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">BUCH</text>
-        <rect x="145" y="285" width="38" height="48" rx="3"   fill="#D63335"/>
-        <rect x="145" y="285" width="8"  height="48" rx="2" fill="#AA2020"/>
-        <!-- Kaviar dots -->
-        <text x="203" y="278" text-anchor="middle"
-              class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">KAVIAR</text>
-        <circle cx="187" cy="295" r="10" fill="#D63335"/>
-        <circle cx="203" cy="286" r="9"  fill="#D63335"/>
-        <circle cx="219" cy="297" r="10" fill="#D63335"/>
-        <circle cx="210" cy="314" r="8.5" fill="#D63335"/>
-        <circle cx="194" cy="312" r="8.5" fill="#D63335"/>
-        <!-- Honig (honey jar): body + lid -->
-        <text x="243" y="278" text-anchor="middle"
-              class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">HONIG</text>
-        <rect x="226" y="308" width="36" height="30" rx="5" fill="#D63335"/>
-        <rect x="230" y="293" width="26" height="18" rx="4" fill="#AA2020"/>
+        <!-- Icons group — scaled + floated by GSAP in scene-steuer-10pct -->
+        <g id="waage-icons-l">
+          <!-- Buch -->
+          <text x="165" y="278" text-anchor="middle"
+                class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">BUCH</text>
+          <rect x="145" y="285" width="38" height="48" rx="3"   fill="#D63335"/>
+          <rect x="145" y="285" width="8"  height="48" rx="2" fill="#AA2020"/>
+          <!-- Kaviar dots -->
+          <text x="203" y="278" text-anchor="middle"
+                class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">KAVIAR</text>
+          <circle cx="187" cy="295" r="10" fill="#D63335"/>
+          <circle cx="203" cy="286" r="9"  fill="#D63335"/>
+          <circle cx="219" cy="297" r="10" fill="#D63335"/>
+          <circle cx="210" cy="314" r="8.5" fill="#D63335"/>
+          <circle cx="194" cy="312" r="8.5" fill="#D63335"/>
+          <!-- Honig (honey jar): body + lid -->
+          <text x="243" y="278" text-anchor="middle"
+                class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">HONIG</text>
+          <rect x="226" y="308" width="36" height="30" rx="5" fill="#D63335"/>
+          <rect x="230" y="293" width="26" height="18" rx="4" fill="#AA2020"/>
+        </g>
         <!-- "10%" label -->
         <text x="200" y="405" text-anchor="middle"
               class="svg-mono" font-size="20" fill="#1a1a1a" letter-spacing="2">10%</text>
@@ -289,13 +292,16 @@ export const stageMarkup = /* html */ `
            translate() set each frame by applyGravity(); original center (800, 338) -->
       <g id="waage-circle-r" opacity="0">
         <circle cx="800" cy="338" r="140" fill="#C9C9C0"/>
-        <!-- Tampon body (pill shape) -->
-        <text x="800" y="268" text-anchor="middle"
-              class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">TAMPON</text>
-        <rect x="778" y="275" width="46" height="75" rx="23" fill="#D63335"/>
-        <!-- Tampon string -->
-        <path d="M800,350 C806,368 799,385 805,401"
-              stroke="#AA2020" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <!-- Icon group — scaled + floated by GSAP in scene-steuer-20pct -->
+        <g id="waage-icons-r">
+          <!-- Tampon body (pill shape) -->
+          <text x="800" y="268" text-anchor="middle"
+                class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">TAMPON</text>
+          <rect x="778" y="275" width="46" height="75" rx="23" fill="#D63335"/>
+          <!-- Tampon string -->
+          <path d="M800,350 C806,368 799,385 805,401"
+                stroke="#AA2020" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        </g>
         <!-- "20%" label -->
         <text x="800" y="418" text-anchor="middle"
               class="svg-mono" font-size="20" fill="#1a1a1a" letter-spacing="2">20%</text>

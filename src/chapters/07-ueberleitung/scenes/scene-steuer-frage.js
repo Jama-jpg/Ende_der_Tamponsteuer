@@ -21,6 +21,9 @@ export default {
   init({ gsap }) {
     const waage = document.getElementById('waage-grp');
 
+    /* Frage text sits on the LEFT (default overlay position) */
+    gsap.set('#st-ch7-steuer-frage', { left: '0', right: 'auto' });
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-ch7-steuer-frage',
@@ -30,11 +33,12 @@ export default {
       },
     });
 
-    // Scale fades out as we enter this scene
+    /* 20pct text and scale fade out together on enter */
+    tl.to('#st-ch7-steuer-20pct', { opacity: 0, duration: 0.18, ease: 'power1.in' }, 0.05);
     tl.to(waage, { opacity: 0, duration: 0.20, ease: 'power1.in' }, 0.05);
 
     // Bridging question in → out
-    tl.to('#st-ch7-steuer-frage', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.22);
+    tl.to('#st-ch7-steuer-frage', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.28);
     tl.to('#st-ch7-steuer-frage', { opacity: 0, duration: 0.15, ease: 'power1.in'  }, 0.80);
   },
 };

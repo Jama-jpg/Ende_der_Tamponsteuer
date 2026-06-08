@@ -27,6 +27,11 @@ export default {
     const beamGrp = document.getElementById('waage-beam-grp');
     const circleL = document.getElementById('waage-circle-l');
     const circleR = document.getElementById('waage-circle-r');
+    const iconsR  = document.getElementById('waage-icons-r');
+
+    /* Scale the right icons up; float loop starts after they appear */
+    gsap.set(iconsR, { scale: 1.9, transformOrigin: '50% 50%' });
+
     const elems = { circleL, circleR };
 
     const tl = gsap.timeline({
@@ -38,8 +43,11 @@ export default {
       },
     });
 
-    /* Right pan fades in immediately */
+    /* Right pan fades in; start float loop once visible */
     tl.to(circleR, { opacity: 1, duration: 0.18, ease: 'power1.out' }, 0.05);
+    tl.add(() => {
+      gsap.to(iconsR, { y: -12, duration: 1.8, ease: 'sine.inOut', repeat: -1, yoyo: true });
+    }, 0.25);
 
     /* Beam swings from −15° → +15°; arms stay vertical via gravity. */
     tl.fromTo(beamGrp,
@@ -58,8 +66,7 @@ export default {
     /* 10pct text stays visible while scale swings, then fades out */
     tl.to('#st-ch7-steuer-10pct', { opacity: 0, duration: 0.15, ease: 'power1.in' }, 0.35);
 
-    /* 20pct text fades in → out */
+    /* 20pct text fades in — stays visible until scene-steuer-frage fades it out */
     tl.to('#st-ch7-steuer-20pct', { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.45);
-    tl.to('#st-ch7-steuer-20pct', { opacity: 0, duration: 0.15, ease: 'power1.in'  }, 0.82);
   },
 };

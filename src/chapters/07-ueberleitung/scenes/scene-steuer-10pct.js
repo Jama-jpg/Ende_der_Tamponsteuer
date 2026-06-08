@@ -29,6 +29,10 @@ export default {
     const beamGrp = document.getElementById('waage-beam-grp');
     const circleL = document.getElementById('waage-circle-l');
     const circleR = document.getElementById('waage-circle-r');
+    const iconsL  = document.getElementById('waage-icons-l');
+
+    /* Scale the left icons up; float loop starts after they appear */
+    gsap.set(iconsL, { scale: 1.9, transformOrigin: '50% 50%' });
 
     const elems = { circleL, circleR };
 
@@ -53,8 +57,11 @@ export default {
     /* Scale structure appears (beam + both arms become visible) */
     tl.to(waage, { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.18);
 
-    /* Left pan fades in */
+    /* Left pan fades in; start float loop once visible */
     tl.to(circleL, { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.32);
+    tl.add(() => {
+      gsap.to(iconsL, { y: -12, duration: 1.8, ease: 'sine.inOut', repeat: -1, yoyo: true });
+    }, 0.55);
 
     /* Beam tips LEFT 15° (counter-clockwise); arms always stay vertical */
     tl.fromTo(beamGrp,
