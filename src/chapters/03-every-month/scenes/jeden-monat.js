@@ -41,7 +41,6 @@ export default {
   id: 's8',
   height: '500vh',
   skipSnapStart: true,
-  snapPoints: [0.67],
   overlay: {
     id: 'st8',
     html: `<p class="sl">UND DAS</p>
@@ -132,10 +131,9 @@ export default {
     });
 
     tl
-      /* "1,9 Milliarden" is faded out by circle-grow (s5) — no hand-off needed. */
-      /* "Jeden Monat" appears, then fades out after split is settled. */
-      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.15)
-      .to('#st8', { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.75);
+      /* "Jeden Monat" stays visible through the end — scene-a crossfades to "38 Jahre". */
+      /* (#st5 is faded by pie-26 when the user enters this scene.) */
+      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.10);
 
     /* Initial position: all 12 circles stacked at (775,281,r=PIE_R) — visually
        identical to cFill. prevInHold=true so no opacity change here. */

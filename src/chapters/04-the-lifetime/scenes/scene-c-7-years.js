@@ -1,10 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE C — 456 lines retract → top 31 years wipe to pink → 7-year payoff
    Enters from scene-b's end state: rect + 38 dividers (lines still visible),
-   st-p3 was faded out by scene B at its end.
+   #st-p3 ("456 mal") still visible — crossfaded to #st-p4 at the start.
 
    Timeline (0 → 1 over 150vh):
-     0.08–0.18  "DAS SIND … 7 JAHRE" text fades in
+     0.00–0.08  "456 mal" (#st-p3) crossfades out
+     0.06–0.16  "DAS SIND … 7 JAHRE" (#st-p4) fades in
      0.12–0.30  456 lines converge back to rect centre (from random)
      0.32–0.42  456-lines group fades out; 38 dividers remain visible
      0.42–0.72  rRect wipes top→bottom: pink overlay grows from y=70 downward
@@ -30,7 +31,8 @@ export default {
       },
     });
 
-    /* "7 JAHRE" fades in quickly, holds long, fades out late before scene-17k begins. */
+    /* Crossfade "456 mal" → "7 JAHRE", then fade out at the end of the chapter. */
+    tl.to('#st-p3', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.00);
     tl.to('#st-p4', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.06);
     tl.to('#st-p4', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 

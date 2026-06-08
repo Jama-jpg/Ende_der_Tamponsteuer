@@ -58,13 +58,11 @@ export default {
     });
 
     tl.set('#st-periode', { opacity: 1 }, 0);
-    /* Defensive resets — clear all text from previous scenes at t=0. */
-    tl.set(['#st8', '#st5', '#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
+    /* Defensive resets — clear carried-over text except #st8 which crossfades. */
+    tl.set(['#st5', '#st-p2', '#st-p3', '#st-p4'], { opacity: 0 }, 0);
     /* Size mRect/rRect to match the gooey-merged circles (r=22 → width=44, x=753)
        so the crossfade from circles to rect looks like a true morph, not an insert. */
     tl.set([mRect, rRect], { attr: { x: 753, width: 44 } }, 0);
-    /* st8 ("Jeden Monat") has already faded out inside s8, but reset here as
-       a hard guard so the rect animation plays with no competing text. */
 
     /* Phase A1 (0→0.22): circles grow and merge via gooey filter into a vertical bar,
        then the solid rect cross-dissolves in as the gooey blob fades out. */
@@ -102,10 +100,10 @@ export default {
         duration: 0.14,
       }, 0.50);
 
-    /* Phase A4: "FÜR 38 JAHRE" text fades in early (lines finishing ~0.75),
-       holds long, then fades out late so the user has plenty of reading time. */
+    /* Phase A4: crossfade "Jeden Monat" → "FÜR 38 JAHRE". #st-p2 stays visible
+       through the end of this scene — scene-b will crossfade to "456 mal". */
+    tl.to('#st8',  { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.58);
     tl.to('#st-p2', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.63);
-    tl.to('#st-p2', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

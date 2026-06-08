@@ -1,24 +1,21 @@
 /* ═══════════════════════════════════════════════════════════════════
    SCENE B — 456 lines burst as barcode + "456 mal" text
-   Enters from scene-a's end state: rect + 38 dividers (st-p2 already gone).
+   Enters from scene-a's end state: rect + 38 dividers, #st-p2 still visible.
+   Crossfades #st-p2 → #st-p3; #st-p3 stays visible through the end.
 
    The 38 year-divider lines stay visible throughout — the 456 lines
    layer on top, spanning the rect width, so the combined effect reads
    like a dense barcode over the 38-year rectangle.
 
-   Timeline (0 → 1 over 300vh):
-     0.15–0.58  456 lines expand from collapsed centre to rect width
-     0.65–0.78  "INSGESAMT 456 mal" text fades in
-     0.78–0.88  Hold — user reads the label
-     0.88–0.96  "INSGESAMT 456 mal" fades out (scene owns its own text)
-     0.96–1.00  Hold — clean slate for scene C
+   Timeline (0 → 1 over 150vh):
+     0.05–0.15  "38 Jahre" (#st-p2) fades out
+     0.12–0.22  "456 mal" (#st-p3) fades in, stays visible through end
 ═══════════════════════════════════════════════════════════════════ */
 
 export default {
   id: 's-periode-b',
   height: '150vh',
   skipSnapStart: true,
-  snapPoints: [0.65],
 
   init({ gsap, stage }) {
     const { linesGrp, lineEls } = stage.refs;
@@ -31,8 +28,6 @@ export default {
         scrub: 0.4,
       },
     });
-
-    /* Scene A owns the fade-out of #st-p2 — no cross-scene hand-off needed. */
 
     /* 456 lines expand from rect centre (x≈770–780) to rect bounds (x≈700–850)
        — layered on top of the 38 year-dividers for a barcode effect */
@@ -48,10 +43,10 @@ export default {
         duration: 0.38,
       }, 0.19);
 
-    /* "INSGESAMT 456 mal" fades in early as lines start appearing, holds long,
-       then fades out late so scene C starts with a clean slate. */
+    /* Crossfade "38 Jahre" → "456 mal". #st-p3 stays visible through the end
+       of this scene — scene-c will crossfade to "7 Jahre". */
+    tl.to('#st-p2', { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.05);
     tl.to('#st-p3', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.12);
-    tl.to('#st-p3', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },
