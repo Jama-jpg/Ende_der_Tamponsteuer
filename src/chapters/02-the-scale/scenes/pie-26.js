@@ -10,7 +10,7 @@
 
 export default {
   id: 's7',
-  noSection: true,  // hover overlay only — no scroll spacer, no snap points
+  noSection: true,
   overlay: {
     id: 'st7',
     html: `<p class="sl">DAS SIND</p>
@@ -99,12 +99,9 @@ export default {
       if (inRange) setActive(parseFloat(r.cFill.getAttribute('r')) >= PIE_R - 1);
     });
 
-    /* inRange only when the circle is at full size: scroll ≥ s5's snap end
-       (bottom bottom) so there's no scrub-lag window where the circle looks
-       grown but hover is still disabled. */
     ScrollTrigger.create({
       trigger:     '#s5',
-      start:       'bottom bottom',
+      start:       'top top',
       endTrigger:  '#s8',
       end:         'top top',
       onEnter:     () => { inRange = true; },
