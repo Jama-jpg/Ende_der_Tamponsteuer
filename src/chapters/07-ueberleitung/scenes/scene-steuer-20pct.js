@@ -21,6 +21,9 @@ export default {
   },
 
   init({ gsap }) {
+    /* Text sits on the RIGHT — same side as scene 10pct */
+    gsap.set('#st-ch7-steuer-20pct', { left: 'auto', right: '0' });
+
     const beamGrp = document.getElementById('waage-beam-grp');
     const circleL = document.getElementById('waage-circle-l');
     const circleR = document.getElementById('waage-circle-r');
