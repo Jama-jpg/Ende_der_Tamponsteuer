@@ -243,75 +243,56 @@ export const stageMarkup = /* html */ `
           stroke="#D63335" stroke-width="3" stroke-linecap="round" opacity="0"/>
     <rect id="spine-hit" x="486" y="70" width="28" height="440" fill="transparent"/>
 
-    <!-- ── CHAPTER 07: WAAGE (BALANCE SCALE) ────────────────────────
-         The spine doubles as the scale's mast. The beam pivots around
-         x=500/y=220; right side drops to show Tampons are taxed more. -->
+    <!-- ── CHAPTER 07: BRACKET SCALE ────────────────────────────────
+         Rigid ⊓ bracket: horizontal beam + two vertical arms.
+         waage-bracket is one group rotated via GSAP svgOrigin="500 220"
+         so everything (items, "10%", tampon capsule) tilts together. -->
     <g id="waage-grp" opacity="0">
-      <!-- Chains -->
-      <line id="waage-chain-l" x1="180" y1="220" x2="180" y2="340"
-            stroke="#A9A99F" stroke-width="1.5" stroke-linecap="round"/>
-      <line id="waage-chain-r" x1="820" y1="220" x2="820" y2="340"
-            stroke="#A9A99F" stroke-width="1.5" stroke-linecap="round"/>
-      <!-- Pans -->
-      <ellipse id="waage-pan-l" cx="180" cy="340" rx="62" ry="10"
-               fill="none" stroke="#A9A99F" stroke-width="1.5"/>
-      <ellipse id="waage-pan-r" cx="820" cy="340" rx="62" ry="10"
-               fill="none" stroke="#A9A99F" stroke-width="1.5"/>
-      <!-- Items left pan: Kaviar dot cluster -->
-      <g id="waage-items-l" opacity="0">
-        <circle cx="155" cy="330" r="6" fill="#C9C9C0"/>
-        <circle cx="172" cy="327" r="5" fill="#C9C9C0"/>
-        <circle cx="188" cy="330" r="7" fill="#C9C9C0"/>
-        <circle cx="165" cy="318" r="4" fill="#C9C9C0"/>
-        <circle cx="180" cy="315" r="5" fill="#C9C9C0"/>
+      <g id="waage-bracket">
+        <!-- Horizontal beam -->
+        <line x1="180" y1="220" x2="820" y2="220"
+              stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Left arm (hangs from beam left end) -->
+        <line x1="180" y1="220" x2="180" y2="325"
+              stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Right arm (hangs from beam right end) -->
+        <line x1="820" y1="220" x2="820" y2="325"
+              stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+
+        <!-- Symbolic items at left arm bottom: Bücher · Kaviar · Trüffel -->
+        <g id="waage-items-l" opacity="0">
+          <!-- Buch -->
+          <rect x="152" y="296" width="16" height="22" rx="1.5" fill="#A9A99F"/>
+          <rect x="152" y="296" width="3"  height="22" rx="1"   fill="#787870"/>
+          <!-- Kaviar dots -->
+          <circle cx="183" cy="305" r="4"   fill="#4a4a3f"/>
+          <circle cx="191" cy="311" r="3.5" fill="#4a4a3f"/>
+          <circle cx="179" cy="312" r="3"   fill="#4a4a3f"/>
+          <circle cx="190" cy="301" r="3.5" fill="#4a4a3f"/>
+          <circle cx="198" cy="306" r="3"   fill="#4a4a3f"/>
+          <!-- Trüffel blob -->
+          <ellipse cx="216" cy="303" rx="11" ry="9"  fill="#8B7355"/>
+          <ellipse cx="222" cy="310" rx="8"  ry="7"  fill="#7A6245"/>
+          <circle  cx="212" cy="297" r="5"           fill="#8B7355"/>
+        </g>
+
+        <!-- Large "10%" — left side, tilts upward with the bracket -->
+        <g id="waage-big-10" opacity="0">
+          <text x="50" y="408" text-anchor="start"
+                class="svg-serif svg-italic" font-size="82" fill="#1a1a1a">10%</text>
+        </g>
+
+        <!-- "20%" tampon capsule — right side, tilts downward with the bracket -->
+        <g id="waage-big-20-grp" opacity="0">
+          <!-- Pill body centered at right arm bottom (820, 325) -->
+          <rect x="720" y="228" width="200" height="194" rx="96" fill="#D63335"/>
+          <text x="820" y="325" text-anchor="middle" dominant-baseline="middle"
+                class="svg-serif" font-size="56" fill="#1a1a1a">20%</text>
+          <!-- Tampon string -->
+          <path d="M820,422 C827,439 821,455 826,468 C829,476 822,479 820,472"
+                stroke="#531416" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </g>
       </g>
-      <!-- Items right pan: Tampon simplified shape -->
-      <g id="waage-items-r" opacity="0">
-        <rect x="803" y="308" width="14" height="30" rx="7" fill="#D63335"/>
-        <rect x="821" y="311" width="14" height="27" rx="7" fill="#D63335"/>
-        <rect x="839" y="309" width="14" height="29" rx="7" fill="#D63335"/>
-        <line x1="810" y1="338" x2="810" y2="348" stroke="#D63335" stroke-width="1.5"/>
-        <line x1="828" y1="338" x2="828" y2="348" stroke="#D63335" stroke-width="1.5"/>
-        <line x1="846" y1="338" x2="846" y2="348" stroke="#D63335" stroke-width="1.5"/>
-      </g>
-      <!-- Beam (rotates around fulcrum 500/220) -->
-      <line id="waage-beam" x1="180" y1="220" x2="820" y2="220"
-            stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
-      <!-- Fulcrum triangle -->
-      <polygon id="waage-fulcrum" points="500,230 490,248 510,248"
-               fill="#1a1a1a"/>
-      <!-- Mast (reuses spine visually, drawn on top) -->
-      <line id="waage-mast" x1="500" y1="80" x2="500" y2="228"
-            stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
-      <!-- Top cap -->
-      <circle cx="500" cy="78" r="4" fill="#1a1a1a"/>
-      <!-- Labels left (10%) -->
-      <g id="waage-lbl-l" opacity="0">
-        <text x="180" y="368" text-anchor="middle" class="svg-mono"
-              font-size="7" fill="#4a4a3f" letter-spacing="1.5">KAVIAR · TRÜFFEL · WEINBERGSCHNECKEN</text>
-        <text x="180" y="381" text-anchor="middle" class="svg-serif svg-italic"
-              font-size="14" fill="#4a4a3f">10 % MwSt.</text>
-      </g>
-      <!-- Labels right (20%) -->
-      <g id="waage-lbl-r" opacity="0">
-        <text x="820" y="368" text-anchor="middle" class="svg-mono"
-              font-size="7" fill="#D63335" letter-spacing="1.5">TAMPONS · BINDEN · PERIODENPRODUKTE</text>
-        <text x="820" y="381" text-anchor="middle" class="svg-serif svg-italic"
-              font-size="14" fill="#D63335">20 % MwSt.</text>
-      </g>
-      <!-- Bottom explanation text -->
-      <text id="waage-caption" x="500" y="430" text-anchor="middle"
-            class="svg-mono" font-size="8" fill="#1a1a1a" letter-spacing="1.2" opacity="0">
-        NICHT WEIL JEMAND SO ENTSCHIEDEN HATTE —
-      </text>
-      <text id="waage-caption-2" x="500" y="444" text-anchor="middle"
-            class="svg-mono" font-size="8" fill="#1a1a1a" letter-spacing="1.2" opacity="0">
-        SONDERN WEIL NIEMAND JE DARAN GEDACHT HATTE, ES ANDERS ZU REGELN.
-      </text>
-      <text id="waage-tampon-tax" x="500" y="470" text-anchor="middle"
-            class="svg-serif svg-italic" font-size="20" fill="#D63335" opacity="0">
-        Die „Tamponsteuer"
-      </text>
     </g>
 
     <!-- ── CHAPTER 08: RIGHT SPINE (3-column timeline layout) ────────
