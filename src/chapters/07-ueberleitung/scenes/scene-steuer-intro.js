@@ -39,8 +39,7 @@ export default {
       { opacity: 0, duration: 0.15, ease: 'power1.in' }, 0.0);
     tl.to('#st-ch6-pie12', { opacity: 0, duration: 0.10 }, 0.0);
 
-    // New text in → out
+    // New text in — stays visible until scene-steuer-10pct fades it out
     tl.to('#st-ch7-steuer-intro', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.18);
-    tl.to('#st-ch7-steuer-intro', { opacity: 0, duration: 0.15, ease: 'power1.in'  }, 0.78);
   },
 };

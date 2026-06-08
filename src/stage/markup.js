@@ -243,56 +243,65 @@ export const stageMarkup = /* html */ `
           stroke="#D63335" stroke-width="3" stroke-linecap="round" opacity="0"/>
     <rect id="spine-hit" x="486" y="70" width="28" height="440" fill="transparent"/>
 
-    <!-- ── CHAPTER 07: BRACKET SCALE ────────────────────────────────
-         Rigid ⊓ bracket: horizontal beam + two vertical arms.
-         waage-bracket is one group rotated via GSAP svgOrigin="500 220"
-         so everything (items, "10%", tampon capsule) tilts together. -->
+    <!-- ── CHAPTER 07: BALANCE SCALE ────────────────────────────────
+         GRAVITY MODEL: waage-beam-grp is the only thing that rotates.
+         waage-arm-l / -r are standalone <line> elements repositioned
+         each frame by applyGravity() in the scene JS — they always hang
+         straight down from the (moving) beam ends, like real pendulums.
+         Fulcrum = spine dot 2 (x=500, y=198).  Beam extends x=200↔800.
+         Arms: 82 px long.  Pans: gray circles r=85, connected to arm ends.
+         Arm / beam stroke: matches the thick-spine style (#A9A99F, w=5). -->
     <g id="waage-grp" opacity="0">
-      <g id="waage-bracket">
-        <!-- Horizontal beam -->
-        <line x1="180" y1="220" x2="820" y2="220"
-              stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
-        <!-- Left arm (hangs from beam left end) -->
-        <line x1="180" y1="220" x2="180" y2="325"
-              stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
-        <!-- Right arm (hangs from beam right end) -->
-        <line x1="820" y1="220" x2="820" y2="325"
-              stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
 
-        <!-- Symbolic items at left arm bottom: Bücher · Kaviar · Trüffel -->
-        <g id="waage-items-l" opacity="0">
-          <!-- Buch -->
-          <rect x="152" y="296" width="16" height="22" rx="1.5" fill="#A9A99F"/>
-          <rect x="152" y="296" width="3"  height="22" rx="1"   fill="#787870"/>
-          <!-- Kaviar dots -->
-          <circle cx="183" cy="305" r="4"   fill="#4a4a3f"/>
-          <circle cx="191" cy="311" r="3.5" fill="#4a4a3f"/>
-          <circle cx="179" cy="312" r="3"   fill="#4a4a3f"/>
-          <circle cx="190" cy="301" r="3.5" fill="#4a4a3f"/>
-          <circle cx="198" cy="306" r="3"   fill="#4a4a3f"/>
-          <!-- Trüffel blob -->
-          <ellipse cx="216" cy="303" rx="11" ry="9"  fill="#8B7355"/>
-          <ellipse cx="222" cy="310" rx="8"  ry="7"  fill="#7A6245"/>
-          <circle  cx="212" cy="297" r="5"           fill="#8B7355"/>
-        </g>
-
-        <!-- Large "10%" — left side, tilts upward with the bracket -->
-        <g id="waage-big-10" opacity="0">
-          <text x="50" y="408" text-anchor="start"
-                class="svg-serif svg-italic" font-size="82" fill="#1a1a1a">10%</text>
-        </g>
-
-        <!-- "20%" tampon capsule — right side, tilts downward with the bracket -->
-        <g id="waage-big-20-grp" opacity="0">
-          <!-- Pill body centered at right arm bottom (820, 325) -->
-          <rect x="720" y="228" width="200" height="194" rx="96" fill="#D63335"/>
-          <text x="820" y="325" text-anchor="middle" dominant-baseline="middle"
-                class="svg-serif" font-size="56" fill="#1a1a1a">20%</text>
-          <!-- Tampon string -->
-          <path d="M820,422 C827,439 821,455 826,468 C829,476 822,479 820,472"
-                stroke="#531416" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        </g>
+      <!-- Beam only — this group rotates around (500, 198) -->
+      <g id="waage-beam-grp">
+        <line x1="200" y1="198" x2="800" y2="198"
+              stroke="#A9A99F" stroke-width="5" stroke-linecap="round"/>
       </g>
+
+      <!-- Left arm — repositioned by applyGravity(), never rotated -->
+      <line id="waage-arm-l" x1="200" y1="198" x2="200" y2="280"
+            stroke="#A9A99F" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- Right arm — repositioned by applyGravity(), never rotated -->
+      <line id="waage-arm-r" x1="800" y1="198" x2="800" y2="280"
+            stroke="#A9A99F" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- LEFT pan: Bücher / Kaviar / Honig + "10%"
+           translate() set each frame by applyGravity(); original center (200, 365) -->
+      <g id="waage-circle-l" opacity="0">
+        <circle cx="200" cy="365" r="85" fill="#C9C9C0"/>
+        <!-- Buch -->
+        <rect x="151" y="316" width="28" height="36" rx="2"   fill="#D63335"/>
+        <rect x="151" y="316" width="6"  height="36" rx="1.5" fill="#AA2020"/>
+        <!-- Kaviar dots -->
+        <circle cx="188" cy="326" r="7.5" fill="#D63335"/>
+        <circle cx="203" cy="317" r="7"   fill="#D63335"/>
+        <circle cx="217" cy="328" r="7.5" fill="#D63335"/>
+        <circle cx="209" cy="343" r="6.5" fill="#D63335"/>
+        <circle cx="193" cy="341" r="6.5" fill="#D63335"/>
+        <!-- Honig (honey jar): body + lid -->
+        <rect x="224" y="340" width="28" height="24" rx="4" fill="#D63335"/>
+        <rect x="228" y="328" width="20" height="14" rx="3" fill="#AA2020"/>
+        <!-- "10%" label -->
+        <text x="200" y="408" text-anchor="middle"
+              class="svg-mono" font-size="20" fill="#1a1a1a" letter-spacing="2">10%</text>
+      </g>
+
+      <!-- RIGHT pan: Tampon + "20%"
+           translate() set each frame by applyGravity(); original center (800, 365) -->
+      <g id="waage-circle-r" opacity="0">
+        <circle cx="800" cy="365" r="85" fill="#C9C9C0"/>
+        <!-- Tampon body (pill shape) -->
+        <rect x="782" y="300" width="36" height="58" rx="18" fill="#D63335"/>
+        <!-- Tampon string -->
+        <path d="M800,358 C805,374 799,388 804,400"
+              stroke="#AA2020" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- "20%" label -->
+        <text x="800" y="418" text-anchor="middle"
+              class="svg-mono" font-size="20" fill="#1a1a1a" letter-spacing="2">20%</text>
+      </g>
+
     </g>
 
     <!-- ── CHAPTER 08: RIGHT SPINE (3-column timeline layout) ────────
