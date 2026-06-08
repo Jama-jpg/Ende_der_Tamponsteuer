@@ -51,7 +51,7 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
           pts.push(Math.round(start + f * range));
         }
       }
-      pts.push(end); // scrub end
+      if (!scene.skipSnapEnd) pts.push(end); // scrub end
     }
     return Array.from(new Set(pts)).sort((a, b) => a - b);
   }

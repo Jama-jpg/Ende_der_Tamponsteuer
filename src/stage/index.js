@@ -57,9 +57,10 @@ export function buildStage(mount, gsap) {
     tamponPillEls: [],   // pill groups for coinEls[0..16], filled below
 
     /* Chapter 6 */
-    povCircle: $('pov-circle'),
-    povPie17:  $('pov-pie-17'),
-    povSub:    $('pov-sub'),
+    povCircle:     $('pov-circle'),
+    povPie17:      $('pov-pie-17'),
+    povSub:        $('pov-sub'),
+    povSubSpinner: $('pov-sub-spinner'),
     povPie90:  $('pov-pie-90'),
     povPie60:  $('pov-pie-60'),
     povPie15:  $('pov-pie-15'),
@@ -230,7 +231,7 @@ export function buildStage(mount, gsap) {
     refs.linesGrp, refs.lines38Grp, refs.liqFill, refs.liqStream, refs.vatBigTax,
     refs.cAxisProgress,
     refs.tampon3d, refs.coinsGrp,
-    refs.povCircle, refs.povPie17, refs.povSub,
+    refs.povCircle, refs.povPie17, refs.povSub, refs.povSubSpinner,
     refs.povPie90, refs.povPie60, refs.povPie15, refs.povPie12,
   ], { opacity: 0 });
   gsap.set(refs.cAxis,   { strokeDashoffset: 448 });

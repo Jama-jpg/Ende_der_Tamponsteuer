@@ -10,11 +10,13 @@
 ═══════════════════════════════════════════════════════════════════ */
 import { POV_SUB_R } from '../../../core/constants.js';
 
+const POV_SUB_CIRC = 2 * Math.PI * 108; // ≈ 678.6 — must match markup stroke-dasharray
+
 export default {
   id: 's-ch6-500k',
   height: '150vh',
   skipSnapStart: true,
-  snapPoints: [0.65],
+  snapPoints: [0.82],
 
   overlay: {
     id: 'st-ch6-500k',
@@ -24,7 +26,7 @@ export default {
   },
 
   init({ gsap, stage }) {
-    const { povSub } = stage.refs;
+    const { povSub, povSubSpinner } = stage.refs;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -35,12 +37,26 @@ export default {
       },
     });
 
-    /* scene-1-4m owns #st-ch6-14m-main fade-out. #st-ch6-hover17 is hover-driven
-       and reset by scene-1-4m's onLeaveBack — no cross-scene control needed. */
+    /* scene-1-4m owns #st-ch6-14m-main fade-out. */
     tl.to('#st-ch6-500k', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.10);
     tl.to('#st-ch6-500k', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
 
-    tl.to(povSub, { opacity: 1, attr: { r: POV_SUB_R }, ease: 'power2.out', duration: 0.30 }, 0.18);
+    /* Pre-set the sub-circle to full radius so it appears at full size when faded in */
+    tl.set(povSub, { attr: { r: POV_SUB_R } }, 0);
+
+    /* Step 1: spinner appears and draws one full circle around the sub-circle outline */
+    tl.to(povSubSpinner, { opacity: 1, duration: 0.04 }, 0.02);
+    tl.to(povSubSpinner, {
+      strokeDashoffset: 0,
+      ease: 'power2.inOut',
+      duration: 0.48,
+    }, 0.06);
+
+    /* Step 2: sub-circle fill fades in */
+    tl.to(povSub, { opacity: 1, duration: 0.18, ease: 'power1.out' }, 0.56);
+
+    /* Step 3: spinner fades out */
+    tl.to(povSubSpinner, { opacity: 0, duration: 0.10 }, 0.76);
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

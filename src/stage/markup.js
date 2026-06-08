@@ -219,6 +219,10 @@ export const stageMarkup = /* html */ `
 
     <!-- 500k sub-circle inside poverty circle (darker) -->
     <circle id="pov-sub" cx="790" cy="281" r="0" fill="#531416" opacity="0"/>
+    <!-- Spinner that draws the 500k sub-circle outline before it fills -->
+    <circle id="pov-sub-spinner" cx="790" cy="281" r="108" fill="none" stroke="#531416"
+            stroke-width="1.8" stroke-linecap="round" stroke-dasharray="678.6"
+            stroke-dashoffset="678.6" transform="rotate(-90 790 281)" opacity="0"/>
 
     <!-- Cumulative pie sectors on pov-sub (added one at a time) -->
     <path id="pov-pie-90" fill="#D63335" opacity="0"/>

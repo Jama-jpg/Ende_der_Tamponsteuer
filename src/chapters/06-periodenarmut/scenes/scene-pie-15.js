@@ -7,7 +7,8 @@ export default {
   id: 's-ch6-pie15',
   height: '150vh',
   skipSnapStart: true,
-  snapPoints: [0.55],
+  skipSnapEnd: true,
+  snapPoints: [0.70],
 
   overlay: {
     id: 'st-ch6-pie15',
@@ -40,7 +41,7 @@ export default {
 
     tl.to(proxy, {
       angle: 54,    // 15% of 360°
-      duration: 0.30,
+      duration: 0.50,
       ease: 'power2.out',
       onUpdate() {
         povPie15.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_SUB_R, 0, Math.max(0.01, proxy.angle)));

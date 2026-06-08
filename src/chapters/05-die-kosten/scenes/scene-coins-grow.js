@@ -20,6 +20,7 @@ export default {
   id: 's-ch5-grow',
   height: '200vh',
   skipSnapStart: true,
+  skipSnapEnd: true,
   snapPoints: [0.75],
 
   overlay: {

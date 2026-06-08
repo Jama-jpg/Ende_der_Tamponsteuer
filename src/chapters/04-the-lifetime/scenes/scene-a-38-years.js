@@ -18,6 +18,7 @@ export default {
   id: 's-periode-a',
   height: '200vh',
   skipSnapStart: true,
+  skipSnapEnd: true,
   snapPoints: [0.75],
 
   overlay: {
