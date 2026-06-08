@@ -175,6 +175,14 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
   /* ── Converge state (25 balls → 1 big ball at POV position) ──── */
   let convergeFactor = 0;    // 0 → 1 driven by scroll (after grow phase)
 
+  /* ── Offscreen canvases for metaball converge effect ────────── */
+  const grayCanvas  = document.createElement('canvas');
+  const colorCanvas = document.createElement('canvas');
+  grayCanvas.width  = colorCanvas.width  = W;
+  grayCanvas.height = colorCanvas.height = H;
+  const grayCtx  = grayCanvas.getContext('2d');
+  const colorCtx = colorCanvas.getContext('2d');
+
   /* ── Custom afterRender: cord + text on tampons, text on balls ── */
   Events.on(render, 'afterRender', () => {
     const ctx         = render.context;
@@ -266,8 +274,10 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
       ctx.restore();
     }
 
-    /* Balls animate into packed grid and grow (growFactor 0 → 1) */
-    if (growEntries.length && growFactor > 0 && convergeFactor === 0) {
+    /* Balls animate into packed grid and grow (growFactor 0 → 1).
+       Also handles the frozen state (growFactor=0) so text is visible
+       as soon as the scene enters and freeze() has been called. */
+    if (growEntries.length && convergeFactor === 0) {
       /* smoothstep for position, linear for radius */
       const pt   = growFactor * growFactor * (3 - 2 * growFactor);
       const drawR = growBaseR + (growTargetR - growBaseR) * growFactor;
@@ -289,43 +299,68 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
       ctx.restore();
     }
 
-    /* 25 balls converge into one big red ball at the POV circle position */
+    /* 25 balls converge into one big red ball — fluid metaball effect */
     if (growEntries.length && convergeFactor > 0) {
       const { scale: sc, lbX: lx, lbY: ly } = getSVGLayout();
       const centerX = lx + POV_CX * sc;
       const centerY = ly + POV_CY * sc;
       const bigR    = POV_R * sc;
 
-      /* smoothstep */
       const pt = convergeFactor * convergeFactor * (3 - 2 * convergeFactor);
 
-      /* individual balls: start at grid positions, move toward center,
-         radius interpolates from growTargetR → bigR, fade out past 60% */
-      const individualAlpha = Math.max(0, 1 - pt / 0.6);
-      if (individualAlpha > 0) {
-        ctx.save();
-        ctx.globalAlpha = individualAlpha;
-        for (const e of growEntries) {
-          const x = e.targetX + (centerX - e.targetX) * pt;
-          const y = e.targetY + (centerY - e.targetY) * pt;
-          const r = growTargetR + (bigR - growTargetR) * pt;
-          ctx.beginPath();
-          ctx.arc(x, y, r, 0, Math.PI * 2);
-          ctx.fillStyle = '#D63335';
-          ctx.fill();
-        }
-        ctx.restore();
+      const cW = canvas.width;
+      const cH = canvas.height;
+      if (grayCanvas.width !== cW || grayCanvas.height !== cH) {
+        grayCanvas.width  = colorCanvas.width  = cW;
+        grayCanvas.height = colorCanvas.height = cH;
       }
 
-      /* single big ball: fades in after 40% and reaches full opacity at 100% */
-      const singleAlpha = Math.max(0, (pt - 0.4) / 0.6);
-      if (singleAlpha > 0) {
+      /* Blur radius grows as balls converge so gooey necks form naturally */
+      const blurR = Math.max(6, growTargetR * (0.3 + 0.7 * pt));
+
+      /* Step 1: draw blurred white circles to grayCanvas */
+      grayCtx.clearRect(0, 0, cW, cH);
+      grayCtx.filter    = `blur(${blurR.toFixed(1)}px)`;
+      grayCtx.fillStyle = 'white';
+      for (const e of growEntries) {
+        const x = e.targetX + (centerX - e.targetX) * pt;
+        const y = e.targetY + (centerY - e.targetY) * pt;
+        /* radius grows toward bigR as convergence nears completion */
+        const r = growTargetR + (bigR - growTargetR) * Math.pow(pt, 1.5);
+        grayCtx.beginPath();
+        grayCtx.arc(x, y, r, 0, Math.PI * 2);
+        grayCtx.fill();
+      }
+      grayCtx.filter = 'none';
+
+      /* Step 2: fill colorCanvas with red, then mask it with the
+         threshold-contrasted metaball shape (destination-in).
+         The contrast filter snaps the blurred alpha gradient into a
+         sharp gooey outline and fills gaps between close circles. */
+      colorCtx.clearRect(0, 0, cW, cH);
+      colorCtx.fillStyle = '#D63335';
+      colorCtx.fillRect(0, 0, cW, cH);
+      colorCtx.globalCompositeOperation = 'destination-in';
+      colorCtx.filter = 'contrast(18)';
+      colorCtx.drawImage(grayCanvas, 0, 0);
+      colorCtx.filter = 'none';
+      colorCtx.globalCompositeOperation = 'source-over';
+
+      /* Step 3: composite metaball onto main canvas */
+      ctx.drawImage(colorCanvas, 0, 0);
+
+      /* Step 4: "1000€" fades in on the final merged circle */
+      if (pt > 0.82) {
+        const textAlpha = (pt - 0.82) / 0.18;
+        const mergedR   = growTargetR + (bigR - growTargetR) * Math.pow(pt, 1.5);
+        const fs        = Math.max(14, Math.round(mergedR * 0.28));
         ctx.save();
-        ctx.globalAlpha = singleAlpha;
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, bigR, 0, Math.PI * 2);
-        ctx.fillStyle = '#D63335';
-        ctx.fill();
+        ctx.globalAlpha  = textAlpha;
+        ctx.font         = `bold ${fs}px dm-mono, monospace`;
+        ctx.fillStyle    = '#FFFFFF';
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('1000€', centerX, centerY);
         ctx.restore();
       }
     }
@@ -433,6 +468,8 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
     canvas.style.width  = nW + 'px';
     canvas.style.height = nH + 'px';
     Render.setSize(render, nW, nH);
+    grayCanvas.width  = colorCanvas.width  = nW;
+    grayCanvas.height = colorCanvas.height = nH;
     Body.setPosition(floor, { x: (sx + nW) / 2,   y: nH + WALL_T / 2 });
     Body.setPosition(wallL,  { x: sx - WALL_T / 2, y: nH / 2 });
     Body.setPosition(wallR,  { x: nW + WALL_T / 2, y: nH / 2 });
