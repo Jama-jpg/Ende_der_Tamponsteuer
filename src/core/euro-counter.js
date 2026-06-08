@@ -1,8 +1,11 @@
 /* ═══════════════════════════════════════════════
    EURO COUNTER — top-left corner
-   Fades in with the circle fill (s3, ~68% scroll). Counts 0 → 20.500 € as
-   the reader scrolls from s3 (circle full) through Chapter 2.
+   Fades in with the circle fill (s4). Counts 0 → 20.000 as the reader
+   scrolls from s3 through to just before scene-25k. At scene-25k the
+   counter flies into the overlay text and finishes counting there.
 ═══════════════════════════════════════════════ */
+
+let scrubTween = null;
 
 export function createEuroCounter({ gsap, ScrollTrigger }) {
   const numEl  = document.getElementById('euro-num');
@@ -11,16 +14,17 @@ export function createEuroCounter({ gsap, ScrollTrigger }) {
   const fmt = (n) =>
     Math.round(n).toLocaleString('de-AT');
 
-  /* Count 0 → 20 500 from when the counter first appears (~50% into s3)
-     to the text-reveal point in s8. scrub keeps the value linear to scroll. */
-  gsap.to(counter, {
-    value: 20500,
+  /* Count 0 → 20 000 from when the counter first appears (~50% into s3)
+     to just before scene-25k's overlay fades in (top 80%). The last 5 000
+     are counted in the fly animation at the destination. */
+  scrubTween = gsap.to(counter, {
+    value: 20000,
     ease: 'none',
     scrollTrigger: {
       trigger:    '#s3',
       start:      '50% top',
-      endTrigger: '#s8',
-      end:        '72% bottom',
+      endTrigger: '#s-ch5-25k',
+      end:        'top 80%',
       scrub:      1.5,
     },
     onUpdate() {
@@ -28,8 +32,7 @@ export function createEuroCounter({ gsap, ScrollTrigger }) {
     },
   });
 
-  /* Attention pulse — fires once as the counter becomes visible (~52% into s3).
-     The 0.3 s delay means it plays while the counter opacity is settling. */
+  /* Attention pulse — fires once as the counter becomes visible (~52% into s3). */
   ScrollTrigger.create({
     trigger: '#s3',
     start:   '52% top',
@@ -50,4 +53,12 @@ export function createEuroCounter({ gsap, ScrollTrigger }) {
       });
     },
   });
+}
+
+/* Called by scene-25k just before the fly animation begins. */
+export function killEuroScrub() {
+  if (scrubTween) {
+    scrubTween.kill();
+    scrubTween = null;
+  }
 }
