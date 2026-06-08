@@ -61,7 +61,7 @@ export default {
     ScrollTrigger.create({
       trigger:  '#s-ch5-grow',
       start:    'top top',
-      end:      'bottom top',
+      end:      'bottom bottom',
       scrub:    0.6,
       onUpdate(self) {
         if (!ch5State.physics) return;

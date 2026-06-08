@@ -28,7 +28,7 @@ export default {
        the #euro-counter element once it arrives here. */
     html: `<p class="sl">ALLES ZUSAMMEN KOSTET EINE MENSTRUIERENDE PERSON IM LAUFE IHRES LEBENS RUND</p>
            <p class="sh"><span id="ch5-counter" style="opacity:0">25.000</span></p>
-           <p class="sl">€.</p>`,
+           <p class="sl">.</p>`,
   },
 
   init({ gsap, ScrollTrigger }) {
