@@ -52,11 +52,7 @@ export default {
       },
     });
 
-    /* ── Grow then converge via scroll progress ─────────────────── */
-    /* end: 'bottom top' spreads the animation across the full 200vh so
-       convergeFactor reaches 1.0 exactly when the scene boundary is hit
-       and scene-1-4m starts — zero gap between the merged ball and the
-       poverty circle appearing. */
+    /* ── Grow: top→bottom-bottom (100vh), grid fully built at snap 0.75 ── */
     const GROW_END = 0.75;
     ScrollTrigger.create({
       trigger:  '#s-ch5-grow',
@@ -65,20 +61,29 @@ export default {
       scrub:    0.6,
       onUpdate(self) {
         if (!ch5State.physics) return;
-        const p = self.progress;
-        if (p <= GROW_END) {
-          ch5State.physics.setGrowFactor(p / GROW_END);
-          ch5State.physics.setConvergeFactor(0);
-        } else {
-          ch5State.physics.setGrowFactor(1);
-          ch5State.physics.setConvergeFactor((p - GROW_END) / (1 - GROW_END));
-        }
+        ch5State.physics.setGrowFactor(Math.min(1, self.progress / GROW_END));
       },
       onLeaveBack() {
         if (ch5State.physics) {
           ch5State.physics.setGrowFactor(0);
           ch5State.physics.setConvergeFactor(0);
         }
+      },
+    });
+
+    /* ── Converge: starts when text fades (bottom 35%), ends at scene exit ── */
+    /* This keeps the grid fully visible while the text is on screen, then
+       merges the 25 balls into one circle simultaneously with the text leaving. */
+    ScrollTrigger.create({
+      trigger: '#s-ch5-grow',
+      start:   'bottom 35%',
+      end:     'bottom top',
+      scrub:   0.6,
+      onUpdate(self) {
+        if (ch5State.physics) ch5State.physics.setConvergeFactor(self.progress);
+      },
+      onLeaveBack() {
+        if (ch5State.physics) ch5State.physics.setConvergeFactor(0);
       },
     });
 
