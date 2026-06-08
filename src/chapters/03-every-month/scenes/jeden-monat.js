@@ -48,7 +48,7 @@ export default {
   },
 
   init({ gsap, stage }) {
-    const { cFill, mCircles, mcEls, gooeyBlur } = stage.refs;
+    const { cFill, mCircles, mcEls, gooeyBlur, pieHl } = stage.refs;
 
     const backOut  = gsap.parseEase(`back.out(${BOUNCE})`);
     const massEase = gsap.parseEase('power1.in');
@@ -131,6 +131,8 @@ export default {
     });
 
     tl
+      /* Fade out pie sector and "26% der Weltbevölkerung" text from previous scene. */
+      .to([pieHl, '#st7'], { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0)
       /* "Jeden Monat" stays visible through the end — scene-a crossfades to "38 Jahre". */
       /* (#st5 is faded by pie-26 when the user enters this scene.) */
       .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.10);
