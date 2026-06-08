@@ -44,8 +44,9 @@ function getSVGLayout() {
  * @returns {{ morph(), destroy() }}
  */
 export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } = {}) {
-  const W = window.innerWidth;
-  const H = window.innerHeight;
+  const W   = window.innerWidth;
+  const H   = window.innerHeight;
+  const dpr = window.devicePixelRatio || 1;
 
   /* ── Engine (mirrors demo: no extra options) ──────────────────── */
   const engine = Engine.create();
@@ -59,6 +60,7 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
     options: {
       width:      W,
       height:     H,
+      pixelRatio: dpr,
       wireframes: false,
       background: 'transparent',
     },
@@ -178,10 +180,12 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
   /* ── Offscreen canvases for metaball converge effect ────────── */
   const grayCanvas  = document.createElement('canvas');
   const colorCanvas = document.createElement('canvas');
-  grayCanvas.width  = colorCanvas.width  = W;
-  grayCanvas.height = colorCanvas.height = H;
+  grayCanvas.width  = colorCanvas.width  = W * dpr;
+  grayCanvas.height = colorCanvas.height = H * dpr;
   const grayCtx  = grayCanvas.getContext('2d');
   const colorCtx = colorCanvas.getContext('2d');
+  grayCtx.scale(dpr, dpr);
+  colorCtx.scale(dpr, dpr);
 
   /* ── Custom afterRender: cord + text on tampons, text on balls ── */
   Events.on(render, 'afterRender', () => {
@@ -313,6 +317,8 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
       if (grayCanvas.width !== cW || grayCanvas.height !== cH) {
         grayCanvas.width  = colorCanvas.width  = cW;
         grayCanvas.height = colorCanvas.height = cH;
+        grayCtx.scale(dpr, dpr);
+        colorCtx.scale(dpr, dpr);
       }
 
       /* Blur radius grows as balls converge so gooey necks form naturally */
@@ -349,20 +355,7 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
       /* Step 3: composite metaball onto main canvas */
       ctx.drawImage(colorCanvas, 0, 0);
 
-      /* Step 4: "1000€" fades in on the final merged circle */
-      if (pt > 0.82) {
-        const textAlpha = (pt - 0.82) / 0.18;
-        const mergedR   = growTargetR + (bigR - growTargetR) * Math.pow(pt, 1.5);
-        const fs        = Math.max(14, Math.round(mergedR * 0.28));
-        ctx.save();
-        ctx.globalAlpha  = textAlpha;
-        ctx.font         = `bold ${fs}px dm-mono, monospace`;
-        ctx.fillStyle    = '#FFFFFF';
-        ctx.textAlign    = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('1000€', centerX, centerY);
-        ctx.restore();
-      }
+      /* Step 4: no text label on the final merged circle */
     }
 
     /* Coins */
@@ -467,9 +460,11 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
     const nH = window.innerHeight;
     canvas.style.width  = nW + 'px';
     canvas.style.height = nH + 'px';
-    Render.setSize(render, nW, nH);
-    grayCanvas.width  = colorCanvas.width  = nW;
-    grayCanvas.height = colorCanvas.height = nH;
+    Render.setSize(render, nW, nH);   // handles canvas pixel dims + ctx scale via pixelRatio
+    grayCanvas.width  = colorCanvas.width  = nW * dpr;
+    grayCanvas.height = colorCanvas.height = nH * dpr;
+    grayCtx.scale(dpr, dpr);
+    colorCtx.scale(dpr, dpr);
     Body.setPosition(floor, { x: (sx + nW) / 2,   y: nH + WALL_T / 2 });
     Body.setPosition(wallL,  { x: sx - WALL_T / 2, y: nH / 2 });
     Body.setPosition(wallR,  { x: nW + WALL_T / 2, y: nH / 2 });

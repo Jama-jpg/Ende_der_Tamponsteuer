@@ -162,7 +162,7 @@ body {
   top: 22px;
   left: 22px;
   font-family: var(--f-serif);
-  font-size: clamp(11px, 1vw, 14px);
+  font-size: clamp(12px, 1.1vw, 16px);
   letter-spacing: 0.1em;
   color: var(--ink);
   opacity: 0;
