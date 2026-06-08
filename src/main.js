@@ -87,8 +87,9 @@ scenes.forEach((scene) => scene.init?.(ctx));
 /* 5 ─ Wire the spine as the page scrollbar (overall scroll progress + seek) */
 createSpine({ ScrollTrigger, refs });
 
-/* 6b ─ Scroll snap — eases to each scene's snap points on wheel/touch/key */
-createSnap({ ScrollTrigger, gsap, scenes });
+/* 6b ─ Scroll snap — only for the two physics scenes that need a forced pause */
+const snapScenes = scenes.filter(s => ['s-ch5-17k', 's-ch5-25k'].includes(s.id));
+createSnap({ ScrollTrigger, gsap, scenes: snapScenes });
 
 /* 7 ─ Euro counter — top-left corner, Chapter 2 → "Jeden Monat" */
 createEuroCounter({ gsap, ScrollTrigger });

@@ -59,6 +59,17 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
   const maxScroll = () => ScrollTrigger.maxScroll(window);
   const locked    = () => document.body.style.overflow === 'hidden';
 
+  /* Returns true only if there is a snap boundary ahead in the given
+     direction (+1 down, -1 up). Used to decide whether to intercept the
+     scroll event — if no target exists, native scroll is left untouched. */
+  function wouldSnap(dir) {
+    const pts = boundaries();
+    if (!pts.length) return false;
+    const y   = Math.round(window.scrollY || window.pageYOffset);
+    const eps = 4;
+    return dir > 0 ? pts.some(p => p > y + eps) : pts.some(p => p < y - eps);
+  }
+
   let busy      = false;
   let lockTimer = null;
 
@@ -112,16 +123,20 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
 
   window.addEventListener('wheel', (e) => {
     if (locked()) return;
-    e.preventDefault();                             // suppress native scroll
+    const delta = normalizeDelta(e);
+    const dir   = delta >= 0 ? 1 : -1;
+    // Only intercept if a snap target exists in this direction, or a snap
+    // animation is already running (prevent fighting the tween).
+    if (!busy && !wouldSnap(dir)) return;
+    e.preventDefault();
 
     if (busy) return;                               // drop all events while locked
 
-    accumY += normalizeDelta(e);
+    accumY += delta;
     clearTimeout(accumTimer);
     accumTimer = setTimeout(() => { accumY = 0; }, ACCUM_RESET);
 
     if (Math.abs(accumY) >= ACCUM_THRESHOLD) {
-      const dir = accumY > 0 ? 1 : -1;
       accumY = 0;
       clearTimeout(accumTimer);
       go(dir);
@@ -135,9 +150,11 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
   }, { passive: true });
   window.addEventListener('touchmove', (e) => {
     if (locked() || touchY == null) return;
+    const dy  = touchY - e.touches[0].clientY;
+    const dir = dy >= 0 ? 1 : -1;
+    if (!busy && !wouldSnap(dir)) return;
     e.preventDefault();
-    const dy = touchY - e.touches[0].clientY;
-    if (Math.abs(dy) > SWIPE) { go(dy > 0 ? 1 : -1); touchY = null; }
+    if (Math.abs(dy) > SWIPE) { go(dir); touchY = null; }
   }, { passive: false });
   window.addEventListener('touchend', () => { touchY = null; });
 
@@ -145,8 +162,10 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
   window.addEventListener('keydown', (e) => {
     if (locked()) return;
     if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+      if (!wouldSnap(1)) return;
       e.preventDefault(); go(1);
     } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      if (!wouldSnap(-1)) return;
       e.preventDefault(); go(-1);
     }
   });
