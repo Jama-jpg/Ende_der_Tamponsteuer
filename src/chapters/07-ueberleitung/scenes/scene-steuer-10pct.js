@@ -28,11 +28,9 @@ export default {
     const waage   = document.getElementById('waage-grp');
     const beamGrp = document.getElementById('waage-beam-grp');
     const circleL = document.getElementById('waage-circle-l');
-    const armL    = document.getElementById('waage-arm-l');
-    const armR    = document.getElementById('waage-arm-r');
     const circleR = document.getElementById('waage-circle-r');
 
-    const elems = { armL, armR, circleL, circleR };
+    const elems = { circleL, circleR };
 
     /* Initialise arm positions at rot=0 (matches markup, but explicit is safe) */
     applyGravity(0, elems);
@@ -42,7 +40,7 @@ export default {
         trigger: '#s-ch7-steuer-10pct',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1.0,
+        scrub: 2.5,
       },
     });
 
@@ -63,13 +61,13 @@ export default {
       { rotation: 0,   svgOrigin: '500 198' },
       {
         rotation: -15, svgOrigin: '500 198',
-        duration: 0.45,
-        ease: 'power3.inOut',
+        duration: 0.60,
+        ease: 'sine.inOut',
         onUpdate() {
           applyGravity(gsap.getProperty(beamGrp, 'rotation'), elems);
         },
       },
-      0.48,
+      0.40,
     );
   },
 };

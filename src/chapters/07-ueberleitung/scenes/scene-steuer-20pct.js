@@ -27,17 +27,14 @@ export default {
     const beamGrp = document.getElementById('waage-beam-grp');
     const circleL = document.getElementById('waage-circle-l');
     const circleR = document.getElementById('waage-circle-r');
-    const armL    = document.getElementById('waage-arm-l');
-    const armR    = document.getElementById('waage-arm-r');
-
-    const elems = { armL, armR, circleL, circleR };
+    const elems = { circleL, circleR };
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-ch7-steuer-20pct',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1.0,
+        scrub: 2.5,
       },
     });
 
@@ -49,8 +46,8 @@ export default {
       { rotation: -15, svgOrigin: '500 198' },
       {
         rotation:  15, svgOrigin: '500 198',
-        duration: 0.45,
-        ease: 'power3.inOut',
+        duration: 0.60,
+        ease: 'sine.inOut',
         onUpdate() {
           applyGravity(gsap.getProperty(beamGrp, 'rotation'), elems);
         },

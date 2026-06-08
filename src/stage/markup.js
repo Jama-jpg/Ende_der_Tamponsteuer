@@ -245,12 +245,11 @@ export const stageMarkup = /* html */ `
 
     <!-- ── CHAPTER 07: BALANCE SCALE ────────────────────────────────
          GRAVITY MODEL: waage-beam-grp is the only thing that rotates.
-         waage-arm-l / -r are standalone <line> elements repositioned
-         each frame by applyGravity() in the scene JS — they always hang
-         straight down from the (moving) beam ends, like real pendulums.
+         Pans hang directly from the beam ends (no intermediate arm segments).
+         applyGravity() repositions the pan groups each frame.
          Fulcrum = spine dot 2 (x=500, y=198).  Beam extends x=200↔800.
-         Arms: 82 px long.  Pans: gray circles r=85, connected to arm ends.
-         Arm / beam stroke: matches the thick-spine style (#A9A99F, w=5). -->
+         Pans: gray circles r=140, centre at beam-end + CIRCLE_R below.
+         Beam stroke: matches the thick-spine style (#A9A99F, w=5). -->
     <g id="waage-grp" opacity="0">
 
       <!-- Beam only — this group rotates around (500, 198) -->
@@ -259,54 +258,46 @@ export const stageMarkup = /* html */ `
               stroke="#A9A99F" stroke-width="5" stroke-linecap="round"/>
       </g>
 
-      <!-- Left arm — hangs from beam end to pan top -->
-      <line id="waage-arm-l" x1="200" y1="198" x2="200" y2="280"
-            stroke="#A9A99F" stroke-width="5" stroke-linecap="round"/>
-
-      <!-- Right arm — hangs from beam end to pan top -->
-      <line id="waage-arm-r" x1="800" y1="198" x2="800" y2="280"
-            stroke="#A9A99F" stroke-width="5" stroke-linecap="round"/>
-
       <!-- LEFT pan: Bücher / Kaviar / Honig + "10%"
-           translate() set each frame by applyGravity(); original center (200, 420) -->
+           translate() set each frame by applyGravity(); original center (200, 338) -->
       <g id="waage-circle-l" opacity="0">
-        <circle cx="200" cy="420" r="140" fill="#C9C9C0"/>
+        <circle cx="200" cy="338" r="140" fill="#C9C9C0"/>
         <!-- Buch -->
-        <text x="165" y="360" text-anchor="middle"
+        <text x="165" y="278" text-anchor="middle"
               class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">BUCH</text>
-        <rect x="145" y="367" width="38" height="48" rx="3"   fill="#D63335"/>
-        <rect x="145" y="367" width="8"  height="48" rx="2" fill="#AA2020"/>
+        <rect x="145" y="285" width="38" height="48" rx="3"   fill="#D63335"/>
+        <rect x="145" y="285" width="8"  height="48" rx="2" fill="#AA2020"/>
         <!-- Kaviar dots -->
-        <text x="203" y="360" text-anchor="middle"
+        <text x="203" y="278" text-anchor="middle"
               class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">KAVIAR</text>
-        <circle cx="187" cy="377" r="10" fill="#D63335"/>
-        <circle cx="203" cy="368" r="9"  fill="#D63335"/>
-        <circle cx="219" cy="379" r="10" fill="#D63335"/>
-        <circle cx="210" cy="396" r="8.5" fill="#D63335"/>
-        <circle cx="194" cy="394" r="8.5" fill="#D63335"/>
+        <circle cx="187" cy="295" r="10" fill="#D63335"/>
+        <circle cx="203" cy="286" r="9"  fill="#D63335"/>
+        <circle cx="219" cy="297" r="10" fill="#D63335"/>
+        <circle cx="210" cy="314" r="8.5" fill="#D63335"/>
+        <circle cx="194" cy="312" r="8.5" fill="#D63335"/>
         <!-- Honig (honey jar): body + lid -->
-        <text x="243" y="360" text-anchor="middle"
+        <text x="243" y="278" text-anchor="middle"
               class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">HONIG</text>
-        <rect x="226" y="390" width="36" height="30" rx="5" fill="#D63335"/>
-        <rect x="230" y="375" width="26" height="18" rx="4" fill="#AA2020"/>
+        <rect x="226" y="308" width="36" height="30" rx="5" fill="#D63335"/>
+        <rect x="230" y="293" width="26" height="18" rx="4" fill="#AA2020"/>
         <!-- "10%" label -->
-        <text x="200" y="487" text-anchor="middle"
+        <text x="200" y="405" text-anchor="middle"
               class="svg-mono" font-size="20" fill="#1a1a1a" letter-spacing="2">10%</text>
       </g>
 
       <!-- RIGHT pan: Tampon + "20%"
-           translate() set each frame by applyGravity(); original center (800, 420) -->
+           translate() set each frame by applyGravity(); original center (800, 338) -->
       <g id="waage-circle-r" opacity="0">
-        <circle cx="800" cy="420" r="140" fill="#C9C9C0"/>
+        <circle cx="800" cy="338" r="140" fill="#C9C9C0"/>
         <!-- Tampon body (pill shape) -->
-        <text x="800" y="350" text-anchor="middle"
+        <text x="800" y="268" text-anchor="middle"
               class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">TAMPON</text>
-        <rect x="778" y="357" width="46" height="75" rx="23" fill="#D63335"/>
+        <rect x="778" y="275" width="46" height="75" rx="23" fill="#D63335"/>
         <!-- Tampon string -->
-        <path d="M800,432 C806,450 799,467 805,483"
+        <path d="M800,350 C806,368 799,385 805,401"
               stroke="#AA2020" stroke-width="3.5" fill="none" stroke-linecap="round"/>
         <!-- "20%" label -->
-        <text x="800" y="500" text-anchor="middle"
+        <text x="800" y="418" text-anchor="middle"
               class="svg-mono" font-size="20" fill="#1a1a1a" letter-spacing="2">20%</text>
       </g>
 
