@@ -23,14 +23,20 @@ const SVG_W = 1000;
 const SVG_H = 562;
 const WALL_T = 60;
 
+/* POV circle constants (mirror of core/constants.js) */
+const POV_CX = 790;
+const POV_CY = 281;
+const POV_R  = 180;
+
 const MORPH_DURATION = 900; // ms for tampon → ball animation
 
 function getSVGLayout() {
   const el    = document.getElementById('main-svg');
   const r     = el.getBoundingClientRect();
   const scale = Math.min(r.width / SVG_W, r.height / SVG_H);
-  const lbX   = (r.width - SVG_W * scale) / 2;
-  return { scale, lbX };
+  const lbX   = (r.width  - SVG_W * scale) / 2;
+  const lbY   = (r.height - SVG_H * scale) / 2;
+  return { scale, lbX, lbY };
 }
 
 /**
@@ -161,10 +167,13 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
   let morphDone      = false;
 
   /* ── Grow state (balls pack into grid and expand) ────────────── */
-  let growFactor  = 0;       // 0 → 1 driven by scroll
-  let growEntries = [];      // { startX, startY, targetX, targetY }
-  let growBaseR   = 0;
-  let growTargetR = 0;
+  let growFactor    = 0;     // 0 → 1 driven by scroll
+  let growEntries   = [];    // { startX, startY, targetX, targetY }
+  let growBaseR     = 0;
+  let growTargetR   = 0;
+
+  /* ── Converge state (25 balls → 1 big ball at POV position) ──── */
+  let convergeFactor = 0;    // 0 → 1 driven by scroll (after grow phase)
 
   /* ── Custom afterRender: cord + text on tampons, text on balls ── */
   Events.on(render, 'afterRender', () => {
@@ -258,7 +267,7 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
     }
 
     /* Balls animate into packed grid and grow (growFactor 0 → 1) */
-    if (growEntries.length && growFactor > 0) {
+    if (growEntries.length && growFactor > 0 && convergeFactor === 0) {
       /* smoothstep for position, linear for radius */
       const pt   = growFactor * growFactor * (3 - 2 * growFactor);
       const drawR = growBaseR + (growTargetR - growBaseR) * growFactor;
@@ -278,6 +287,47 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
         ctx.fillText('1000€', x, y);
       }
       ctx.restore();
+    }
+
+    /* 25 balls converge into one big red ball at the POV circle position */
+    if (growEntries.length && convergeFactor > 0) {
+      const { scale: sc, lbX: lx, lbY: ly } = getSVGLayout();
+      const centerX = lx + POV_CX * sc;
+      const centerY = ly + POV_CY * sc;
+      const bigR    = POV_R * sc;
+
+      /* smoothstep */
+      const pt = convergeFactor * convergeFactor * (3 - 2 * convergeFactor);
+
+      /* individual balls: start at grid positions, move toward center,
+         radius interpolates from growTargetR → bigR, fade out past 60% */
+      const individualAlpha = Math.max(0, 1 - pt / 0.6);
+      if (individualAlpha > 0) {
+        ctx.save();
+        ctx.globalAlpha = individualAlpha;
+        for (const e of growEntries) {
+          const x = e.targetX + (centerX - e.targetX) * pt;
+          const y = e.targetY + (centerY - e.targetY) * pt;
+          const r = growTargetR + (bigR - growTargetR) * pt;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fillStyle = '#D63335';
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      /* single big ball: fades in after 40% and reaches full opacity at 100% */
+      const singleAlpha = Math.max(0, (pt - 0.4) / 0.6);
+      if (singleAlpha > 0) {
+        ctx.save();
+        ctx.globalAlpha = singleAlpha;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, bigR, 0, Math.PI * 2);
+        ctx.fillStyle = '#D63335';
+        ctx.fill();
+        ctx.restore();
+      }
     }
 
     /* Coins */
@@ -460,6 +510,11 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
     /** Drive the grow animation (0 = original positions, 1 = full grid). */
     setGrowFactor(t) {
       growFactor = t;
+    },
+
+    /** Drive the convergence animation (0 = grid, 1 = single big ball at POV). */
+    setConvergeFactor(t) {
+      convergeFactor = t;
     },
 
     /** Animate each tampon pill morphing into a 1000€ red ball,

@@ -46,17 +46,30 @@ export default {
       },
     });
 
-    /* ── Grow balls via scroll progress ─────────────────────────── */
+    /* ── Grow then converge via scroll progress ─────────────────── */
+    /* 0 → 0.75 = grow phase (matches snapPoint), 0.75 → 1.0 = converge phase */
+    const GROW_END = 0.75;
     ScrollTrigger.create({
       trigger:  '#s-ch5-grow',
       start:    'top top',
       end:      'bottom bottom',
       scrub:    0.6,
       onUpdate(self) {
-        if (ch5State.physics) ch5State.physics.setGrowFactor(self.progress);
+        if (!ch5State.physics) return;
+        const p = self.progress;
+        if (p <= GROW_END) {
+          ch5State.physics.setGrowFactor(p / GROW_END);
+          ch5State.physics.setConvergeFactor(0);
+        } else {
+          ch5State.physics.setGrowFactor(1);
+          ch5State.physics.setConvergeFactor((p - GROW_END) / (1 - GROW_END));
+        }
       },
       onLeaveBack() {
-        if (ch5State.physics) ch5State.physics.setGrowFactor(0);
+        if (ch5State.physics) {
+          ch5State.physics.setGrowFactor(0);
+          ch5State.physics.setConvergeFactor(0);
+        }
       },
     });
 

@@ -21,9 +21,9 @@ export default {
 
   overlay: {
     id: 'st-ch5-17k',
-    html: `<p class="sl">EIN LEBEN VOLLER ZYKLEN ERFORDERT ÜBER</p>
+    html: `<p class="sl">EIN LEBEN VOLLER ZYKLEN BEDEUTET ÜBER</p>
            <p class="sh">17.000</p>
-           <p class="sl">PERIODENPRODUKTE (TAMPONS, BINDEN&nbsp;&amp;&nbsp;CO.),<br>UM DURCH DIESE ZEIT ZU KOMMEN.</p>`,
+           <p class="sl">PERIODENPRODUKTE SOWIE ZUSÄTZLICHE KOSTEN FÜR SCHMERZMITTEL, MEDIKAMENTE, ERSATZKLEIDUNG UND WEITERE BEGLEITKOSTEN.</p>`,
   },
 
   init({ gsap, ScrollTrigger, stage }) {
