@@ -3,8 +3,8 @@
    Turns the central axis into the page's scrollbar: a grey fill grows down
    the spine tracking scroll progress from s3 onward (where user scrolling
    begins). There are 4 dots on the spine; dot 0 is filled by the intro,
-   dot 1 fills after the Waage scene (ch 7), dot 2 at end of timeline (ch 8),
-   dot 3 at the very end of the website (ch 10).
+   dot 1 fills after the scale/steuer chapter (ch 7, when the Waage exits),
+   dot 2 at end of timeline (ch 8), dot 3 at the very end of the website (ch 10).
    The spine can be clicked / dragged to seek. The native scrollbar is
    hidden in base.css. Interaction is disabled while intro locks scrolling.
 ═══════════════════════════════════════════════════════════════════ */
@@ -45,14 +45,14 @@ export function createSpine({ ScrollTrigger, refs }) {
 
   /* ── Dot filling ────────────────────────────────────────────────────
      Dot 0 is filled during the intro by countdown.js.
-     Dot 1 fills after the Waage scene (end of chapter 7).
+     Dot 1 fills when the scale chapter exits (end of ch 7, where the Waage fades out).
      Dot 2 fills at the end of the timeline chapter (chapter 8).
      Dot 3 fills at the very end of the website (chapter 10). */
   const fill  = (i) => dots[i]?.setAttribute('fill', FILLED);
   const empty = (i) => dots[i]?.setAttribute('fill', EMPTY);
 
   ScrollTrigger.create({
-    trigger:     '#s-ch7-waage',
+    trigger:     '#s-ch7-steuer-frage',
     start:       'bottom bottom',
     onEnter:     () => fill(1),
     onLeaveBack: () => empty(1),
