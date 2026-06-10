@@ -9,7 +9,7 @@
 ═══════════════════════════════════════════════════════════════════ */
 import { POV_CX, POV_CY, POV_R } from '../../../core/constants.js';
 import { sectorPath } from '../../../core/svg.js';
-import { textIn, textOut, Y } from '../../../core/text-anim.js';
+import { textIn, textOut, Y_IN } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch6-14m',
@@ -37,7 +37,7 @@ export default {
     const { povPie17 } = stage.refs;
     const PIE17_DEG = 61.2; // 17% of 360°
 
-    gsap.set('#st-ch6-14m-main', { y: Y });
+    gsap.set('#st-ch6-14m-main', { y: Y_IN() });
 
     /* Reset sector to tiny sliver so the sweep starts from 0 */
     povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R, 0, 0.01));

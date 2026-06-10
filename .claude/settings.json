@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -rn \"import.*{ Y }.*text-anim\\\\|import.*Y,.*text-anim\\\\|import.*,Y.*text-anim\" /Users/Angewandte_4/15_Scrollytelling_final/src/ --include=\"*.js\")"
+    ]
+  }
+}

@@ -14,7 +14,7 @@
 import { createPhysicsWorld } from '../gravity-physics.js';
 import { ch5State } from '../chapter5-state.js';
 import { killEuroScrub } from '../../../core/euro-counter.js';
-import { Y } from '../../../core/text-anim.js';
+import { Y_IN, Y_OUT } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch5-25k',
@@ -34,7 +34,7 @@ export default {
   },
 
   init({ gsap, ScrollTrigger }) {
-    gsap.set('#st-ch5-25k', { y: Y });
+    gsap.set('#st-ch5-25k', { y: Y_IN() });
 
     let flyTween     = null;
     let finalTween   = null;
@@ -115,7 +115,7 @@ export default {
         flyIn();
       },
       onLeaveBack() {
-        gsap.to('#st-ch5-25k', { opacity: 0, y: Y,  duration: 0.3, ease: 'power2.in' });
+        gsap.to('#st-ch5-25k', { opacity: 0, y: Y_IN(),  duration: 0.3, ease: 'power2.in' });
         flyBack();
       },
     });
@@ -124,7 +124,7 @@ export default {
       trigger:     '#s-ch5-25k',
       start:       'bottom 35%',
       onEnter() {
-        gsap.to('#st-ch5-25k',  { opacity: 0, y: -Y, duration: 0.3, ease: 'power2.in' });
+        gsap.to('#st-ch5-25k',  { opacity: 0, y: -Y_OUT(), duration: 0.3, ease: 'power2.in' });
         gsap.to('#euro-counter', { opacity: 0, duration: 0.3, ease: 'power1.in' });
       },
       onLeaveBack() {
