@@ -5,28 +5,24 @@ export const Y_OUT = () => window.innerHeight * 2 / 3;
 export const DUR_IN  = 0.5;
 export const DUR_OUT = 0.3;
 
-// Target scroll distances so text always moves at the same speed regardless of scene height.
-// Call setSceneVh(N) once at the top of each scene's init() before any textIn/textOut calls.
-const IN_VH  = 30;   // text drifts in over 30vh of scroll
-const OUT_VH = 18;   // text drifts out over 18vh of scroll
+// Fixed fraction of scene scroll progress — all scenes feel equally paced.
+const IN_PCT  = 0.15;
+const OUT_PCT = 0.10;
 
-let _sceneVh = 200;
-export function setSceneVh(vh) { _sceneVh = vh; }
+// setSceneVh is kept for backwards compatibility but no longer affects text animation speed.
+export function setSceneVh(_vh) {}
 
 export function textIn(tl, id, time) {
-  const d = IN_VH / _sceneVh;
-  tl.fromTo(id, { opacity: 0, y: Y_IN() }, { opacity: 1, y: 0, duration: d, ease: 'power2.out' }, time);
+  tl.fromTo(id, { opacity: 0, y: Y_IN() }, { opacity: 1, y: 0, duration: IN_PCT, ease: 'power2.out' }, time);
 }
 
 export function textOut(tl, id, time) {
-  const d = Math.min(OUT_VH / _sceneVh, 1.0 - time);
+  const d = Math.min(OUT_PCT, 1.0 - time);
   tl.to(id, { opacity: 0, y: -Y_OUT(), duration: d, ease: 'power2.in' }, time);
 }
 
 // Fades in at 1/3 scroll progress, briefly at center, fades out at 2/3.
 export function textThrough(tl, id) {
-  const dIn  = IN_VH  / _sceneVh;
-  const dOut = OUT_VH / _sceneVh;
-  tl.fromTo(id, { opacity: 0, y: Y_IN() }, { opacity: 1, y: 0, duration: dIn,  ease: 'power2.out' }, 1 / 3);
-  tl.to(id, { opacity: 0, y: -Y_OUT(), duration: dOut, ease: 'power2.in' }, 2 / 3 - dOut);
+  tl.fromTo(id, { opacity: 0, y: Y_IN() }, { opacity: 1, y: 0, duration: IN_PCT,  ease: 'power2.out' }, 1 / 3);
+  tl.to(id, { opacity: 0, y: -Y_OUT(), duration: OUT_PCT, ease: 'power2.in' }, 2 / 3 - OUT_PCT);
 }

@@ -23,9 +23,10 @@ export default {
 
   overlay: {
     id: 'st-ch5-17k',
-    html: `<p class="sl">EIN LEBEN VOLLER ZYKLEN ERFORDERT ÜBER</p>
+    html: `<p class="sl">EIN LEBEN VOLLER <br> ZYKLEN ERFORDERT ÜBER</p>
            <p class="sh">17.000</p>
-           <p class="sl">PERIODENPRODUKTE. DAZU KOMMEN SCHMERZMITTEL, ERSATZKLEIDUNG UND ANDERE NOTWENDIGKEITEN.</p>`,
+           <p class="sl">PERIODENPRODUKTE. DAZU KOMMEN <br> SCHMERZMITTEL, 
+           ERSATZKLEIDUNG <br> UND ANDERE NOTWENDIGKEITEN.</p>`,
   },
 
   init({ gsap, ScrollTrigger, stage }) {
