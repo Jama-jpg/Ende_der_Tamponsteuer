@@ -86,7 +86,7 @@ export default {
     textIn(tl, '#st-ch6-hover17', 0.42);
 
     // Beat 2 → Beat 3: "17%" and pie exit
-    textOut(tl, '#st-ch6-hover17', 0.76);
+    textOut(tl, '#st-ch6-hover17', 0.82);
     tl.to(povPie17,            { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.78);
 
     // Final overlay exit

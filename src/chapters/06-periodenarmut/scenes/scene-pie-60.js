@@ -8,7 +8,7 @@ import { textIn, textOut } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch6-pie60',
-  height: '150vh',
+  height: '200vh',
   skipSnapStart: true,
   skipSnapEnd: true,
   snapPoints: [0.70],

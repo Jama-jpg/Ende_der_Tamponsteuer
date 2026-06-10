@@ -7,7 +7,7 @@ import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch6-pie15',
-  height: '150vh',
+  height: '200vh',
   skipSnapStart: true,
   skipSnapEnd: true,
   snapPoints: [0.70],

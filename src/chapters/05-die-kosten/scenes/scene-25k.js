@@ -28,7 +28,7 @@ export default {
     /* #ch5-counter is kept invisible — it serves as the landing-position
        anchor for the flying euro counter. The actual value is shown by
        the #euro-counter element once it arrives here. */
-    html: `<p class="sl">ALLES ZUSAMMEN KOSTET EINE MENSTRUIERENDE PERSON IM LAUFE IHRES LEBENS RUND</p>
+    html: `<p class="sl">ALLES ZUSAMMEN <br> KOSTET EINE MENSTRUIERENDE PERSON <br> IM LAUFE IHRES LEBENS RUND</p>
            <p class="sh"><span id="ch5-counter" style="opacity:0">25.000</span></p>
            <p class="sl">.</p>`,
   },

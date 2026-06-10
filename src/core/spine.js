@@ -26,21 +26,53 @@ export function createSpine({ ScrollTrigger, refs }) {
 
   const dots = periodDots ? Array.from(periodDots.children) : [];
 
-  /* Grow the progress line from dot 0 to dot 3 (full spine). */
-  function render(progress) {
-    const y = Y_TOP + (Y_END - Y_TOP) * clamp01(progress);
+  /* ── Piecewise spine progress ──────────────────────────────────────
+     The spine is divided into 3 segments, each spanning exactly one
+     chapter boundary. The grey line reaches each dot precisely when
+     the chapter's last scene exits the viewport — not at a fixed
+     percentage of total scroll height.
+
+     Segment 0: #s3 top → #s-ch7-steuer-frage bottom  (Kapitel 1)
+     Segment 1: #s-ch7-steuer-frage bottom → #s-tl-layout-out bottom
+     Segment 2: #s-tl-layout-out bottom → #s-ch10-protest bottom    */
+
+  const SEG_Y = [DOT_YS[0], DOT_YS[1], DOT_YS[2], DOT_YS[3]];
+  const segProgress = [0, 0, 0];
+
+  function renderFromSegs() {
+    let y = SEG_Y[0];
+    for (let i = 0; i < 3; i++) {
+      y = SEG_Y[i] + (SEG_Y[i + 1] - SEG_Y[i]) * clamp01(segProgress[i]);
+      if (segProgress[i] < 1) break;
+    }
     cAxisProgress.setAttribute('y2', y);
   }
 
-  /* Drive from s3 (where user scrolling begins) to page end, so progress=0
-     right after the intro and progress=1 at the very last scene. */
   ScrollTrigger.create({
-    trigger:    '#s3',
-    start:      'top top',
-    endTrigger: document.body,
-    end:        'bottom bottom',
-    onUpdate:  (self) => render(self.progress),
-    onRefresh: (self) => render(self.progress),
+    trigger:     '#s3',
+    start:       'top top',
+    endTrigger:  '#s-ch7-steuer-frage',
+    end:         'bottom bottom',
+    onUpdate:  (self) => { segProgress[0] = self.progress; renderFromSegs(); },
+    onRefresh: (self) => { segProgress[0] = self.progress; renderFromSegs(); },
+  });
+
+  ScrollTrigger.create({
+    trigger:     '#s-ch7-steuer-frage',
+    start:       'bottom bottom',
+    endTrigger:  '#s-tl-layout-out',
+    end:         'bottom bottom',
+    onUpdate:  (self) => { segProgress[1] = self.progress; renderFromSegs(); },
+    onRefresh: (self) => { segProgress[1] = self.progress; renderFromSegs(); },
+  });
+
+  ScrollTrigger.create({
+    trigger:     '#s-tl-layout-out',
+    start:       'bottom bottom',
+    endTrigger:  '#s-ch10-protest',
+    end:         'bottom bottom',
+    onUpdate:  (self) => { segProgress[2] = self.progress; renderFromSegs(); },
+    onRefresh: (self) => { segProgress[2] = self.progress; renderFromSegs(); },
   });
 
   /* ── Dot filling ────────────────────────────────────────────────────
@@ -51,11 +83,22 @@ export function createSpine({ ScrollTrigger, refs }) {
   const fill  = (i) => dots[i]?.setAttribute('fill', FILLED);
   const empty = (i) => dots[i]?.setAttribute('fill', EMPTY);
 
+  const lblKapitel = document.getElementById('lbl-kapitel');
+  const lblPeriode = document.getElementById('lbl-periode');
+
   ScrollTrigger.create({
     trigger:     '#s-ch7-steuer-frage',
     start:       'bottom bottom',
-    onEnter:     () => fill(1),
-    onLeaveBack: () => empty(1),
+    onEnter: () => {
+      fill(1);
+      if (lblKapitel) lblKapitel.textContent = 'KAPITEL 2';
+      if (lblPeriode) lblPeriode.textContent = 'DIE TAMPONSSTEUER';
+    },
+    onLeaveBack: () => {
+      empty(1);
+      if (lblKapitel) lblKapitel.textContent = 'KAPITEL 1';
+      if (lblPeriode) lblPeriode.textContent = 'DIE PERIODE';
+    },
   });
 
   ScrollTrigger.create({
