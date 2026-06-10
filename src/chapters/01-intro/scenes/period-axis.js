@@ -38,7 +38,7 @@ export default {
       scrollTrigger: { trigger: '#s3', start: 'top top', end: 'bottom bottom', scrub: 0.4 },
     });
 
-    textIn(tl, '#st3', 0.02, { duration: 0.20 });
+    textIn(tl, '#st3', 0.02);
 
     tl
       /* Step 1: "Abonnement" text fades in — grey circle stays, no animation yet. */

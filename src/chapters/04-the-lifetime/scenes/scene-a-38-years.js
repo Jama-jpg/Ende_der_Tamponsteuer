@@ -104,8 +104,8 @@ export default {
 
     /* Phase A4: crossfade "Jeden Monat" → "FÜR 38 JAHRE". #st-p2 stays visible
        through the end of this scene — scene-b will crossfade to "456 mal". */
-    textOut(tl, '#st8',  0.58, { duration: 0.08 });
-    textIn(tl,  '#st-p2', 0.63, { duration: 0.10 });
+    textOut(tl, '#st8', 0.58);
+    textIn(tl, '#st-p2', 0.63);
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

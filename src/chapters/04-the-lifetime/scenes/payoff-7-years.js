@@ -26,8 +26,8 @@ export default {
       scrollTrigger: { trigger: '#s13', start: 'top top', end: 'bottom bottom', scrub: 1.5 },
     });
 
-    textOut(tl, '#st12', 0, { duration: 0.12 });
-    textIn(tl, '#st13', 0.65, { duration: 0.25 });
+    textOut(tl, '#st12', 0);
+    textIn(tl, '#st13', 0.65);
 
     tl
       .to(r.lineEls, {

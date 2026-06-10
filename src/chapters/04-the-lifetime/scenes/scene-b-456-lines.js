@@ -47,8 +47,8 @@ export default {
 
     /* Crossfade "38 Jahre" → "456 mal". #st-p3 stays visible through the end
        of this scene — scene-c will crossfade to "7 Jahre". */
-    textOut(tl, '#st-p2', 0.05, { duration: 0.10 });
-    textIn(tl,  '#st-p3', 0.12, { duration: 0.10 });
+    textOut(tl, '#st-p2', 0.05);
+    textIn(tl, '#st-p3', 0.12);
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

@@ -68,14 +68,14 @@ export default {
     tl.set([lblKapitel, lblPeriode, lblXxxx], { opacity: 1 }, 0);
 
     /* ── Text transitions ──────────────────────────────────────────── */
-    textOut(tl, '#st8',   0.00, { duration: 0.06 });
-    textIn(tl,  '#st-p1', 0.01, { duration: 0.06 });
-    textOut(tl, '#st-p1', 0.10, { duration: 0.05 });
-    textIn(tl,  '#st-p2', 0.26, { duration: 0.07 });
-    textOut(tl, '#st-p2', 0.53, { duration: 0.05 });
-    textIn(tl,  '#st-p3', 0.64, { duration: 0.07 });
-    textOut(tl, '#st-p3', 0.88, { duration: 0.05 });
-    textIn(tl,  '#st-p4', 0.87, { duration: 0.10 });
+    textOut(tl, '#st8', 0.00);
+    textIn(tl, '#st-p1', 0.01);
+    textOut(tl, '#st-p1', 0.10);
+    textIn(tl, '#st-p2', 0.26);
+    textOut(tl, '#st-p2', 0.53);
+    textIn(tl, '#st-p3', 0.64);
+    textOut(tl, '#st-p3', 0.88);
+    textIn(tl, '#st-p4', 0.87);
 
     /* ── Phase 1 (0→0.20): 12 circles → thin rect ─────────────────
        Fade out the previous scene's "JEDEN MONAT" text, show state-1

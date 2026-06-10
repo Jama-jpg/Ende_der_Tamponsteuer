@@ -66,8 +66,8 @@ export default {
       },
     });
 
-    textIn(tl,  '#st-ch10-was-bleibt', 0.05, { duration: 0.20 });
-    textOut(tl, '#st-ch10-was-bleibt', 0.82, { duration: 0.10 });
+    textIn(tl, '#st-ch10-was-bleibt', 0.05);
+    textOut(tl, '#st-ch10-was-bleibt', 0.82);
 
     tl
       .to(g, { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.15)

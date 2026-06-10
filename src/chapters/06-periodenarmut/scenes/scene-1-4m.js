@@ -48,11 +48,11 @@ export default {
       start:      'top top',
       onEnter() {
         gsap.to('#st-ch6-14m',      { opacity: 1, duration: 0.01 });
-        gsap.to('#st-ch6-14m-main', { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
+        gsap.to('#st-ch6-14m-main', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
       },
       onLeaveBack() {
         gsap.to('#st-ch6-hover17',  { opacity: 0, duration: 0.2 });
-        gsap.to('#st-ch6-14m-main', { opacity: 0, y: Y, duration: 0.25 });
+        gsap.to('#st-ch6-14m-main', { opacity: 0, y: Y_IN(), duration: 0.3 });
         gsap.to('#st-ch6-14m',      { opacity: 0, duration: 0.25, delay: 0.15 });
         povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R, 0, 0.01));
         gsap.set(povPie17, { opacity: 0 });
@@ -72,7 +72,7 @@ export default {
     });
 
     // Beat 1 → Beat 2: "1,4M" fades out, pie sweeps in, "17%" fades in
-    textOut(tl, '#st-ch6-14m-main', 0.30, { duration: 0.08 });
+    textOut(tl, '#st-ch6-14m-main', 0.30);
     tl.to(povPie17,            { opacity: 1, duration: 0.01                     }, 0.38);
     tl.to(pieProxy, {
       angle: PIE17_DEG,
@@ -82,10 +82,10 @@ export default {
         povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R, 0, Math.max(0.01, pieProxy.angle)));
       },
     }, 0.38);
-    textIn(tl,  '#st-ch6-hover17', 0.42, { duration: 0.08 });
+    textIn(tl, '#st-ch6-hover17', 0.42);
 
     // Beat 2 → Beat 3: "17%" and pie exit
-    textOut(tl, '#st-ch6-hover17', 0.76, { duration: 0.06 });
+    textOut(tl, '#st-ch6-hover17', 0.76);
     tl.to(povPie17,            { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.78);
 
     // Final overlay exit

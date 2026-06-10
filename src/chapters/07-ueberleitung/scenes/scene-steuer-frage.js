@@ -36,11 +36,11 @@ export default {
     });
 
     /* 20pct text and scale fade out together on enter */
-    textOut(tl, '#st-ch7-steuer-20pct', 0.05, { duration: 0.18 });
+    textOut(tl, '#st-ch7-steuer-20pct', 0.05);
     tl.to(waage, { opacity: 0, duration: 0.20, ease: 'power1.in' }, 0.05);
 
     // Bridging question in → out
-    textIn(tl,  '#st-ch7-steuer-frage', 0.28, { duration: 0.25 });
-    textOut(tl, '#st-ch7-steuer-frage', 0.80, { duration: 0.15 });
+    textIn(tl, '#st-ch7-steuer-frage', 0.28);
+    textOut(tl, '#st-ch7-steuer-frage', 0.80);
   },
 };

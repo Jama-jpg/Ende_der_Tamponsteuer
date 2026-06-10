@@ -36,8 +36,8 @@ export default {
       },
     });
 
-    textOut(tl, '#st5', 0, { duration: 0.15 });
-    textIn(tl, '#st7', 0.4, { duration: 0.25 });
+    textOut(tl, '#st5', 0);
+    textIn(tl, '#st7', 0.4);
 
     tl
       .to(r.pieHl, { opacity: 1, duration: 0.1, ease: 'none' }, 0.12)

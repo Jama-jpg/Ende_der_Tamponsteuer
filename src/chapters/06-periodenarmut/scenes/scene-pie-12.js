@@ -37,7 +37,7 @@ export default {
     });
 
     /* scene-steuer-intro owns #st-ch6-pie12 fade-out. */
-    textIn(tl, '#st-ch6-pie12', 0.12, { duration: 0.12 });
+    textIn(tl, '#st-ch6-pie12', 0.12);
     tl.to('#pov-pie-12',   { opacity: 1, duration: 0.01 }, 0.12);
 
     tl.to(proxy, {

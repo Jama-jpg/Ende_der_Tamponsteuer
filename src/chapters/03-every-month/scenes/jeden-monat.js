@@ -131,8 +131,8 @@ export default {
       },
     });
 
-    textOut(tl, '#st7', 0, { duration: 0.08 });
-    textIn(tl, '#st8', 0.10, { duration: 0.10 });
+    textOut(tl, '#st7', 0);
+    textIn(tl, '#st8', 0.10);
 
     tl
       /* Fade out pie sector from previous scene. */

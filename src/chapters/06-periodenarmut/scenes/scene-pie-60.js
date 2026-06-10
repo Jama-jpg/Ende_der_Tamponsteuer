@@ -39,8 +39,8 @@ export default {
     });
 
     /* scene-pie-15 owns #st-ch6-pie15 fade-out. */
-    textIn(tl,  '#st-ch6-pie60', 0.12, { duration: 0.12 });
-    textOut(tl, '#st-ch6-pie60', 0.92, { duration: 0.06 });
+    textIn(tl, '#st-ch6-pie60', 0.12);
+    textOut(tl, '#st-ch6-pie60', 0.92);
     tl.to('#pov-pie-60',   { opacity: 1, duration: 0.01 }, 0.12);
 
     tl.to(proxy, {

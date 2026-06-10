@@ -26,8 +26,8 @@ export default {
       scrollTrigger: { trigger: '#s5', start: 'top top', end: 'bottom bottom', scrub: 0.4 },
     });
 
-    textOut(tl, '#st3', 0.06, { duration: 0.08 });
-    textIn(tl, '#st5', 0.10, { duration: 0.25 });
+    textOut(tl, '#st3', 0.06);
+    textIn(tl, '#st5', 0.10);
 
     tl
       /* Circle grows. */

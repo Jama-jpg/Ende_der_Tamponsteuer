@@ -34,9 +34,9 @@ export default {
     });
 
     /* Crossfade "456 mal" → "7 JAHRE", then fade out at the end of the chapter. */
-    textOut(tl, '#st-p3', 0.00, { duration: 0.08 });
-    textIn(tl,  '#st-p4', 0.06, { duration: 0.10 });
-    textOut(tl, '#st-p4', 0.92, { duration: 0.06 });
+    textOut(tl, '#st-p3', 0.00);
+    textIn(tl, '#st-p4', 0.06);
+    textOut(tl, '#st-p4', 0.92);
 
     /* 456 lines converge back toward the rect centre (CX=775) */
     tl

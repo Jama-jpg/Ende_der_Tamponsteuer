@@ -22,8 +22,8 @@ export default {
       scrollTrigger: { trigger: '#s12', start: 'top top', end: 'bottom bottom', scrub: 1.5 },
     });
 
-    textOut(tl, '#st10', 0, { duration: 0.12 });
-    textIn(tl, '#st12', 0.65, { duration: 0.2 });
+    textOut(tl, '#st10', 0);
+    textIn(tl, '#st12', 0.65);
 
     tl
       .to(linesGrp, { opacity: 1, duration: 0.1 }, 0.06)

@@ -117,8 +117,8 @@ export default {
       },
     });
 
-    textIn(tl,  '#st-ch9-eu', 0.05, { duration: 0.20 });
-    textOut(tl, '#st-ch9-eu', 0.84, { duration: 0.10 });
+    textIn(tl, '#st-ch9-eu', 0.05);
+    textOut(tl, '#st-ch9-eu', 0.84);
 
     tl
       .to(g, { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.10)

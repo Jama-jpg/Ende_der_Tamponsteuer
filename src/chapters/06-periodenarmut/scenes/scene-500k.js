@@ -39,8 +39,8 @@ export default {
     });
 
     /* scene-1-4m owns #st-ch6-14m-main fade-out. */
-    textIn(tl,  '#st-ch6-500k', 0.10, { duration: 0.12 });
-    textOut(tl, '#st-ch6-500k', 0.92, { duration: 0.06 });
+    textIn(tl, '#st-ch6-500k', 0.10);
+    textOut(tl, '#st-ch6-500k', 0.92);
 
     /* Pre-set the sub-circle to full radius so it appears at full size when faded in */
     tl.set(povSub, { attr: { r: POV_SUB_R } }, 0);

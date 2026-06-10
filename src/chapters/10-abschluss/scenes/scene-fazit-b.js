@@ -24,7 +24,7 @@ export default {
       },
     });
 
-    textIn(tl,  '#st-ch10-fazit-b', 0.10, { duration: 0.25 });
-    textOut(tl, '#st-ch10-fazit-b', 0.80, { duration: 0.15 });
+    textIn(tl, '#st-ch10-fazit-b', 0.10);
+    textOut(tl, '#st-ch10-fazit-b', 0.80);
   },
 };

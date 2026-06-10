@@ -39,7 +39,7 @@ export default {
     // Fade out chapter-6 pie visuals immediately on enter
     tl.to([povSub, povPie90, povPie60, povPie15, povPie12],
       { opacity: 0, duration: 0.15, ease: 'power1.in' }, 0.0);
-    textOut(tl, '#st-ch6-pie12', 0.0, { duration: 0.10 });
-    textIn(tl,  '#st-ch7-steuer-intro', 0.18, { duration: 0.25 });
+    textOut(tl, '#st-ch6-pie12', 0.0);
+    textIn(tl, '#st-ch7-steuer-intro', 0.18);
   },
 };

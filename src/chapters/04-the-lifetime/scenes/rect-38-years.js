@@ -32,7 +32,7 @@ export default {
       .to(mCircles, { opacity: 0, duration: 0.08 }, 0.55)
       .to(mRect, { opacity: 1, duration: 0.18 }, 0.42);
 
-    textIn(tl, '#st10', 0.62, { duration: 0.25 });
+    textIn(tl, '#st10', 0.62);
 
     tl.to({}, { duration: 0.6 });
   },

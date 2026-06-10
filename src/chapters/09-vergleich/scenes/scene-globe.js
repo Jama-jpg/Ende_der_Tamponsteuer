@@ -171,8 +171,8 @@ export default {
       },
     });
 
-    textIn(tl,  '#st-ch9-globe', 0.05, { duration: 0.20 });
-    textOut(tl, '#st-ch9-globe', 0.88, { duration: 0.10 });
+    textIn(tl, '#st-ch9-globe', 0.05);
+    textOut(tl, '#st-ch9-globe', 0.88);
 
     tl
       // 0–15%: globe fades in, overlay appears

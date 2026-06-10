@@ -50,10 +50,10 @@ export default {
     });
 
     /* Steuer-intro text out */
-    textOut(tl, '#st-ch7-steuer-intro', 0.0, { duration: 0.10 });
+    textOut(tl, '#st-ch7-steuer-intro', 0.0);
 
     /* Right-side text in — stays visible until scene-steuer-20pct fades it out */
-    textIn(tl, '#st-ch7-steuer-10pct', 0.05, { duration: 0.18 });
+    textIn(tl, '#st-ch7-steuer-10pct', 0.05);
 
     /* Scale structure appears (beam + both arms become visible) */
     tl.to(waage, { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.18);

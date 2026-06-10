@@ -65,9 +65,9 @@ export default {
     );
 
     /* 10pct text stays visible while scale swings, then fades out */
-    textOut(tl, '#st-ch7-steuer-10pct', 0.35, { duration: 0.15 });
+    textOut(tl, '#st-ch7-steuer-10pct', 0.35);
 
     /* 20pct text fades in — stays visible until scene-steuer-frage fades it out */
-    textIn(tl, '#st-ch7-steuer-20pct', 0.45, { duration: 0.20 });
+    textIn(tl, '#st-ch7-steuer-20pct', 0.45);
   },
 };
