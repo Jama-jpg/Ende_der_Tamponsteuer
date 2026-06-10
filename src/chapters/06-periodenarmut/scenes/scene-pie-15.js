@@ -3,7 +3,7 @@
    15% sector sweeps in on top of 90% + 60%.
 ═══════════════════════════════════════════════════════════════════ */
 
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch6-pie15',
@@ -19,6 +19,7 @@ export default {
   },
 
   init({ gsap, stage, helpers, constants }) {
+    setSceneVh(150);
     const { povPie15 } = stage.refs;
     const { sectorPath } = helpers;
     const { POV_CX, POV_CY, POV_SUB_R } = constants;

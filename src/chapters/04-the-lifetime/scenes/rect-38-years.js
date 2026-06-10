@@ -4,7 +4,7 @@
    "38 Jahre" text.
 ═══════════════════════════════════════════════ */
 
-import { textIn } from '../../../core/text-anim.js';
+import { textIn, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's10',
@@ -16,6 +16,7 @@ export default {
   },
 
   init({ gsap, stage }) {
+    setSceneVh(320);
     const { mcEls, mCircles, mRect } = stage.refs;
 
     const tl = gsap.timeline({

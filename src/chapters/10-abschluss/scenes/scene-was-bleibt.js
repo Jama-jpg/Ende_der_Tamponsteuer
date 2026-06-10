@@ -1,4 +1,4 @@
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 /* „Was bleibt" — statistics on remaining burden despite 0% VAT */
 
@@ -25,6 +25,7 @@ export default {
   },
 
   init({ gsap, ScrollTrigger }) {
+    setSceneVh(200);
     const container = document.getElementById('tl-cards');
     const g = document.createElementNS(SVG_NS, 'g');
     g.setAttribute('id', 'stats-grp');

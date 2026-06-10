@@ -7,7 +7,7 @@
    (guards against the intro's programmatic scroll firing the trigger).
 ═══════════════════════════════════════════════ */
 
-import { textIn } from '../../../core/text-anim.js';
+import { textIn, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's3',
@@ -20,6 +20,7 @@ export default {
   },
 
   init({ gsap, ScrollTrigger, stage, controllers }) {
+    setSceneVh(250);
     const { cSpinner, cFill, cOutline, vatBigNum } = stage.refs;
     const { pulse } = controllers;
     const euroContainer = document.getElementById('euro-counter');

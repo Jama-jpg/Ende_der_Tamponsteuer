@@ -12,7 +12,7 @@
 ═══════════════════════════════════════════════════════════════════ */
 import { createPhysicsWorld } from '../gravity-physics.js';
 import { ch5State } from '../chapter5-state.js';
-import { Y_IN, Y_OUT } from '../../../core/text-anim.js';
+import { Y_IN, Y_OUT, DUR_IN, DUR_OUT } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch5-17k',
@@ -37,14 +37,14 @@ export default {
     ScrollTrigger.create({
       trigger:    '#s-ch5-17k',
       start:      'top 65%',
-      onEnter:    () => gsap.to('#st-ch5-17k', { opacity: 1, y: 0,       duration: 0.5, ease: 'power2.out' }),
-      onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 0, y: Y_IN(),  duration: 0.3, ease: 'power2.in' }),
+      onEnter:    () => gsap.to('#st-ch5-17k', { opacity: 1, y: 0,       duration: DUR_IN,  ease: 'power2.out' }),
+      onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 0, y: Y_IN(),  duration: DUR_OUT, ease: 'power2.in' }),
     });
     ScrollTrigger.create({
       trigger:    '#s-ch5-17k',
       start:      'bottom 35%',
-      onEnter:    () => gsap.to('#st-ch5-17k', { opacity: 0, y: -Y_OUT(), duration: 0.3, ease: 'power2.in' }),
-      onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 1, y: 0,  duration: 0.3, ease: 'power2.out' }),
+      onEnter:    () => gsap.to('#st-ch5-17k', { opacity: 0, y: -Y_OUT(), duration: DUR_OUT, ease: 'power2.in' }),
+      onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 1, y: 0,       duration: DUR_IN,  ease: 'power2.out' }),
     });
 
     /* ── Physics trigger via ScrollTrigger (once per page load) ─── */

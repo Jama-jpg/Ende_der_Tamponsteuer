@@ -4,7 +4,7 @@
    the "456 mal" text.
 ═══════════════════════════════════════════════ */
 
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's12',
@@ -16,6 +16,7 @@ export default {
   },
 
   init({ gsap, stage }) {
+    setSceneVh(300);
     const { linesGrp, lineEls } = stage.refs;
 
     const tl = gsap.timeline({

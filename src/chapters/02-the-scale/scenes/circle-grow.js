@@ -5,7 +5,7 @@
    scene automatically — no separate ScrollTrigger needed here.
 ═══════════════════════════════════════════════ */
 import { PIE_R } from '../../../core/constants.js';
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's5',
@@ -20,6 +20,7 @@ export default {
   },
 
   init({ gsap, stage }) {
+    setSceneVh(150);
     const { cFill } = stage.refs;
 
     const tl = gsap.timeline({

@@ -2,7 +2,7 @@
    Uses a sinusoidal projection to simulate 3D rotation driven by scroll. */
 
 import { COUNTRIES, rateColor, rateLabel } from '../globe-data.js';
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const CX = 775, CY = 281, R = 185;
@@ -37,6 +37,7 @@ export default {
   },
 
   init({ gsap, ScrollTrigger }) {
+    setSceneVh(350);
     const globeGrp   = document.getElementById('globe-grp');
     const latsGrp    = document.getElementById('globe-lats');
     const lonsGrp    = document.getElementById('globe-lons');

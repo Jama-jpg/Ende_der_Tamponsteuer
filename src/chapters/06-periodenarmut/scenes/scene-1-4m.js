@@ -9,7 +9,7 @@
 ═══════════════════════════════════════════════════════════════════ */
 import { POV_CX, POV_CY, POV_R } from '../../../core/constants.js';
 import { sectorPath } from '../../../core/svg.js';
-import { textIn, textOut, Y_IN } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh, Y_IN, DUR_IN, DUR_OUT } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch6-14m',
@@ -34,6 +34,7 @@ export default {
   },
 
   init({ gsap, ScrollTrigger, stage }) {
+    setSceneVh(300);
     const { povPie17 } = stage.refs;
     const PIE17_DEG = 61.2; // 17% of 360°
 
@@ -48,11 +49,11 @@ export default {
       start:      'top top',
       onEnter() {
         gsap.to('#st-ch6-14m',      { opacity: 1, duration: 0.01 });
-        gsap.to('#st-ch6-14m-main', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+        gsap.to('#st-ch6-14m-main', { opacity: 1, y: 0,      duration: DUR_IN,  ease: 'power2.out' });
       },
       onLeaveBack() {
-        gsap.to('#st-ch6-hover17',  { opacity: 0, duration: 0.2 });
-        gsap.to('#st-ch6-14m-main', { opacity: 0, y: Y_IN(), duration: 0.3 });
+        gsap.to('#st-ch6-hover17',  { opacity: 0, duration: DUR_OUT });
+        gsap.to('#st-ch6-14m-main', { opacity: 0, y: Y_IN(), duration: DUR_OUT });
         gsap.to('#st-ch6-14m',      { opacity: 0, duration: 0.25, delay: 0.15 });
         povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R, 0, 0.01));
         gsap.set(povPie17, { opacity: 0 });

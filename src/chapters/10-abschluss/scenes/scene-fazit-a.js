@@ -1,4 +1,4 @@
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch10-fazit-a',
@@ -15,6 +15,7 @@ export default {
   },
 
   init({ gsap, ScrollTrigger }) {
+    setSceneVh(150);
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-ch10-fazit-a',

@@ -12,7 +12,7 @@
      0.12–0.22  "456 mal" (#st-p3) fades in, stays visible through end
 ═══════════════════════════════════════════════════════════════════ */
 
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's-periode-b',
@@ -20,6 +20,7 @@ export default {
   skipSnapStart: true,
 
   init({ gsap, stage }) {
+    setSceneVh(150);
     const { linesGrp, lineEls } = stage.refs;
 
     const tl = gsap.timeline({

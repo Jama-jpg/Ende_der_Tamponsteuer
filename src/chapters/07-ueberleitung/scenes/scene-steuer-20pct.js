@@ -6,7 +6,7 @@
    Arms stay vertical throughout via the gravity helper.
 ═══════════════════════════════════════════════════════════════════ */
 import { applyGravity } from '../waage-gravity.js';
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch7-steuer-20pct',
@@ -22,6 +22,7 @@ export default {
   },
 
   init({ gsap }) {
+    setSceneVh(300);
     /* Text sits on the RIGHT — same side as scene 10pct */
     gsap.set('#st-ch7-steuer-20pct', { left: 'auto', right: '0' });
 

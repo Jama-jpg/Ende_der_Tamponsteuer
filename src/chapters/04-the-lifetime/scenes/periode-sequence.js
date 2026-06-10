@@ -1,4 +1,4 @@
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — Die Periode (unified 500vh sequence)
@@ -50,6 +50,7 @@ export default {
   },
 
   init({ gsap, stage }) {
+    setSceneVh(500);
     const r = stage.refs;
     const { mcEls, mCircles, mRect, rRect, linesGrp, lineEls, lines38Grp, line38Els,
             lblKapitel, lblPeriode, lblXxxx } = r;

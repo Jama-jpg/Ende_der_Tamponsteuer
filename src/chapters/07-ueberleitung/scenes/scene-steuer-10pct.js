@@ -5,7 +5,7 @@
    in, then the beam tips LEFT 20°.  Arms stay vertical via gravity.
 ═══════════════════════════════════════════════════════════════════ */
 import { applyGravity } from '../waage-gravity.js';
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch7-steuer-10pct',
@@ -23,6 +23,7 @@ export default {
   },
 
   init({ gsap }) {
+    setSceneVh(300);
     /* Text sits on the RIGHT — visual is on the left pan */
     gsap.set('#st-ch7-steuer-10pct', { left: 'auto', right: '0' });
 

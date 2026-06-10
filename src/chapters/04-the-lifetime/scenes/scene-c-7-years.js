@@ -13,7 +13,7 @@
      0.82–1.00  Hold
 ═══════════════════════════════════════════════════════════════════ */
 
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's-periode-c',
@@ -22,6 +22,7 @@ export default {
   snapPoints: [0.75],
 
   init({ gsap, ScrollTrigger, stage }) {
+    setSceneVh(150);
     const { linesGrp, lineEls, rRect } = stage.refs;
 
     const tl = gsap.timeline({

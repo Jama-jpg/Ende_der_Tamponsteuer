@@ -6,7 +6,7 @@
    everything automatically.
 ═══════════════════════════════════════════════ */
 
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's7',
@@ -20,6 +20,7 @@ export default {
   },
 
   init({ gsap, stage, helpers, constants }) {
+    setSceneVh(150);
     const r = stage.refs;
     const { sectorPath } = helpers;
     const { CX, CY, PIE_R } = constants;

@@ -1,4 +1,4 @@
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 /* Markttest: which retailers passed on the full 10% saving (Jan 2026) */
 
@@ -17,6 +17,7 @@ export default {
   },
 
   init({ gsap, ScrollTrigger, stage }) {
+    setSceneVh(200);
     const SVG_NS = 'http://www.w3.org/2000/svg';
 
     // Build a simple bar chart in SVG showing retailers

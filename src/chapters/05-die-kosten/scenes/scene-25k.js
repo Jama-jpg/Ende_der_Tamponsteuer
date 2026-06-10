@@ -14,7 +14,7 @@
 import { createPhysicsWorld } from '../gravity-physics.js';
 import { ch5State } from '../chapter5-state.js';
 import { killEuroScrub } from '../../../core/euro-counter.js';
-import { Y_IN, Y_OUT } from '../../../core/text-anim.js';
+import { Y_IN, Y_OUT, DUR_IN, DUR_OUT } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch5-25k',
@@ -111,11 +111,11 @@ export default {
       trigger:     '#s-ch5-25k',
       start:       'top 65%',
       onEnter() {
-        gsap.to('#st-ch5-25k', { opacity: 1, y: 0,  duration: 0.5, ease: 'power2.out' });
+        gsap.to('#st-ch5-25k', { opacity: 1, y: 0,       duration: DUR_IN,  ease: 'power2.out' });
         flyIn();
       },
       onLeaveBack() {
-        gsap.to('#st-ch5-25k', { opacity: 0, y: Y_IN(),  duration: 0.3, ease: 'power2.in' });
+        gsap.to('#st-ch5-25k', { opacity: 0, y: Y_IN(), duration: DUR_OUT, ease: 'power2.in' });
         flyBack();
       },
     });
@@ -124,12 +124,12 @@ export default {
       trigger:     '#s-ch5-25k',
       start:       'bottom 35%',
       onEnter() {
-        gsap.to('#st-ch5-25k',  { opacity: 0, y: -Y_OUT(), duration: 0.3, ease: 'power2.in' });
-        gsap.to('#euro-counter', { opacity: 0, duration: 0.3, ease: 'power1.in' });
+        gsap.to('#st-ch5-25k',   { opacity: 0, y: -Y_OUT(), duration: DUR_OUT, ease: 'power2.in' });
+        gsap.to('#euro-counter', { opacity: 0, duration: DUR_OUT, ease: 'power1.in' });
       },
       onLeaveBack() {
-        gsap.to('#st-ch5-25k',  { opacity: 1, y: 0,  duration: 0.3, ease: 'power2.out' });
-        gsap.to('#euro-counter', { opacity: 1, duration: 0.3, ease: 'power1.out' });
+        gsap.to('#st-ch5-25k',   { opacity: 1, y: 0,        duration: DUR_IN,  ease: 'power2.out' });
+        gsap.to('#euro-counter', { opacity: 1, duration: DUR_IN,  ease: 'power1.out' });
       },
     });
 

@@ -5,7 +5,7 @@
    of emphasis.
 ═══════════════════════════════════════════════ */
 
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's13',
@@ -18,6 +18,7 @@ export default {
   },
 
   init({ gsap, ScrollTrigger, stage, shared }) {
+    setSceneVh(250);
     const r = stage.refs;
     /* Same shrink scale the intro computed, so the pulse stays on-size. */
     const base = shared.vatScale ?? 0.056;

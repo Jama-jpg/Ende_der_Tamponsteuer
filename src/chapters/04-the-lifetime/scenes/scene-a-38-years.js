@@ -10,7 +10,7 @@
      0.82–1.00  Hold — user reads the label; scene B scrolls it away
 ═══════════════════════════════════════════════════════════════════ */
 import { MC_R } from '../../../core/constants.js';
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 const GOOEY_BLUR = 10;  // matches jeden-monat.js FULL_BLUR
 const GROW_R     = 22;  // circles grow to this radius so neighbours merge via gooey
@@ -43,6 +43,7 @@ export default {
   },
 
   init({ gsap, stage }) {
+    setSceneVh(200);
     const r = stage.refs;
     const { mcEls, mCircles, mRect, rRect, lines38Grp, line38Els, gooeyBlur } = r;
 

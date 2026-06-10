@@ -19,7 +19,7 @@
    Ends with the 12 circles in place for the Lifetime chapter.
 ═══════════════════════════════════════════════ */
 import { CX, CY, PIE_R, MC_X, MC_Y, MC_R } from '../../../core/constants.js';
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 /* ── Split physics tuning ───────────────────────────────────────────── */
 const HOLD       = 0.06;  // hold — big circle visible before split begins
@@ -49,6 +49,7 @@ export default {
   },
 
   init({ gsap, stage }) {
+    setSceneVh(500);
     const { cFill, mCircles, mcEls, gooeyBlur, pieHl } = stage.refs;
 
     const backOut  = gsap.parseEase(`back.out(${BOUNCE})`);
