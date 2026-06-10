@@ -2,6 +2,7 @@
    Uses a sinusoidal projection to simulate 3D rotation driven by scroll. */
 
 import { COUNTRIES, rateColor, rateLabel } from '../globe-data.js';
+import { textIn, textOut } from '../../../core/text-anim.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const CX = 775, CY = 281, R = 185;
@@ -170,10 +171,12 @@ export default {
       },
     });
 
+    textIn(tl,  '#st-ch9-globe', 0.05, { duration: 0.20 });
+    textOut(tl, '#st-ch9-globe', 0.88, { duration: 0.10 });
+
     tl
       // 0–15%: globe fades in, overlay appears
       .to(globeGrp,             { opacity: 1, duration: 0.15, ease: 'power1.out' }, 0)
-      .to('#st-ch9-globe',      { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.05)
       .to(latsGrp,              { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.08)
       .to(lonsGrp,              { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.10)
       // 15–60%: markers appear + globe rotates ~1.5 turns
@@ -195,7 +198,6 @@ export default {
       .to(labelsGrp,            { opacity: 1, duration: 0.15, ease: 'power1.out' }, 0.65)
       .to(legendGrp,            { opacity: 1, duration: 0.15, ease: 'power1.out' }, 0.70)
       // 88–100%: fade out
-      .to('#st-ch9-globe',      { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.88)
       .to(globeGrp,             { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.90);
   },
 };

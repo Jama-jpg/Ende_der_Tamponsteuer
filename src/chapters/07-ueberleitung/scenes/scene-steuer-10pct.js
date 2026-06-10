@@ -5,6 +5,7 @@
    in, then the beam tips LEFT 20°.  Arms stay vertical via gravity.
 ═══════════════════════════════════════════════════════════════════ */
 import { applyGravity } from '../waage-gravity.js';
+import { textIn, textOut } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch7-steuer-10pct',
@@ -49,10 +50,10 @@ export default {
     });
 
     /* Steuer-intro text out */
-    tl.to('#st-ch7-steuer-intro', { opacity: 0, duration: 0.10, ease: 'power1.in' }, 0.0);
+    textOut(tl, '#st-ch7-steuer-intro', 0.0, { duration: 0.10 });
 
     /* Right-side text in — stays visible until scene-steuer-20pct fades it out */
-    tl.to('#st-ch7-steuer-10pct', { opacity: 1, duration: 0.18, ease: 'power1.out' }, 0.05);
+    textIn(tl, '#st-ch7-steuer-10pct', 0.05, { duration: 0.18 });
 
     /* Scale structure appears (beam + both arms become visible) */
     tl.to(waage, { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.18);

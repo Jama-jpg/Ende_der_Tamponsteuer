@@ -6,6 +6,8 @@
    everything automatically.
 ═══════════════════════════════════════════════ */
 
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 export default {
   id: 's7',
   height: '150vh',
@@ -34,8 +36,10 @@ export default {
       },
     });
 
+    textOut(tl, '#st5', 0, { duration: 0.15 });
+    textIn(tl, '#st7', 0.4, { duration: 0.25 });
+
     tl
-      .to('#st5', { opacity: 0, duration: 0.15, ease: 'power1.in' }, 0)
       .to(r.pieHl, { opacity: 1, duration: 0.1, ease: 'none' }, 0.12)
       .to(pieProxy, {
         angle: 93.6,
@@ -44,7 +48,6 @@ export default {
         onUpdate() {
           r.pieHl.setAttribute('d', sectorPath(CX, CY, PIE_R, 0, pieProxy.angle));
         },
-      }, 0.12)
-      .to('#st7', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.4);
+      }, 0.12);
   },
 };

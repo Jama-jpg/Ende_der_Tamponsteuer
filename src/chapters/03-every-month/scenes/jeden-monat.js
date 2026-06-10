@@ -19,6 +19,7 @@
    Ends with the 12 circles in place for the Lifetime chapter.
 ═══════════════════════════════════════════════ */
 import { CX, CY, PIE_R, MC_X, MC_Y, MC_R } from '../../../core/constants.js';
+import { textIn, textOut } from '../../../core/text-anim.js';
 
 /* ── Split physics tuning ───────────────────────────────────────────── */
 const HOLD       = 0.06;  // hold — big circle visible before split begins
@@ -130,12 +131,12 @@ export default {
       },
     });
 
+    textOut(tl, '#st7', 0, { duration: 0.08 });
+    textIn(tl, '#st8', 0.10, { duration: 0.10 });
+
     tl
-      /* Fade out pie sector and "26% der Weltbevölkerung" text from previous scene. */
-      .to([pieHl, '#st7'], { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0)
-      /* "Jeden Monat" stays visible through the end — scene-a crossfades to "38 Jahre". */
-      /* (#st5 is faded by pie-26 when the user enters this scene.) */
-      .to('#st8', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.10);
+      /* Fade out pie sector from previous scene. */
+      .to(pieHl, { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0);
 
     /* Initial position: all 12 circles stacked at (775,281,r=PIE_R) — visually
        identical to cFill. prevInHold=true so no opacity change here. */

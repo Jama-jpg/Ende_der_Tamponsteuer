@@ -1,3 +1,5 @@
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 /* Markttest: which retailers passed on the full 10% saving (Jan 2026) */
 
 export default {
@@ -105,10 +107,11 @@ export default {
       },
     });
 
+    textIn(tl,  '#st-ch9-realitaet', 0.05, { duration: 0.20 });
+    textOut(tl, '#st-ch9-realitaet', 0.82, { duration: 0.10 });
+
     tl
-      .to('#st-ch9-realitaet', { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.05)
-      .to(g,                   { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.15)
-      .to('#st-ch9-realitaet', { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.82)
-      .to(g,                   { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.88);
+      .to(g, { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.15)
+      .to(g, { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.88);
   },
 };

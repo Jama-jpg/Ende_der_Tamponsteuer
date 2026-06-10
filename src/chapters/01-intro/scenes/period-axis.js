@@ -7,6 +7,8 @@
    (guards against the intro's programmatic scroll firing the trigger).
 ═══════════════════════════════════════════════ */
 
+import { textIn } from '../../../core/text-anim.js';
+
 export default {
   id: 's3',
   height: '250vh',
@@ -36,9 +38,10 @@ export default {
       scrollTrigger: { trigger: '#s3', start: 'top top', end: 'bottom bottom', scrub: 0.4 },
     });
 
+    textIn(tl, '#st3', 0.02, { duration: 0.20 });
+
     tl
       /* Step 1: "Abonnement" text fades in — grey circle stays, no animation yet. */
-      .to('#st3',     { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.02)
       /* [snap at 0.28] — reader pauses here: text visible, grey circle only. */
       /* Step 2: Spinner appears and draws clockwise around the grey outline. */
       .to(cSpinner,   { opacity: 1, duration: 0.06 }, 0.32)

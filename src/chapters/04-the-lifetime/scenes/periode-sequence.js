@@ -1,3 +1,5 @@
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — Die Periode (unified 500vh sequence)
    One sticky section drives 5 visual phases in a single ScrollTrigger.
@@ -65,12 +67,20 @@ export default {
     tl.set('#st-periode', { opacity: 1 }, 0);
     tl.set([lblKapitel, lblPeriode, lblXxxx], { opacity: 1 }, 0);
 
+    /* ── Text transitions ──────────────────────────────────────────── */
+    textOut(tl, '#st8',   0.00, { duration: 0.06 });
+    textIn(tl,  '#st-p1', 0.01, { duration: 0.06 });
+    textOut(tl, '#st-p1', 0.10, { duration: 0.05 });
+    textIn(tl,  '#st-p2', 0.26, { duration: 0.07 });
+    textOut(tl, '#st-p2', 0.53, { duration: 0.05 });
+    textIn(tl,  '#st-p3', 0.64, { duration: 0.07 });
+    textOut(tl, '#st-p3', 0.88, { duration: 0.05 });
+    textIn(tl,  '#st-p4', 0.87, { duration: 0.10 });
+
     /* ── Phase 1 (0→0.20): 12 circles → thin rect ─────────────────
        Fade out the previous scene's "JEDEN MONAT" text, show state-1
        text, then collapse the month circles into the thin mRect.       */
     tl
-      .to('#st8', { opacity: 0, duration: 0.06 }, 0)
-      .to('#st-p1', { opacity: 1, duration: 0.06, ease: 'power1.out' }, 0.01)
       .to(mcEls, {
         attr: { r: 0 },
         stagger: { each: 0.006, from: 'start' },
@@ -78,7 +88,6 @@ export default {
         duration: 0.04,
       }, 0.09)
       .to(mRect, { opacity: 1, duration: 0.04 }, 0.12)
-      .to('#st-p1', { opacity: 0, duration: 0.05 }, 0.10)
       .to(mCircles, { opacity: 0, duration: 0.04 }, 0.17);
 
     /* ── Phase 2 (0.20→0.40): thin rect widens + "FÜR 38 JAHRE" ─── */
@@ -87,12 +96,10 @@ export default {
         attr: { x: 650, width: 150 },
         ease: 'power2.inOut',
         duration: 0.17,
-      }, 0.20)
-      .to('#st-p2', { opacity: 1, duration: 0.07, ease: 'power1.out' }, 0.26);
+      }, 0.20);
 
     /* ── Phase 3 (0.40→0.60): 38 year-dividers appear in the rect ── */
     tl
-      .to('#st-p2', { opacity: 0, duration: 0.05 }, 0.53)
       .to(lines38Grp, { opacity: 1, duration: 0.03 }, 0.42)
       .to(line38Els, {
         attr: { x1: 650, x2: 800 },
@@ -113,15 +120,13 @@ export default {
         stagger: { each: 0.00015, from: 'start' },
         ease: 'power2.out',
         duration: 0.08,
-      }, 0.61)
-      .to('#st-p3', { opacity: 1, duration: 0.07, ease: 'power1.out' }, 0.64);
+      }, 0.61);
 
     /* ── Phase 5 (0.80→1.00): lines converge, 7-year block revealed ─
        Lines collapse back toward the rect centre, the group fades out,
        then the light-pink rRect overlay fades in over the bottom 31
        years — leaving the top 7-year strip visually solid red.         */
     tl
-      .to('#st-p3', { opacity: 0, duration: 0.05 }, 0.88)
       .to(lineEls, {
         attr: { x1: 724, x2: 726 },
         stagger: { each: 0.00008, from: 'random' },
@@ -130,7 +135,6 @@ export default {
       }, 0.80)
       .to(linesGrp, { opacity: 0, duration: 0.07 }, 0.87)
       .to(rRect, { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.85)
-      .to('#st-p4', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.87)
       /* Pad to keep total timeline duration at 1.0 */
       .to({}, { duration: 0.02 }, 0.98);
   },

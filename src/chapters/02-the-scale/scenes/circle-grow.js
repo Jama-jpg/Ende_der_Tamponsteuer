@@ -5,6 +5,7 @@
    scene automatically — no separate ScrollTrigger needed here.
 ═══════════════════════════════════════════════ */
 import { PIE_R } from '../../../core/constants.js';
+import { textIn, textOut } from '../../../core/text-anim.js';
 
 export default {
   id: 's5',
@@ -25,12 +26,12 @@ export default {
       scrollTrigger: { trigger: '#s5', start: 'top top', end: 'bottom bottom', scrub: 0.4 },
     });
 
+    textOut(tl, '#st3', 0.06, { duration: 0.08 });
+    textIn(tl, '#st5', 0.10, { duration: 0.25 });
+
     tl
       /* Circle grows. */
-      .to(cFill,  { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.80 }, 0)
+      .to(cFill,  { attr: { r: PIE_R }, ease: 'power2.out', duration: 0.80 }, 0);
       /* #st3 (from s3) stays visible through the circle animation, fades out as new text arrives. */
-      .to('#st3', { opacity: 0, duration: 0.08, ease: 'power1.in' }, 0.06)
-      /* New text fades in — pie-26.js owns the fade-out once hover is active. */
-      .to('#st5', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.10);
   },
 };

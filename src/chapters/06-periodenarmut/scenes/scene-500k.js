@@ -9,6 +9,7 @@
      0.50–1.00  Hold
 ═══════════════════════════════════════════════════════════════════ */
 import { POV_SUB_R } from '../../../core/constants.js';
+import { textIn, textOut } from '../../../core/text-anim.js';
 
 const POV_SUB_CIRC = 2 * Math.PI * 108; // ≈ 678.6 — must match markup stroke-dasharray
 
@@ -38,8 +39,8 @@ export default {
     });
 
     /* scene-1-4m owns #st-ch6-14m-main fade-out. */
-    tl.to('#st-ch6-500k', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.10);
-    tl.to('#st-ch6-500k', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
+    textIn(tl,  '#st-ch6-500k', 0.10, { duration: 0.12 });
+    textOut(tl, '#st-ch6-500k', 0.92, { duration: 0.06 });
 
     /* Pre-set the sub-circle to full radius so it appears at full size when faded in */
     tl.set(povSub, { attr: { r: POV_SUB_R } }, 0);

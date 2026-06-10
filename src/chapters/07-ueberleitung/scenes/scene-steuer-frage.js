@@ -1,3 +1,5 @@
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — Woher kommt diese Ungleichheit?  (Chapter 7 · Scene 4)
    Scale fades out; the bridging question leads the reader into the
@@ -34,11 +36,11 @@ export default {
     });
 
     /* 20pct text and scale fade out together on enter */
-    tl.to('#st-ch7-steuer-20pct', { opacity: 0, duration: 0.18, ease: 'power1.in' }, 0.05);
+    textOut(tl, '#st-ch7-steuer-20pct', 0.05, { duration: 0.18 });
     tl.to(waage, { opacity: 0, duration: 0.20, ease: 'power1.in' }, 0.05);
 
     // Bridging question in → out
-    tl.to('#st-ch7-steuer-frage', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.28);
-    tl.to('#st-ch7-steuer-frage', { opacity: 0, duration: 0.15, ease: 'power1.in'  }, 0.80);
+    textIn(tl,  '#st-ch7-steuer-frage', 0.28, { duration: 0.25 });
+    textOut(tl, '#st-ch7-steuer-frage', 0.80, { duration: 0.15 });
   },
 };

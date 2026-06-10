@@ -10,6 +10,7 @@
      0.82–1.00  Hold — user reads the label; scene B scrolls it away
 ═══════════════════════════════════════════════════════════════════ */
 import { MC_R } from '../../../core/constants.js';
+import { textIn, textOut } from '../../../core/text-anim.js';
 
 const GOOEY_BLUR = 10;  // matches jeden-monat.js FULL_BLUR
 const GROW_R     = 22;  // circles grow to this radius so neighbours merge via gooey
@@ -103,8 +104,8 @@ export default {
 
     /* Phase A4: crossfade "Jeden Monat" → "FÜR 38 JAHRE". #st-p2 stays visible
        through the end of this scene — scene-b will crossfade to "456 mal". */
-    tl.to('#st8',  { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.58);
-    tl.to('#st-p2', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.63);
+    textOut(tl, '#st8',  0.58, { duration: 0.08 });
+    textIn(tl,  '#st-p2', 0.63, { duration: 0.10 });
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

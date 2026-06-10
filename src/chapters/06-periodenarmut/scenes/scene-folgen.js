@@ -9,6 +9,8 @@
      0.38–1.00  Hold
 ═══════════════════════════════════════════════════════════════════ */
 
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 export default {
   id: 's-ch6-folgen',
   height: '150vh',
@@ -33,8 +35,8 @@ export default {
     });
 
     /* scene-500k owns #st-ch6-500k fade-out. */
-    tl.to('#st-ch6-folgen', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
-    tl.to('#st-ch6-folgen', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
+    textIn(tl,  '#st-ch6-folgen', 0.12, { duration: 0.12 });
+    textOut(tl, '#st-ch6-folgen', 0.92, { duration: 0.06 });
 
     tl.to([povCircle, povPie17], { opacity: 0, ease: 'power1.in', duration: 0.24 }, 0.14);
 

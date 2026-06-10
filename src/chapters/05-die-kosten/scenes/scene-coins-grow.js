@@ -15,6 +15,7 @@
 ═══════════════════════════════════════════════════════════════════ */
 import { ch5State } from '../chapter5-state.js';
 import { POV_R } from '../../../core/constants.js';
+import { Y } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch5-grow',
@@ -29,18 +30,20 @@ export default {
   },
 
   init({ gsap, ScrollTrigger }) {
+    gsap.set('#st-ch5-grow', { y: Y });
+
     /* ── Text (non-scrub) ────────────────────────────────────────── */
     ScrollTrigger.create({
       trigger:     '#s-ch5-grow',
       start:       'top 65%',
-      onEnter:     () => gsap.to('#st-ch5-grow', { opacity: 1, duration: 0.5, ease: 'power1.out' }),
-      onLeaveBack: () => gsap.to('#st-ch5-grow', { opacity: 0, duration: 0.3, ease: 'power1.in' }),
+      onEnter:     () => gsap.to('#st-ch5-grow', { opacity: 1, y: 0,  duration: 0.5, ease: 'power2.out' }),
+      onLeaveBack: () => gsap.to('#st-ch5-grow', { opacity: 0, y: Y,  duration: 0.3, ease: 'power2.in' }),
     });
     ScrollTrigger.create({
       trigger:     '#s-ch5-grow',
       start:       'bottom 35%',
-      onEnter:     () => gsap.to('#st-ch5-grow', { opacity: 0, duration: 0.3, ease: 'power1.in' }),
-      onLeaveBack: () => gsap.to('#st-ch5-grow', { opacity: 1, duration: 0.3, ease: 'power1.out' }),
+      onEnter:     () => gsap.to('#st-ch5-grow', { opacity: 0, y: -Y, duration: 0.3, ease: 'power2.in' }),
+      onLeaveBack: () => gsap.to('#st-ch5-grow', { opacity: 1, y: 0,  duration: 0.3, ease: 'power2.out' }),
     });
 
     /* ── Freeze physics when scene becomes visible ───────────────── */

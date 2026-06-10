@@ -12,6 +12,7 @@
 ═══════════════════════════════════════════════════════════════════ */
 import { createPhysicsWorld } from '../gravity-physics.js';
 import { ch5State } from '../chapter5-state.js';
+import { Y } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch5-17k',
@@ -30,18 +31,20 @@ export default {
   init({ gsap, ScrollTrigger, stage }) {
     const { mRect, rRect, lines38Grp } = stage.refs;
 
+    gsap.set('#st-ch5-17k', { y: Y });
+
     /* ── Text overlay: fade in when section is in view (no scrub) ── */
     ScrollTrigger.create({
       trigger:    '#s-ch5-17k',
       start:      'top 65%',
-      onEnter:    () => gsap.to('#st-ch5-17k', { opacity: 1, duration: 0.5, ease: 'power1.out' }),
-      onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 0, duration: 0.3, ease: 'power1.in' }),
+      onEnter:    () => gsap.to('#st-ch5-17k', { opacity: 1, y: 0,  duration: 0.5, ease: 'power2.out' }),
+      onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 0, y: Y,  duration: 0.3, ease: 'power2.in' }),
     });
     ScrollTrigger.create({
       trigger:    '#s-ch5-17k',
       start:      'bottom 35%',
-      onEnter:    () => gsap.to('#st-ch5-17k', { opacity: 0, duration: 0.3, ease: 'power1.in' }),
-      onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 1, duration: 0.3, ease: 'power1.out' }),
+      onEnter:    () => gsap.to('#st-ch5-17k', { opacity: 0, y: -Y, duration: 0.3, ease: 'power2.in' }),
+      onLeaveBack:() => gsap.to('#st-ch5-17k', { opacity: 1, y: 0,  duration: 0.3, ease: 'power2.out' }),
     });
 
     /* ── Physics trigger via ScrollTrigger (once per page load) ─── */

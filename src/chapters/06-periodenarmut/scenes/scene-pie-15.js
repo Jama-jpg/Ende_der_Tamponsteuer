@@ -3,6 +3,8 @@
    15% sector sweeps in on top of 90% + 60%.
 ═══════════════════════════════════════════════════════════════════ */
 
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 export default {
   id: 's-ch6-pie15',
   height: '150vh',
@@ -34,9 +36,9 @@ export default {
       },
     });
 
-    /* scene-pie-60 owns #st-ch6-pie60 fade-out. */
-    tl.to('#st-ch6-pie15', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
-    tl.to('#st-ch6-pie15', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
+    /* scene-pie-12 owns #st-ch6-pie12 fade-out. */
+    textIn(tl,  '#st-ch6-pie15', 0.12, { duration: 0.12 });
+    textOut(tl, '#st-ch6-pie15', 0.92, { duration: 0.06 });
     tl.to('#pov-pie-15',   { opacity: 1, duration: 0.01 }, 0.12);
 
     tl.to(proxy, {

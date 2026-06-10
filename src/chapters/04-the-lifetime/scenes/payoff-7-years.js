@@ -5,6 +5,8 @@
    of emphasis.
 ═══════════════════════════════════════════════ */
 
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 export default {
   id: 's13',
   height: '250vh',
@@ -24,8 +26,10 @@ export default {
       scrollTrigger: { trigger: '#s13', start: 'top top', end: 'bottom bottom', scrub: 1.5 },
     });
 
+    textOut(tl, '#st12', 0, { duration: 0.12 });
+    textIn(tl, '#st13', 0.65, { duration: 0.25 });
+
     tl
-      .to('#st12', { opacity: 0, duration: 0.12 }, 0)
       .to(r.lineEls, {
         y: 640,
         opacity: 0,
@@ -36,7 +40,6 @@ export default {
       .to(r.mRect,    { opacity: 0, duration: 0.22 }, 0.12)
       .to(r.linesGrp, { opacity: 0, duration: 0.08 }, 0.62)
       .to(r.rRect,    { opacity: 1, duration: 0.28, ease: 'power1.out' }, 0.52)
-      .to('#st13',    { opacity: 1, duration: 0.25 }, 0.65)
       .to(r.vatBigEl, { scale: base * 1.45, color: '#D63335', duration: 0.1, ease: 'power2.out' }, 0.76)
       .to(r.vatBigEl, { scale: base, color: '#1a1a1a', duration: 0.12, ease: 'power2.in' }, 0.87);
 

@@ -4,6 +4,8 @@
    the "456 mal" text.
 ═══════════════════════════════════════════════ */
 
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 export default {
   id: 's12',
   height: '300vh',
@@ -20,8 +22,10 @@ export default {
       scrollTrigger: { trigger: '#s12', start: 'top top', end: 'bottom bottom', scrub: 1.5 },
     });
 
+    textOut(tl, '#st10', 0, { duration: 0.12 });
+    textIn(tl, '#st12', 0.65, { duration: 0.2 });
+
     tl
-      .to('#st10', { opacity: 0, duration: 0.12 }, 0)
       .to(linesGrp, { opacity: 1, duration: 0.1 }, 0.06)
       .to(lineEls, {
         attr: () => ({
@@ -31,7 +35,6 @@ export default {
         stagger: { each: 0.0028, from: 'start' },
         ease: 'power2.out',
         duration: 0.55,
-      }, 0.08)
-      .to('#st12', { opacity: 1, duration: 0.2 }, 0.65);
+      }, 0.08);
   },
 };

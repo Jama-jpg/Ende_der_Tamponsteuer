@@ -9,6 +9,7 @@
 ═══════════════════════════════════════════════════════════════════ */
 import { POV_CX, POV_CY, POV_R } from '../../../core/constants.js';
 import { sectorPath } from '../../../core/svg.js';
+import { textIn, textOut, Y } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch6-14m',
@@ -36,6 +37,8 @@ export default {
     const { povPie17 } = stage.refs;
     const PIE17_DEG = 61.2; // 17% of 360°
 
+    gsap.set('#st-ch6-14m-main', { y: Y });
+
     /* Reset sector to tiny sliver so the sweep starts from 0 */
     povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R, 0, 0.01));
 
@@ -45,11 +48,11 @@ export default {
       start:      'top top',
       onEnter() {
         gsap.to('#st-ch6-14m',      { opacity: 1, duration: 0.01 });
-        gsap.to('#st-ch6-14m-main', { opacity: 1, duration: 0.4, ease: 'power1.out' });
+        gsap.to('#st-ch6-14m-main', { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
       },
       onLeaveBack() {
         gsap.to('#st-ch6-hover17',  { opacity: 0, duration: 0.2 });
-        gsap.to('#st-ch6-14m-main', { opacity: 0, duration: 0.25 });
+        gsap.to('#st-ch6-14m-main', { opacity: 0, y: Y, duration: 0.25 });
         gsap.to('#st-ch6-14m',      { opacity: 0, duration: 0.25, delay: 0.15 });
         povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R, 0, 0.01));
         gsap.set(povPie17, { opacity: 0 });
@@ -69,7 +72,7 @@ export default {
     });
 
     // Beat 1 → Beat 2: "1,4M" fades out, pie sweeps in, "17%" fades in
-    tl.to('#st-ch6-14m-main', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.30);
+    textOut(tl, '#st-ch6-14m-main', 0.30, { duration: 0.08 });
     tl.to(povPie17,            { opacity: 1, duration: 0.01                     }, 0.38);
     tl.to(pieProxy, {
       angle: PIE17_DEG,
@@ -79,10 +82,10 @@ export default {
         povPie17.setAttribute('d', sectorPath(POV_CX, POV_CY, POV_R, 0, Math.max(0.01, pieProxy.angle)));
       },
     }, 0.38);
-    tl.to('#st-ch6-hover17',   { opacity: 1, duration: 0.08, ease: 'power1.out' }, 0.42);
+    textIn(tl,  '#st-ch6-hover17', 0.42, { duration: 0.08 });
 
     // Beat 2 → Beat 3: "17%" and pie exit
-    tl.to('#st-ch6-hover17',   { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.76);
+    textOut(tl, '#st-ch6-hover17', 0.76, { duration: 0.06 });
     tl.to(povPie17,            { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.78);
 
     // Final overlay exit

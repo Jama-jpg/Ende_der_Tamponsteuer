@@ -1,3 +1,5 @@
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 /* „Was bleibt" — statistics on remaining burden despite 0% VAT */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -64,10 +66,11 @@ export default {
       },
     });
 
+    textIn(tl,  '#st-ch10-was-bleibt', 0.05, { duration: 0.20 });
+    textOut(tl, '#st-ch10-was-bleibt', 0.82, { duration: 0.10 });
+
     tl
-      .to('#st-ch10-was-bleibt', { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.05)
-      .to(g,                     { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.15)
-      .to('#st-ch10-was-bleibt', { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.82)
-      .to(g,                     { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.88);
+      .to(g, { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.15)
+      .to(g, { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.88);
   },
 };

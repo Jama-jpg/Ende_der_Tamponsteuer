@@ -4,6 +4,8 @@
    "38 Jahre" text.
 ═══════════════════════════════════════════════ */
 
+import { textIn } from '../../../core/text-anim.js';
+
 export default {
   id: 's10',
   height: '320vh',
@@ -28,8 +30,10 @@ export default {
         duration: 0.35,
       }, 0.02)
       .to(mCircles, { opacity: 0, duration: 0.08 }, 0.55)
-      .to(mRect, { opacity: 1, duration: 0.18 }, 0.42)
-      .to('#st10', { opacity: 1, duration: 0.25 }, 0.62)
-      .to({}, { duration: 0.6 });
+      .to(mRect, { opacity: 1, duration: 0.18 }, 0.42);
+
+    textIn(tl, '#st10', 0.62, { duration: 0.25 });
+
+    tl.to({}, { duration: 0.6 });
   },
 };

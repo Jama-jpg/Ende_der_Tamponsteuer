@@ -1,3 +1,5 @@
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 /* EU comparison table: VAT on period products 2026 */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -115,10 +117,11 @@ export default {
       },
     });
 
+    textIn(tl,  '#st-ch9-eu', 0.05, { duration: 0.20 });
+    textOut(tl, '#st-ch9-eu', 0.84, { duration: 0.10 });
+
     tl
-      .to('#st-ch9-eu', { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.05)
-      .to(g,            { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.10)
-      .to('#st-ch9-eu', { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.84)
-      .to(g,            { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.90);
+      .to(g, { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.10)
+      .to(g, { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.90);
   },
 };

@@ -3,6 +3,8 @@
    12% sector sweeps in, completing the cumulative pie.
 ═══════════════════════════════════════════════════════════════════ */
 
+import { textIn } from '../../../core/text-anim.js';
+
 export default {
   id: 's-ch6-pie12',
   height: '150vh',
@@ -34,8 +36,8 @@ export default {
       },
     });
 
-    /* scene-pie-15 owns #st-ch6-pie15 fade-out. */
-    tl.to('#st-ch6-pie12', { opacity: 1, duration: 0.12, ease: 'power1.out' }, 0.12);
+    /* scene-steuer-intro owns #st-ch6-pie12 fade-out. */
+    textIn(tl, '#st-ch6-pie12', 0.12, { duration: 0.12 });
     tl.to('#pov-pie-12',   { opacity: 1, duration: 0.01 }, 0.12);
 
     tl.to(proxy, {

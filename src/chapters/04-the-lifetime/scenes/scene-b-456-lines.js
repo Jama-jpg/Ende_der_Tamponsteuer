@@ -12,6 +12,8 @@
      0.12–0.22  "456 mal" (#st-p3) fades in, stays visible through end
 ═══════════════════════════════════════════════════════════════════ */
 
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 export default {
   id: 's-periode-b',
   height: '150vh',
@@ -45,8 +47,8 @@ export default {
 
     /* Crossfade "38 Jahre" → "456 mal". #st-p3 stays visible through the end
        of this scene — scene-c will crossfade to "7 Jahre". */
-    tl.to('#st-p2', { opacity: 0, duration: 0.10, ease: 'power1.in'  }, 0.05);
-    tl.to('#st-p3', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.12);
+    textOut(tl, '#st-p2', 0.05, { duration: 0.10 });
+    textIn(tl,  '#st-p3', 0.12, { duration: 0.10 });
 
     tl.to({}, { duration: 0.02 }, 0.98);
   },

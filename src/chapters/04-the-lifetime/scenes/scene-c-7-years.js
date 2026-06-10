@@ -13,6 +13,8 @@
      0.82–1.00  Hold
 ═══════════════════════════════════════════════════════════════════ */
 
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 export default {
   id: 's-periode-c',
   height: '150vh',
@@ -32,9 +34,9 @@ export default {
     });
 
     /* Crossfade "456 mal" → "7 JAHRE", then fade out at the end of the chapter. */
-    tl.to('#st-p3', { opacity: 0, duration: 0.08, ease: 'power1.in'  }, 0.00);
-    tl.to('#st-p4', { opacity: 1, duration: 0.10, ease: 'power1.out' }, 0.06);
-    tl.to('#st-p4', { opacity: 0, duration: 0.06, ease: 'power1.in'  }, 0.92);
+    textOut(tl, '#st-p3', 0.00, { duration: 0.08 });
+    textIn(tl,  '#st-p4', 0.06, { duration: 0.10 });
+    textOut(tl, '#st-p4', 0.92, { duration: 0.06 });
 
     /* 456 lines converge back toward the rect centre (CX=775) */
     tl

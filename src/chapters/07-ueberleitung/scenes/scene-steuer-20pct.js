@@ -6,6 +6,7 @@
    Arms stay vertical throughout via the gravity helper.
 ═══════════════════════════════════════════════════════════════════ */
 import { applyGravity } from '../waage-gravity.js';
+import { textIn, textOut } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch7-steuer-20pct',
@@ -64,9 +65,9 @@ export default {
     );
 
     /* 10pct text stays visible while scale swings, then fades out */
-    tl.to('#st-ch7-steuer-10pct', { opacity: 0, duration: 0.15, ease: 'power1.in' }, 0.35);
+    textOut(tl, '#st-ch7-steuer-10pct', 0.35, { duration: 0.15 });
 
     /* 20pct text fades in — stays visible until scene-steuer-frage fades it out */
-    tl.to('#st-ch7-steuer-20pct', { opacity: 1, duration: 0.20, ease: 'power1.out' }, 0.45);
+    textIn(tl, '#st-ch7-steuer-20pct', 0.45, { duration: 0.20 });
   },
 };

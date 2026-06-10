@@ -1,3 +1,5 @@
+import { textIn, textOut } from '../../../core/text-anim.js';
+
 export default {
   id: 's-ch10-fazit-a',
   height: '150vh',
@@ -22,8 +24,7 @@ export default {
       },
     });
 
-    tl
-      .to('#st-ch10-fazit-a', { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.10)
-      .to('#st-ch10-fazit-a', { opacity: 0, duration: 0.15, ease: 'power1.in'  }, 0.80);
+    textIn(tl,  '#st-ch10-fazit-a', 0.10, { duration: 0.25 });
+    textOut(tl, '#st-ch10-fazit-a', 0.80, { duration: 0.15 });
   },
 };
