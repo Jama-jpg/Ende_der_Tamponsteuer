@@ -20,6 +20,12 @@ const EMPTY  = 'white';
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 
+/* Minimum y2 for cAxisProgress. Starts at Y_TOP (bar invisible / zero-length).
+   Raised by setSpineFloor() after the intro teaser so the bar stays at the
+   teaser position until real scroll progress grows past it. */
+let yFloor = Y_TOP;
+export function setSpineFloor(y) { yFloor = y; }
+
 export function createSpine({ ScrollTrigger, refs }) {
   const { cAxisProgress, spineHit, periodDots } = refs;
   if (!cAxisProgress || !spineHit) return;
@@ -45,7 +51,7 @@ export function createSpine({ ScrollTrigger, refs }) {
       y = SEG_Y[i] + (SEG_Y[i + 1] - SEG_Y[i]) * clamp01(segProgress[i]);
       if (segProgress[i] < 1) break;
     }
-    cAxisProgress.setAttribute('y2', y);
+    cAxisProgress.setAttribute('y2', Math.max(y, yFloor));
   }
 
   ScrollTrigger.create({

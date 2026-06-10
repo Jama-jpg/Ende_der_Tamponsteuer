@@ -5,6 +5,8 @@
    This whole sequence is time-driven (no ScrollTrigger).
 ═══════════════════════════════════════════════ */
 
+import { setSpineFloor } from '../../../core/spine.js';
+
 export default {
   id: 's1',
   height: '220vh',
@@ -29,15 +31,6 @@ export default {
       const s3 = document.getElementById('s3');
       const base = s3 ? s3.offsetTop : 0;
       if (s3) window.scrollTo(0, base);
-
-      /* Hide the scroll hint the moment the reader actually scrolls. */
-      const hideHint = () => {
-        if (window.scrollY > base + 30) {
-          gsap.to(r.scrollHint, { opacity: 0, duration: 0.4, ease: 'power1.out' });
-          window.removeEventListener('scroll', hideHint);
-        }
-      };
-      window.addEventListener('scroll', hideHint, { passive: true });
     }
 
     /* ── Page-load entrance (staggered fades) ── */
@@ -72,9 +65,16 @@ export default {
            (see period-axis.js). */
         .to(r.cOutline, { opacity: 1, duration: 0.7, ease: 'power1.out' }, 0.9)
         .call(() => { r.yearLbl.textContent = '2020'; }, [], 0.8)
-        /* Once everything has settled, prompt the reader to scroll. */
-        .to(r.scrollHint, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 1.6)
-        .call(unlockScroll, [], 1.6);
+        /* Teaser: first scene text slides up from below while spine nudges down. */
+        .fromTo('#st3',
+          { opacity: 0, y: window.innerHeight / 3 },
+          { opacity: 1, y: 0, duration: 1.8, ease: 'power2.out' },
+          1.9
+        )
+        .to(r.cAxisProgress, { attr: { y2: 88 }, duration: 1.8, ease: 'power2.out' }, 1.9)
+        /* Lock in the floor so spine.js never redraws below 88 — bar stays. */
+        .call(() => setSpineFloor(88), [], 3.7)
+        .call(unlockScroll, [], 3.8);
     }
 
     /* ── Auto-play countdown: 20→0% and 1973→2026 over 4.2s, liquid drains
