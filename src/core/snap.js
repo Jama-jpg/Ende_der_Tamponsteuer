@@ -19,15 +19,20 @@
 
 const DURATION  = 1.2;     // seconds per scene transition
 const EASE      = 'power2.inOut';
-const LOCK_TIME = 2000;    // ms total lock: covers anim (1200ms) + scrub lag + buffer
-const SWIPE     = 40;      // px of touch travel before it counts as a swipe
+const LOCK_TIME = 3500;    // ms total lock: covers anim (1200ms) + scrub lag + buffer
+const SWIPE     = 120;     // px of touch travel before it counts as a swipe
 
 // Wheel accumulator: prevents trackpad noise from triggering multiple snaps.
 // We sum raw deltaY events; once the total exceeds this threshold we fire once.
-const ACCUM_THRESHOLD = 30;  // px accumulated before triggering
-const ACCUM_RESET     = 200; // ms of wheel silence to reset the accumulator
+const ACCUM_THRESHOLD = 500;  // px accumulated before triggering
+const ACCUM_RESET     = 400; // ms of wheel silence to reset the accumulator
 
 export function createSnap({ ScrollTrigger, gsap, scenes }) {
+  /* Scenes marked snapOnce:true fire their snap once, then release forward
+     scrolling so the user can pass through without further snapping.
+     Cleared when the user scrolls back above the scene's start. */
+  const firedScenes = new Set();
+
   /* Live scene-edge scroll positions, sorted top→bottom.
      Per scene: its start (offsetTop, scrub 0%) and its end (where the
      section's bottom meets the viewport bottom, scrub 100%) — matching the
@@ -35,8 +40,10 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
      100vh scene (start == end) collapses to one point.
      Scenes with skipSnapStart:true omit the start boundary so the snap jumps
      directly to the animation's end — avoiding a dead rest point where nothing
-     changes visually. */
-  function boundaries() {
+     changes visually.
+     When dir > 0 (forward), snapOnce scenes that have already fired are
+     excluded so the user can scroll freely past them. */
+  function boundaries(dir = 0) {
     const vh = window.innerHeight;
     const pts = [];
     for (const scene of scenes) {
@@ -44,14 +51,15 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
       if (!el) continue;
       const start = el.offsetTop;
       const end   = Math.round(start + el.offsetHeight - vh);
+      const skip  = dir > 0 && scene.snapOnce && firedScenes.has(scene.id);
       if (!scene.skipSnapStart) pts.push(Math.round(start));
-      if (scene.snapPoints) {
+      if (scene.snapPoints && !skip) {
         const range = el.offsetHeight - vh;
         for (const f of scene.snapPoints) {
           pts.push(Math.round(start + f * range));
         }
       }
-      if (!scene.skipSnapEnd) pts.push(end); // scrub end
+      if (!scene.skipSnapEnd && !skip) pts.push(end); // scrub end
     }
     return Array.from(new Set(pts)).sort((a, b) => a - b);
   }
@@ -60,14 +68,28 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
   const locked    = () => document.body.style.overflow === 'hidden';
 
   /* Returns true only if there is a snap boundary ahead in the given
-     direction (+1 down, -1 up). Used to decide whether to intercept the
-     scroll event — if no target exists, native scroll is left untouched. */
+     direction (+1 down, -1 up) AND within 1.5 viewports — so native scroll
+     is left untouched when the snap scenes are far away. */
   function wouldSnap(dir) {
-    const pts = boundaries();
+    const pts = boundaries(dir);
     if (!pts.length) return false;
-    const y   = Math.round(window.scrollY || window.pageYOffset);
-    const eps = 4;
-    return dir > 0 ? pts.some(p => p > y + eps) : pts.some(p => p < y - eps);
+    const y     = Math.round(window.scrollY || window.pageYOffset);
+    const eps   = 4;
+    const range = window.innerHeight * 1.5;
+    return dir > 0
+      ? pts.some(p => p > y + eps && p < y + range)
+      : pts.some(p => p < y - eps && p > y - range);
+  }
+
+  /* When scrolling up, un-fire snapOnce scenes whose start is now above us,
+     so they snap again if the user scrolls back down into them. */
+  function clearFiredAbove() {
+    const y = Math.round(window.scrollY || window.pageYOffset);
+    for (const scene of scenes) {
+      if (!firedScenes.has(scene.id)) continue;
+      const el = document.getElementById(scene.id);
+      if (el && y < el.offsetTop) firedScenes.delete(scene.id);
+    }
   }
 
   let busy      = false;
@@ -85,18 +107,19 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
      trackpad momentum events after the animation cannot re-trigger a snap. */
   function go(dir) {
     if (busy || locked()) return;
-    const pts = boundaries();
+    const pts = boundaries(dir);
     if (!pts.length) return;
 
-    const y = Math.round(window.scrollY || window.pageYOffset);
-    const eps = 2;
+    const y     = Math.round(window.scrollY || window.pageYOffset);
+    const eps   = 2;
+    const range = window.innerHeight * 1.5;
     let dest;
     if (dir > 0) {
-      dest = pts.find((p) => p > y + eps);          // next scene below
-      if (dest == null) return;                     // already at the last one
+      dest = pts.find((p) => p > y + eps && p < y + range);
+      if (dest == null) return;
     } else {
-      const above = pts.filter((p) => p < y - eps); // scenes above
-      if (!above.length) return;                    // already at the first one
+      const above = pts.filter((p) => p < y - eps && p > y - range);
+      if (!above.length) return;
       dest = above[above.length - 1];
     }
     dest = Math.min(dest, maxScroll());
@@ -105,7 +128,26 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
     // Lock immediately — not after animation — so coast events are dropped.
     busy = true;
     clearTimeout(lockTimer);
-    lockTimer = setTimeout(() => { busy = false; }, LOCK_TIME);
+    lockTimer = setTimeout(() => {
+      busy = false;
+      // Mark snapOnce scene as fired if dest was one of its snap points.
+      if (dir > 0) {
+        for (const scene of scenes) {
+          if (!scene.snapOnce || firedScenes.has(scene.id)) continue;
+          const el = document.getElementById(scene.id);
+          if (!el) continue;
+          const start = el.offsetTop;
+          const snapRange = el.offsetHeight - window.innerHeight;
+          if (scene.snapPoints) {
+            for (const f of scene.snapPoints) {
+              if (Math.abs(dest - Math.round(start + f * snapRange)) < 4) {
+                firedScenes.add(scene.id);
+              }
+            }
+          }
+        }
+      }
+    }, LOCK_TIME);
 
     gsap.to(window, {
       scrollTo: { y: dest, autoKill: false },
@@ -125,6 +167,7 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
     if (locked()) return;
     const delta = normalizeDelta(e);
     const dir   = delta >= 0 ? 1 : -1;
+    if (dir < 0) clearFiredAbove();
     // Only intercept if a snap target exists in this direction, or a snap
     // animation is already running (prevent fighting the tween).
     if (!busy && !wouldSnap(dir)) return;
@@ -152,6 +195,7 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
     if (locked() || touchY == null) return;
     const dy  = touchY - e.touches[0].clientY;
     const dir = dy >= 0 ? 1 : -1;
+    if (dir < 0) clearFiredAbove();
     if (!busy && !wouldSnap(dir)) return;
     e.preventDefault();
     if (Math.abs(dy) > SWIPE) { go(dir); touchY = null; }
