@@ -57,9 +57,12 @@ export default {
       const euroRect = euroEl.getBoundingClientRect();
       const shRect   = shEl.getBoundingClientRect();
 
-      /* Delta from euro-counter center → .sh center */
+      /* Delta from euro-counter center → .sh center.
+         The overlay is still at Y_IN() when flyIn runs — subtract it so we
+         aim at the final resting position, not the in-flight offset. */
+      const overlayY = gsap.getProperty('#st-ch5-25k', 'y') || 0;
       const dx = (shRect.left  + shRect.width  / 2) - (euroRect.left  + euroRect.width  / 2);
-      const dy = (shRect.top   + shRect.height / 2) - (euroRect.top   + euroRect.height / 2);
+      const dy = (shRect.top - overlayY + shRect.height / 2) - (euroRect.top + euroRect.height / 2);
 
       /* Scale so the number visually matches the .sh font size */
       const shFontPx   = parseFloat(getComputedStyle(shEl).fontSize);
