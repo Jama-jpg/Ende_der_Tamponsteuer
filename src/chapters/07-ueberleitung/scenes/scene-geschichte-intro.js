@@ -16,7 +16,7 @@ export default {
     id: 'st-ch7-geschichte-1',
     html: `
       <p class="sl">Die Geschichte der</p>
-      <p class="sh">Periodenprodukte</p>
+      <p class="sh">PERIODENPRODUKTE</p>
       <p class="sl">beginnt mit einfachen Hilfsmitteln.</p>
     `,
   },
@@ -30,7 +30,7 @@ export default {
       ov.id = 'st-ch7-geschichte-2';
       ov.innerHTML = `
         <p class="sl">Gleichzeitig beginnt</p>
-        <p class="sh">Die Stigmatisierung<br>der Periode</p>
+        <p class="sh">DIE STIGMATISIERUNG<br>DER PERIODE </p>
         <p class="sl">mit den ersten Vorurteilen<br>und Mythen.</p>
       `;
       overlaysContainer.appendChild(ov);

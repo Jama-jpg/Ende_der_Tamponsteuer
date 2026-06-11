@@ -15,10 +15,9 @@ export default {
   overlay: {
     id: 'st-ch7-steuer-intro',
     html: `
-      <p class="sl">Zu dieser finanziellen Belastung<br>
-      kommt auch noch ein strukturelles,<br>
-      diskriminierendes Ungleichgewicht<br>
-      in der Besteuerung hinzu.</p>
+      <p class="sl">Zu dieser finanziellen Belastung<br>kommt auch noch ein <br>strukturelles, diskriminierendes</p>
+      <p class="sh">Ungleichgewicht<br>in der Besteuerung</p>
+      <p class="sl">hinzu.</p>
     `,
   },
 

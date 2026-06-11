@@ -15,10 +15,7 @@ export default {
   overlay: {
     id: 'st-ch7-steuer-10pct',
     html: `
-      <p class="sl">Während in Österreich bis ins<br>
-      Jahr 2020 für Produkte<br>
-      wie Bücher oder Kaviar ein reduzierter<br>
-      Mehrwertsteuersatz galt,…</p>
+      <p class="sl">Während in Österreich bis ins<br>Jahr 2020 für Produkte<br>wie Bücher oder Kaviar ein reduzierter<br>Mehrwertsteuersatz galt,…</p>
     `,
   },
 

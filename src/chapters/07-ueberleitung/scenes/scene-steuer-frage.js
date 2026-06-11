@@ -67,9 +67,10 @@ export default {
   overlay: {
     id: 'st-ch7-steuer-frage',
     html: `
-      <p class="sl">Woher kommt diese Ungleichheit?<br>
-      Die Antwort liegt weiter zurück<br>
-      in der Geschichte.</p>
+      <p class="sl">Woher kommt diese</p>
+      <p class="sl">Ungleichheit?</p>
+      <p class="sh">DIE ANTWORT</p>
+      <p class="sh">LIEGT WEITER ZURÜCK<br>IN DER GESCHICHTE.</p>
     `,
   },
 

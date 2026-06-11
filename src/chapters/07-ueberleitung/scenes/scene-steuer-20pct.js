@@ -16,8 +16,7 @@ export default {
   overlay: {
     id: 'st-ch7-steuer-20pct',
     html: `
-      <p class="sl">… waren Periodenprodukte mit dem<br>
-      regulären Steuersatz belastet.</p>
+      <p class="sl">… waren Periodenprodukte mit dem<br>regulären Steuersatz belastet.</p>
     `,
   },
 
