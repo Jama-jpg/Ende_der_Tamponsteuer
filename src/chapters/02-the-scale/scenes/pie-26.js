@@ -10,7 +10,7 @@ import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's7',
-  height: '150vh',
+  height: '200vh',
   skipSnapStart: true,
   overlay: {
     id: 'st7',

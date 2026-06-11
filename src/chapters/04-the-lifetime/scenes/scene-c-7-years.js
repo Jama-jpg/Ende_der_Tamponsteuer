@@ -17,7 +17,7 @@ import { textIn, textOut, setSceneVh } from '../../../core/text-anim.js';
 
 export default {
   id: 's-periode-c',
-  height: '150vh',
+  height: '200vh',
   skipSnapStart: true,
   snapPoints: [0.75],
 

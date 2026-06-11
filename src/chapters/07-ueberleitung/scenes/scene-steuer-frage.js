@@ -8,7 +8,7 @@ import { textIn, textOut } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch7-steuer-frage',
-  height: '150vh',
+  height: '250vh',
   skipSnapStart: true,
 
   overlay: {

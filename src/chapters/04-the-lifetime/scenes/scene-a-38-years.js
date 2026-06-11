@@ -17,7 +17,7 @@ const GROW_R     = 22;  // circles grow to this radius so neighbours merge via g
 
 export default {
   id: 's-periode-a',
-  height: '200vh',
+  height: '300vh',
   skipSnapStart: true,
   skipSnapEnd: true,
   snapPoints: [0.75],
