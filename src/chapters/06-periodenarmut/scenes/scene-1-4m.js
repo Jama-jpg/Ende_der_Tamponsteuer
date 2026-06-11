@@ -21,7 +21,7 @@ export default {
     id: 'st-ch6-14m',
     html: `<div style="display:grid;width:100%">
              <div id="st-ch6-14m-main" style="grid-area:1/1;opacity:0">
-               <p class="sl">ÜBER</p>
+               <p class="sl">DENN ÜBER</p>
                <p class="sh">1,4 MILLIONEN</p>
                <p class="sl">MENSCHEN IN ÖSTERREICH<br>SIND ARMUTSGEFÄHRDET</p>
              </div>
