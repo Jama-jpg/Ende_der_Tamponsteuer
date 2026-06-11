@@ -53,6 +53,6 @@ export default {
     textIn(tl, '#st-ch7-geschichte-2', 0.15);
 
     textOut(tl, '#st-ch7-geschichte-1', 0.82);
-    textOut(tl, '#st-ch7-geschichte-2', 0.82);
+    // #st-ch7-geschichte-2 (right text) persists into scene-steinzeit and fades there
   },
 };
