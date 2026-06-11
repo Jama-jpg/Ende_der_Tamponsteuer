@@ -28,16 +28,16 @@ export function createSpine({ ScrollTrigger, refs }) {
   /* ── Piecewise spine progress ──────────────────────────────────────
      3 segments map to the 3 gaps between the 4 spine dots.
 
-     Segment 0: #s3 top            → #s-ch5-grow bottom   (Intro → Die Kosten)
-     Segment 1: #s-ch5-grow bottom → #s-ch7-steuer-frage bottom  (Periodenarmut)
-     Segment 2: #s-ch7-steuer-frage bottom → #s-ch7-geschichte-intro bottom (Überleitung)
+     Segment 0: #s3 top → steuer-frage 83%           (Kapitel 1: Intro → Überleitung)
+     Segment 1: steuer-frage 83% → #s-ch7-geschichte-intro bottom  (Kapitel 2: Timeline)
+     Segment 2: #s-ch7-geschichte-intro bottom → end              (Rest)
   */
-  const SEG_Y = [DOT_YS[0], DOT_YS[1], DOT_YS[2], DOT_YS[3]];
-  const segProgress = [0, 0, 0];
+  const SEG_Y = [DOT_YS[0], DOT_YS[1], DOT_YS[2]];
+  const segProgress = [0, 0];
 
   function renderFromSegs() {
     let y = SEG_Y[0];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
       y = SEG_Y[i] + (SEG_Y[i + 1] - SEG_Y[i]) * clamp01(segProgress[i]);
       if (segProgress[i] < 1) break;
     }
@@ -47,57 +47,40 @@ export function createSpine({ ScrollTrigger, refs }) {
   ScrollTrigger.create({
     trigger:    '#s3',
     start:      'top top',
-    endTrigger: '#s-ch5-grow',
-    end:        'bottom bottom',
+    endTrigger: '#s-ch7-steuer-frage',
+    end:        '83% top',
     onUpdate:  (self) => { segProgress[0] = self.progress; renderFromSegs(); },
     onRefresh: (self) => { segProgress[0] = self.progress; renderFromSegs(); },
   });
 
   ScrollTrigger.create({
-    trigger:    '#s-ch5-grow',
-    start:      'bottom bottom',
-    endTrigger: '#s-ch7-steuer-frage',
+    trigger:    '#s-ch7-steuer-frage',
+    start:      '83% top',
+    endTrigger: '#s-ch7-geschichte-intro',
     end:        'bottom bottom',
     onUpdate:  (self) => { segProgress[1] = self.progress; renderFromSegs(); },
     onRefresh: (self) => { segProgress[1] = self.progress; renderFromSegs(); },
   });
 
-  ScrollTrigger.create({
-    trigger:    '#s-ch7-steuer-frage',
-    start:      'bottom bottom',
-    endTrigger: '#s-ch7-geschichte-intro',
-    end:        'bottom bottom',
-    onUpdate:  (self) => { segProgress[2] = self.progress; renderFromSegs(); },
-    onRefresh: (self) => { segProgress[2] = self.progress; renderFromSegs(); },
-  });
-
   /* ── Dot filling ─────────────────────────────────────────────────────
      Dot 0: filled by countdown.js (intro build-up).
-     Dot 1: fills at the end of Die Kosten (#s-ch5-grow).
-     Dot 2: fills at the end of Periodenarmut (#s-ch7-steuer-frage).
-     Dot 3: fills at the very end (#s-ch7-geschichte-intro).           */
+     Dot 1: fills when "KAPITEL 2" ticker fires (steuer-frage 83%).
+     Dot 2: fills at the end of Kapitel 2 (#s-ch7-geschichte-intro).  */
   const fill  = (i) => dots[i]?.setAttribute('fill', FILLED);
   const empty = (i) => dots[i]?.setAttribute('fill', EMPTY);
 
   ScrollTrigger.create({
-    trigger:     '#s-ch5-grow',
-    start:       'bottom bottom',
+    trigger:     '#s-ch7-steuer-frage',
+    start:       '83% top',
     onEnter:     () => fill(1),
     onLeaveBack: () => empty(1),
   });
 
   ScrollTrigger.create({
-    trigger:     '#s-ch7-steuer-frage',
+    trigger:     '#s-ch7-geschichte-intro',
     start:       'bottom bottom',
     onEnter:     () => fill(2),
     onLeaveBack: () => empty(2),
-  });
-
-  ScrollTrigger.create({
-    trigger:     '#s-ch7-geschichte-intro',
-    start:       'bottom bottom',
-    onEnter:     () => fill(3),
-    onLeaveBack: () => empty(3),
   });
 
 }
