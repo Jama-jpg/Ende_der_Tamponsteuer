@@ -103,6 +103,9 @@ export default {
     /* Frage text sits on the LEFT (default overlay position) */
     gsap.set('#st-ch7-steuer-frage', { left: '0', right: 'auto' });
 
+    /* Reset right-pan wrapper — previous scene may have dropped it off-screen */
+    gsap.set(document.getElementById('waage-circle-r-wrap'), { y: 0 });
+
     /* Crash ball: natural resting position is on the SVG floor (cy=422, r=140).
        Start 900px above, transformOrigin at bottom so squash pivots on the floor. */
     gsap.set(crashBall, { y: -900 });
@@ -121,16 +124,16 @@ export default {
     textOut(tl, '#st-ch7-steuer-20pct', 0.05);
     tl.to(waage, { opacity: 0, duration: 0.20, ease: 'power1.in' }, 0.05);
 
-    /* Crash ball flies in at the same moment as the text */
-    tl.to(crashBall, { opacity: 1, duration: 0.04, ease: 'none' }, 0.28);
-    tl.to(crashBall, { y: 0, duration: 0.22, ease: 'power3.in' }, 0.28);
+    /* Crash ball falls slowly from the top — visual continuation of the falling scale */
+    tl.to(crashBall, { opacity: 1, duration: 0.05, ease: 'none' }, 0.05);
+    tl.to(crashBall, { y: 0, duration: 0.45, ease: 'power1.in' }, 0.05);
     /* Crack appears on impact */
     tl.to('#crash-ball-crack', { opacity: 1, duration: 0.06, ease: 'power2.out' }, 0.50);
     /* Next scroll: ball falls off the bottom of the screen */
     tl.to(crashBall, { y: 350, duration: 0.14, ease: 'power2.in' }, 0.84);
 
-    // Bridging question in → out
-    textIn(tl, '#st-ch7-steuer-frage', 0.28);
+    // Bridging question in → out (appears after ball lands)
+    textIn(tl, '#st-ch7-steuer-frage', 0.52);
     textOut(tl, '#st-ch7-steuer-frage', 0.80);
 
     // ── Non-scrubbed: fires once at 83% of this scene's scroll ──────

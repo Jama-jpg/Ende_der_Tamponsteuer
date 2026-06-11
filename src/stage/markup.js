@@ -280,23 +280,27 @@ export const stageMarkup = /* html */ `
       </g>
 
       <!-- RIGHT pan: Tampon + "20%"
-           translate() set each frame by applyGravity(); original center (800, 338) -->
-      <g id="waage-circle-r" opacity="0">
-        <circle cx="800" cy="338" r="140" fill="#C9C9C0"/>
-        <!-- Icon group — scaled + floated by GSAP in scene-steuer-20pct -->
-        <g id="waage-icons-r">
-          <!-- TAMPON label -->
-          <text x="800" y="270" text-anchor="middle"
-                class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">TAMPON</text>
-          <!-- Horizontal pill body — same shape as scene-17k physics tampon, no price label -->
-          <rect x="772" y="298" width="56" height="20" rx="10" fill="#D63335"/>
-          <!-- Wavy cord from right end of pill (mirrors the physics renderer's bezier) -->
-          <path d="M828,308 C837,303 850,313 859,308"
-                stroke="#D63335" stroke-width="3" fill="none" stroke-linecap="round"/>
+           translate() set each frame by applyGravity(); original center (800, 338).
+           Outer wrapper (#waage-circle-r-wrap) is used for the fall-out animation so
+           applyGravity (which uses setAttribute on the inner group) never conflicts with GSAP. -->
+      <g id="waage-circle-r-wrap">
+        <g id="waage-circle-r" opacity="0">
+          <circle cx="800" cy="338" r="140" fill="#C9C9C0"/>
+          <!-- Icon group — scaled + floated by GSAP in scene-steuer-20pct -->
+          <g id="waage-icons-r">
+            <!-- TAMPON label -->
+            <text x="800" y="270" text-anchor="middle"
+                  class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">TAMPON</text>
+            <!-- Horizontal pill body — same shape as scene-17k physics tampon, no price label -->
+            <rect x="772" y="298" width="56" height="20" rx="10" fill="#D63335"/>
+            <!-- Wavy cord from right end of pill (mirrors the physics renderer's bezier) -->
+            <path d="M828,308 C837,303 850,313 859,308"
+                  stroke="#D63335" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- "20%" label -->
+          <text x="800" y="440" text-anchor="middle"
+                class="svg-serif" font-size="52" fill="#1a1a1a">20%</text>
         </g>
-        <!-- "20%" label -->
-        <text x="800" y="440" text-anchor="middle"
-              class="svg-serif" font-size="52" fill="#1a1a1a">20%</text>
       </g>
 
     </g>

@@ -26,10 +26,11 @@ export default {
     /* Text sits on the RIGHT — same side as scene 10pct */
     gsap.set('#st-ch7-steuer-20pct', { left: 'auto', right: '0' });
 
-    const beamGrp = document.getElementById('waage-beam-grp');
-    const circleL = document.getElementById('waage-circle-l');
-    const circleR = document.getElementById('waage-circle-r');
-    const iconsR  = document.getElementById('waage-icons-r');
+    const beamGrp   = document.getElementById('waage-beam-grp');
+    const circleL   = document.getElementById('waage-circle-l');
+    const circleR   = document.getElementById('waage-circle-r');
+    const circleRWrap = document.getElementById('waage-circle-r-wrap');
+    const iconsR    = document.getElementById('waage-icons-r');
 
     /* Scale the right icons up; float loop starts after they appear */
     gsap.set(iconsR, { scale: 1.9, transformOrigin: '50% 50%' });
@@ -68,7 +69,10 @@ export default {
     /* 10pct text stays visible while scale swings, then fades out */
     textOut(tl, '#st-ch7-steuer-10pct', 0.35);
 
-    /* 20pct text fades in — stays visible until scene-steuer-frage fades it out */
+    /* 20pct text fades in */
     textIn(tl, '#st-ch7-steuer-20pct', 0.45);
+
+    /* Right pan falls off the bottom — wrapper is untouched by applyGravity, so no transform conflict */
+    tl.to(circleRWrap, { y: 700, duration: 0.20, ease: 'power3.in' }, 0.77);
   },
 };
