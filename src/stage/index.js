@@ -231,6 +231,7 @@ export function buildStage(mount, gsap) {
     refs.linesGrp, refs.lines38Grp, refs.liqFill, refs.liqStream, refs.vatBigTax,
     refs.cAxisProgress,
     refs.tampon3d, refs.coinsGrp,
+    $('ch7-bg-tampon'), $('ch7-bg-exclaim'),
     refs.povCircle, refs.povPie17, refs.povSub, refs.povSubSpinner,
     refs.povPie90, refs.povPie60, refs.povPie15, refs.povPie12,
   ], { opacity: 0 });

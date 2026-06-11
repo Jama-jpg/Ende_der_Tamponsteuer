@@ -1,10 +1,11 @@
-import steuerIntro  from './scenes/scene-steuer-intro.js';
-import steuer10pct  from './scenes/scene-steuer-10pct.js';
-import steuer20pct  from './scenes/scene-steuer-20pct.js';
-import steuerFrage  from './scenes/scene-steuer-frage.js';
+import steuerIntro      from './scenes/scene-steuer-intro.js';
+import steuer10pct      from './scenes/scene-steuer-10pct.js';
+import steuer20pct      from './scenes/scene-steuer-20pct.js';
+import steuerFrage      from './scenes/scene-steuer-frage.js';
+import geschichteIntro  from './scenes/scene-geschichte-intro.js';
 
 export default {
   id: 'ueberleitung',
   title: 'Die Überleitung',
-  scenes: [steuerIntro, steuer10pct, steuer20pct, steuerFrage],
+  scenes: [steuerIntro, steuer10pct, steuer20pct, steuerFrage, geschichteIntro],
 };

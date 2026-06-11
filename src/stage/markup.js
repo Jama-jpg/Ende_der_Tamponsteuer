@@ -338,6 +338,7 @@ export const stageMarkup = /* html */ `
          Signs rise from below; slight sway loop after they land.
          Generated entirely by scene-protest.js. -->
     <g id="protest-grp" opacity="0"></g>
+
   </svg>
 
   <!-- Scroll spacer sections injected here by the engine -->
