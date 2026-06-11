@@ -321,11 +321,7 @@ export const stageMarkup = /* html */ `
       </g>
       <text x="800" y="524" text-anchor="middle"
             class="svg-serif" font-size="52" fill="#1a1a1a">20%</text>
-      <!-- Crack: appears on landing, opacity animated in scene-steuer-frage -->
-      <path id="crash-ball-crack" opacity="0"
-            d="M812,288 L775,385 L810,415 L768,555"
-            stroke="white" stroke-width="7" fill="none"
-            stroke-linecap="round" stroke-linejoin="round"/>
+
     </g>
 
     <!-- ── CHAPTER 08: RIGHT SPINE (3-column timeline layout) ────────

@@ -127,8 +127,6 @@ export default {
     /* Crash ball falls slowly from the top — visual continuation of the falling scale */
     tl.to(crashBall, { opacity: 1, duration: 0.05, ease: 'none' }, 0.05);
     tl.to(crashBall, { y: 0, duration: 0.45, ease: 'power1.in' }, 0.05);
-    /* Crack appears on impact */
-    tl.to('#crash-ball-crack', { opacity: 1, duration: 0.06, ease: 'power2.out' }, 0.50);
     /* Next scroll: ball falls off the bottom of the screen */
     tl.to(crashBall, { y: 350, duration: 0.14, ease: 'power2.in' }, 0.84);
 
