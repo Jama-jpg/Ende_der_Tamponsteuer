@@ -255,11 +255,11 @@ export const stageMarkup = /* html */ `
         <circle cx="200" cy="338" r="140" fill="#C9C9C0"/>
         <!-- Icons group — scaled + floated by GSAP in scene-steuer-10pct -->
         <g id="waage-icons-l">
-          <!-- Buch -->
-          <text x="165" y="278" text-anchor="middle"
+          <!-- Buch — shifted left so it doesn't touch KAVIAR -->
+          <text x="150" y="278" text-anchor="middle"
                 class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">BUCH</text>
-          <rect x="145" y="285" width="38" height="48" rx="3"   fill="#D63335"/>
-          <rect x="145" y="285" width="8"  height="48" rx="2" fill="#AA2020"/>
+          <rect x="130" y="285" width="38" height="48" rx="3"   fill="#D63335"/>
+          <rect x="130" y="285" width="8"  height="48" rx="2" fill="#AA2020"/>
           <!-- Kaviar dots -->
           <text x="203" y="278" text-anchor="middle"
                 class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">KAVIAR</text>
@@ -268,15 +268,15 @@ export const stageMarkup = /* html */ `
           <circle cx="219" cy="297" r="10" fill="#D63335"/>
           <circle cx="210" cy="314" r="8.5" fill="#D63335"/>
           <circle cx="194" cy="312" r="8.5" fill="#D63335"/>
-          <!-- Honig (honey jar): body + lid -->
-          <text x="243" y="278" text-anchor="middle"
+          <!-- Honig (honey jar): body + lid — shifted right so it doesn't touch KAVIAR -->
+          <text x="256" y="278" text-anchor="middle"
                 class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">HONIG</text>
-          <rect x="226" y="308" width="36" height="30" rx="5" fill="#D63335"/>
-          <rect x="230" y="293" width="26" height="18" rx="4" fill="#AA2020"/>
+          <rect x="239" y="308" width="36" height="30" rx="5" fill="#D63335"/>
+          <rect x="243" y="293" width="26" height="18" rx="4" fill="#AA2020"/>
         </g>
         <!-- "10%" label -->
-        <text x="200" y="405" text-anchor="middle"
-              class="svg-mono" font-size="20" fill="#1a1a1a" letter-spacing="2">10%</text>
+        <text x="200" y="440" text-anchor="middle"
+              class="svg-serif svg-italic" font-size="52" fill="#1a1a1a">10%</text>
       </g>
 
       <!-- RIGHT pan: Tampon + "20%"
@@ -285,17 +285,18 @@ export const stageMarkup = /* html */ `
         <circle cx="800" cy="338" r="140" fill="#C9C9C0"/>
         <!-- Icon group — scaled + floated by GSAP in scene-steuer-20pct -->
         <g id="waage-icons-r">
-          <!-- Tampon body (pill shape) -->
-          <text x="800" y="268" text-anchor="middle"
+          <!-- TAMPON label -->
+          <text x="800" y="270" text-anchor="middle"
                 class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">TAMPON</text>
-          <rect x="778" y="275" width="46" height="75" rx="23" fill="#D63335"/>
-          <!-- Tampon string -->
-          <path d="M800,350 C806,368 799,385 805,401"
-                stroke="#AA2020" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <!-- Horizontal pill body — same shape as scene-17k physics tampon, no price label -->
+          <rect x="772" y="298" width="56" height="20" rx="10" fill="#D63335"/>
+          <!-- Wavy cord from right end of pill (mirrors the physics renderer's bezier) -->
+          <path d="M828,308 C837,303 850,313 859,308"
+                stroke="#D63335" stroke-width="3" fill="none" stroke-linecap="round"/>
         </g>
         <!-- "20%" label -->
-        <text x="800" y="418" text-anchor="middle"
-              class="svg-mono" font-size="20" fill="#1a1a1a" letter-spacing="2">20%</text>
+        <text x="800" y="440" text-anchor="middle"
+              class="svg-serif svg-italic" font-size="52" fill="#1a1a1a">20%</text>
       </g>
 
     </g>

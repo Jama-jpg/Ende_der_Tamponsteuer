@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -rn \"import.*{ Y }.*text-anim\\\\|import.*Y,.*text-anim\\\\|import.*,Y.*text-anim\" /Users/Angewandte_4/15_Scrollytelling_final/src/ --include=\"*.js\")"
+      "Bash(grep -rn \"import.*{ Y }.*text-anim\\\\|import.*Y,.*text-anim\\\\|import.*,Y.*text-anim\" /Users/Angewandte_4/15_Scrollytelling_final/src/ --include=\"*.js\")",
+      "Bash(open -a \"Google Chrome\" \"http://localhost:5175\")",
+      "Bash(open \"http://localhost:5175\")"
     ]
   }
 }
