@@ -147,7 +147,7 @@ export default {
         if (lblKapitel) cancelKapitel = tickerMorph(gsap, lblKapitel, 'KAPITEL 2');
         if (lblPeriode) cancelPeriode = tickerMorph(gsap, lblPeriode, 'DIE TAMPONSSTEUER');
 
-        // VAT counter: ticker "20" → "—", fade out "%" and "MwST."
+        // VAT counter: ticker "20" → "—", fade out "%" only; "MwST." stays visible
         if (vatNum) cancelVat = tickerMorph(gsap, vatNum, '—');
         if (vatPct) {
           gsap.to(vatPct, {
@@ -155,7 +155,6 @@ export default {
             onComplete() { vatPct.style.display = 'none'; },
           });
         }
-        if (vatTax) gsap.to(vatTax, { opacity: 0, duration: 0.2, ease: 'power2.in' });
       },
       onLeaveBack() {
         morphed = false;
@@ -165,9 +164,8 @@ export default {
         if (cancelPeriode) { cancelPeriode(); cancelPeriode = null; }
         if (cancelVat)     { cancelVat();     cancelVat     = null; }
 
-        // Restore VAT counter parts
+        // Restore VAT "%" sign
         if (vatPct) { vatPct.style.display = 'inline-block'; gsap.set(vatPct, { opacity: 1 }); }
-        if (vatTax) { gsap.killTweensOf(vatTax); gsap.set(vatTax, { opacity: 1 }); }
 
         // Reset year label
         gsap.killTweensOf(lblYear);

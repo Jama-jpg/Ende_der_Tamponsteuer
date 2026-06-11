@@ -95,16 +95,8 @@ export function createSpine({ ScrollTrigger, refs }) {
   ScrollTrigger.create({
     trigger:     '#s-ch7-steuer-frage',
     start:       'bottom bottom',
-    onEnter: () => {
-      fill(1);
-      if (lblKapitel) lblKapitel.textContent = 'KAPITEL 2';
-      if (lblPeriode) lblPeriode.textContent = 'DIE TAMPONSSTEUER';
-    },
-    onLeaveBack: () => {
-      empty(1);
-      if (lblKapitel) lblKapitel.textContent = 'KAPITEL 1';
-      if (lblPeriode) lblPeriode.textContent = 'DIE PERIODE';
-    },
+    onEnter:     () => fill(1),
+    onLeaveBack: () => empty(1),
   });
 
   ScrollTrigger.create({
