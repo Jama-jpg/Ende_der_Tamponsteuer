@@ -15,9 +15,9 @@ export default {
   overlay: {
     id: 'st-ch7-geschichte-1',
     html: `
-      <p class="sl">Die Geschichte der<br>
-      Periodenprodukte<br>
-      beginnt mit einfachsten Mitteln.</p>
+      <p class="sl">Die Geschichte der</p>
+      <p class="sh">Periodenprodukte</p>
+      <p class="sl">beginnt mit einfachen Hilfsmitteln.</p>
     `,
   },
 
@@ -29,9 +29,9 @@ export default {
       ov.className = 'stext';
       ov.id = 'st-ch7-geschichte-2';
       ov.innerHTML = `
-        <p class="sl">Gleichzeitig beginnt die<br>
-        Stigmatisierung der Periode<br>
-        mit den ersten Vorurteilen und Mythen.</p>
+        <p class="sl">Gleichzeitig beginnt</p>
+        <p class="sh">Die Stigmatisierung<br>der Periode</p>
+        <p class="sl">mit den ersten Vorurteilen<br>und Mythen.</p>
       `;
       overlaysContainer.appendChild(ov);
     }
