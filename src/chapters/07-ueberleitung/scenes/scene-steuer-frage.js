@@ -75,6 +75,7 @@ export default {
 
   init({ gsap, ScrollTrigger }) {
     const waage      = document.getElementById('waage-grp');
+    const crashBall  = document.getElementById('crash-ball');
     const lblKapitel = document.getElementById('lbl-kapitel');
     const lblPeriode = document.getElementById('lbl-periode');
     const lblYear    = document.getElementById('lbl-year');
@@ -102,6 +103,11 @@ export default {
     /* Frage text sits on the LEFT (default overlay position) */
     gsap.set('#st-ch7-steuer-frage', { left: '0', right: 'auto' });
 
+    /* Crash ball: natural resting position is on the SVG floor (cy=422, r=140).
+       Start 900px above, transformOrigin at bottom so squash pivots on the floor. */
+    gsap.set(crashBall, { y: -900 });
+    gsap.set('#crash-ball-inner', { scale: 1.9, transformOrigin: '50% 50%' });
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-ch7-steuer-frage',
@@ -114,6 +120,14 @@ export default {
     /* 20pct text and scale fade out together on enter */
     textOut(tl, '#st-ch7-steuer-20pct', 0.05);
     tl.to(waage, { opacity: 0, duration: 0.20, ease: 'power1.in' }, 0.05);
+
+    /* Crash ball falls in from above and lands on the floor */
+    tl.to(crashBall, { opacity: 1, duration: 0.04, ease: 'none' }, 0.04);
+    tl.to(crashBall, { y: 0, duration: 0.62, ease: 'power3.in' }, 0.04);
+    /* Crack appears on impact */
+    tl.to('#crash-ball-crack', { opacity: 1, duration: 0.06, ease: 'power2.out' }, 0.66);
+    /* Next scroll: ball falls off the bottom of the screen */
+    tl.to(crashBall, { y: 350, duration: 0.14, ease: 'power2.in' }, 0.72);
 
     // Bridging question in → out
     textIn(tl, '#st-ch7-steuer-frage', 0.28);

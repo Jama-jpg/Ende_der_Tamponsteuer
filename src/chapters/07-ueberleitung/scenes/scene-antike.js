@@ -16,7 +16,7 @@ export default {
     id: 'st-ch7-antike-left',
     html: `
       <p class="sl">In der Antike<br>nahm man sich unter anderem</p>
-      <p class="sh">Stoffrollen,<br>Naturschwämme</p>
+      <p class="sh">STOFFROLLEN,<br>NATURSCHWÄMME</p>
       <p class="sl">zur Hilfe</p>
     `,
   },

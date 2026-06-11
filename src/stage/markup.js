@@ -301,6 +301,29 @@ export const stageMarkup = /* html */ `
 
     </g>
 
+    <!-- ── CHAPTER 07: CRASH BALL ───────────────────────────────────
+         Used in scene-steuer-frage: same visual as the right pan (tampon + 20%),
+         but a standalone element so it can fall freely without applyGravity conflict.
+         Resting position: circle sitting on SVG floor (cy=422, r=140 → bottom=562).
+         GSAP animates y from -900 → 0, then squashes on impact. -->
+    <g id="crash-ball" opacity="0">
+      <circle cx="800" cy="422" r="140" fill="#C9C9C0"/>
+      <g id="crash-ball-inner">
+        <text x="800" y="354" text-anchor="middle"
+              class="svg-mono" font-size="9" fill="#1a1a1a" letter-spacing="1.5">TAMPON</text>
+        <rect x="772" y="382" width="56" height="20" rx="10" fill="#D63335"/>
+        <path d="M828,392 C837,387 850,397 859,392"
+              stroke="#D63335" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>
+      <text x="800" y="524" text-anchor="middle"
+            class="svg-serif" font-size="52" fill="#1a1a1a">20%</text>
+      <!-- Crack: appears on landing, opacity animated in scene-steuer-frage -->
+      <path id="crash-ball-crack" opacity="0"
+            d="M812,288 L775,385 L810,415 L768,555"
+            stroke="white" stroke-width="7" fill="none"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
     <!-- ── CHAPTER 08: RIGHT SPINE (3-column timeline layout) ────────
          Slides in from the right when the timeline's 3-column layout
          activates. No dots, no progress indicator — decorative only. -->

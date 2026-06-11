@@ -17,7 +17,7 @@ export default {
     id: 'st-ch7-steinzeit',
     html: `
       <p class="sl">In der Steinzeit<br>half die Natur selbst:</p>
-      <p class="sh">Moos, Gras,<br>Tierfelle</p>
+      <p class="sh">MOOS, GRAS,<br>TIERFELLE</p>
       <p class="sl">wurden benutzt um Blut aufzufangen</p>
     `,
   },
