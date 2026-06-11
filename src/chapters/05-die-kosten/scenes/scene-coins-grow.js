@@ -19,7 +19,7 @@ import { Y_IN, Y_OUT, DUR_IN, DUR_OUT } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch5-grow',
-  height: '200vh',
+  height: '150vh',
   skipSnapStart: true,
   skipSnapEnd: true,
   snapPoints: [0.75],

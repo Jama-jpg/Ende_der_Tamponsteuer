@@ -13,7 +13,7 @@ import { textIn, textOut } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch6-folgen',
-  height: '150vh',
+  height: '200vh',
   skipSnapStart: true,
   snapPoints: [0.65],
 

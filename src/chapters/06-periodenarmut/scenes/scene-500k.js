@@ -9,7 +9,7 @@
      0.50–1.00  Hold
 ═══════════════════════════════════════════════════════════════════ */
 import { POV_SUB_R } from '../../../core/constants.js';
-import { textIn, textOut } from '../../../core/text-anim.js';
+import { textIn, Y_IN, Y_OUT, DUR_IN, DUR_OUT } from '../../../core/text-anim.js';
 
 const POV_SUB_CIRC = 2 * Math.PI * 108; // ≈ 678.6 — must match markup stroke-dasharray
 
@@ -26,7 +26,7 @@ export default {
            <p class="sl">FRAUEN VON PERIODENARMUT BETROFFEN</p>`,
   },
 
-  init({ gsap, stage }) {
+  init({ gsap, ScrollTrigger, stage }) {
     const { povSub, povSubSpinner } = stage.refs;
 
     const tl = gsap.timeline({
@@ -40,7 +40,14 @@ export default {
 
     /* scene-1-4m owns #st-ch6-14m-main fade-out. */
     textIn(tl, '#st-ch6-500k', 0.10);
-    textOut(tl, '#st-ch6-500k', 0.92);
+
+    /* Text stays visible until the next scene's text starts appearing. */
+    ScrollTrigger.create({
+      trigger:     '#s-ch6-folgen',
+      start:       'top 80%',
+      onEnter:     () => gsap.to('#st-ch6-500k', { opacity: 0, y: -Y_OUT(), duration: DUR_OUT, ease: 'power2.in' }),
+      onLeaveBack: () => gsap.to('#st-ch6-500k', { opacity: 1, y: 0,        duration: DUR_IN,  ease: 'power2.out' }),
+    });
 
     /* Pre-set the sub-circle to full radius so it appears at full size when faded in */
     tl.set(povSub, { attr: { r: POV_SUB_R } }, 0);

@@ -276,7 +276,7 @@ export const stageMarkup = /* html */ `
         </g>
         <!-- "10%" label -->
         <text x="200" y="440" text-anchor="middle"
-              class="svg-serif svg-italic" font-size="52" fill="#1a1a1a">10%</text>
+              class="svg-serif" font-size="52" fill="#1a1a1a">10%</text>
       </g>
 
       <!-- RIGHT pan: Tampon + "20%"
@@ -296,7 +296,7 @@ export const stageMarkup = /* html */ `
         </g>
         <!-- "20%" label -->
         <text x="800" y="440" text-anchor="middle"
-              class="svg-serif svg-italic" font-size="52" fill="#1a1a1a">20%</text>
+              class="svg-serif" font-size="52" fill="#1a1a1a">20%</text>
       </g>
 
     </g>

@@ -16,11 +16,9 @@ export default {
     id: 'st-ch7-steuer-intro',
     html: `
       <p class="sl">Zu dieser finanziellen Belastung<br>
-      für menstruierende Menschen<br>
       kommt auch noch ein strukturelles,<br>
       diskriminierendes Ungleichgewicht<br>
-      in der Besteuerung von<br>
-      Periodenprodukten hinzu.</p>
+      in der Besteuerung hinzu.</p>
     `,
   },
 
