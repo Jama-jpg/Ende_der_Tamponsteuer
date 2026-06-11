@@ -38,8 +38,9 @@ export default {
 
     const elems = { circleL, circleR };
 
-    /* Initialise arm positions at rot=0 (matches markup, but explicit is safe) */
-    applyGravity(0, elems);
+    /* Start already tipped left at -15° */
+    gsap.set(beamGrp, { rotation: -15, svgOrigin: '500 198' });
+    applyGravity(-15, elems);
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -65,18 +66,5 @@ export default {
       gsap.to(iconsL, { y: -12, duration: 1.8, ease: 'sine.inOut', repeat: -1, yoyo: true });
     }, 0.55);
 
-    /* Beam tips LEFT 15° (counter-clockwise); arms always stay vertical */
-    tl.fromTo(beamGrp,
-      { rotation: 0,   svgOrigin: '500 198' },
-      {
-        rotation: -15, svgOrigin: '500 198',
-        duration: 0.60,
-        ease: 'sine.inOut',
-        onUpdate() {
-          applyGravity(gsap.getProperty(beamGrp, 'rotation'), elems);
-        },
-      },
-      0.40,
-    );
   },
 };

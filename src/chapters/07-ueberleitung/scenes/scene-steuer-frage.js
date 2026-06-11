@@ -121,13 +121,13 @@ export default {
     textOut(tl, '#st-ch7-steuer-20pct', 0.05);
     tl.to(waage, { opacity: 0, duration: 0.20, ease: 'power1.in' }, 0.05);
 
-    /* Crash ball falls in from above and lands on the floor */
-    tl.to(crashBall, { opacity: 1, duration: 0.04, ease: 'none' }, 0.04);
-    tl.to(crashBall, { y: 0, duration: 0.62, ease: 'power3.in' }, 0.04);
+    /* Crash ball flies in at the same moment as the text */
+    tl.to(crashBall, { opacity: 1, duration: 0.04, ease: 'none' }, 0.28);
+    tl.to(crashBall, { y: 0, duration: 0.22, ease: 'power3.in' }, 0.28);
     /* Crack appears on impact */
-    tl.to('#crash-ball-crack', { opacity: 1, duration: 0.06, ease: 'power2.out' }, 0.66);
+    tl.to('#crash-ball-crack', { opacity: 1, duration: 0.06, ease: 'power2.out' }, 0.50);
     /* Next scroll: ball falls off the bottom of the screen */
-    tl.to(crashBall, { y: 350, duration: 0.14, ease: 'power2.in' }, 0.72);
+    tl.to(crashBall, { y: 350, duration: 0.14, ease: 'power2.in' }, 0.84);
 
     // Bridging question in → out
     textIn(tl, '#st-ch7-steuer-frage', 0.28);
