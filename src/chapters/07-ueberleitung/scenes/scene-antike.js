@@ -9,7 +9,7 @@ import { textIn, textOut } from '../../../core/text-anim.js';
 
 export default {
   id: 's-ch7-antike',
-  height: '300vh',
+  height: '450vh',
   skipSnapStart: true,
 
   overlay: {
@@ -36,8 +36,20 @@ export default {
       overlaysContainer.appendChild(ov);
     }
 
-    gsap.set('#st-ch7-antike-left',  { left: '0', right: 'auto' });
-    gsap.set('#st-ch7-antike-right', { left: 'auto', right: '0' });
+    if (!document.getElementById('st-ch7-antike-right-2')) {
+      const ov2 = document.createElement('div');
+      ov2.className = 'stext';
+      ov2.id = 'st-ch7-antike-right-2';
+      ov2.innerHTML = `
+        <p class="sl">Die Blutung sei<br>kein gesunder Zyklus,<br>sondern die notwendige<br>Reinigung eines</p>
+        <p class="sh">BIOLOGISCHEN<br>DEFEKTS.</p>
+      `;
+      overlaysContainer.appendChild(ov2);
+    }
+
+    gsap.set('#st-ch7-antike-left',    { left: '0', right: 'auto' });
+    gsap.set('#st-ch7-antike-right',   { left: 'auto', right: '0' });
+    gsap.set('#st-ch7-antike-right-2', { left: 'auto', right: '0' });
 
     const mainSvg = document.getElementById('main-svg');
     if (!document.getElementById('antike-grp')) {
@@ -107,12 +119,16 @@ export default {
       },
     });
 
-    textIn(tl, '#st-ch7-antike-left', 0.15);
+    textIn(tl, '#st-ch7-antike-left',  0.15);
     textIn(tl, '#st-ch7-antike-right', 0.15);
     tl.to('#antike-grp', { opacity: 1, duration: 0.15, ease: 'power2.out' }, 0.15);
 
-    textOut(tl, '#st-ch7-antike-left', 0.82);
-    textOut(tl, '#st-ch7-antike-right', 0.82);
+    // right text swaps mid-scene; left + SVGs stay visible
+    textOut(tl, '#st-ch7-antike-right',   0.42);
+    textIn(tl,  '#st-ch7-antike-right-2', 0.52);
+
+    textOut(tl, '#st-ch7-antike-left',    0.82);
+    textOut(tl, '#st-ch7-antike-right-2', 0.82);
     tl.to('#antike-grp', { opacity: 0, duration: 0.10, ease: 'power2.in' }, 0.82);
   },
 };
