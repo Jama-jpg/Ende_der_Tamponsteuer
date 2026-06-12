@@ -5,9 +5,10 @@ import steuerFrage      from './scenes/scene-steuer-frage.js';
 import geschichteIntro  from './scenes/scene-geschichte-intro.js';
 import steinzeit        from './scenes/scene-steinzeit.js';
 import antike           from './scenes/scene-antike.js';
+import mittelalter      from './scenes/scene-mittelalter.js';
 
 export default {
   id: 'ueberleitung',
   title: 'Die Überleitung',
-  scenes: [steuerIntro, steuer10pct, steuer20pct, steuerFrage, geschichteIntro, steinzeit, antike],
+  scenes: [steuerIntro, steuer10pct, steuer20pct, steuerFrage, geschichteIntro, steinzeit, antike, mittelalter],
 };
