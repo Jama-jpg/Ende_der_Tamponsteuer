@@ -64,17 +64,13 @@ export default {
       mainSvg.appendChild(g);
     }
 
-    gsap.to('#steinzeit-tierfell', { y: -1.2, duration: 1.8, ease: 'sine.inOut', repeat: -1, yoyo: true });
-    gsap.to('#steinzeit-moos',     { y: -1.2, duration: 1.8, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 0.3 });
-    gsap.to('#steinzeit-gras',     { y: -1.2, duration: 1.8, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 0.6 });
-
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-ch7-steinzeit',
         start: 'top top',
         end: 'bottom bottom',
         scrub: 0.4,
-      },
+      }
     });
 
     textIn(tl, '#st-ch7-steinzeit', 0.15);

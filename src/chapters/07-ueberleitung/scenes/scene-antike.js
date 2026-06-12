@@ -63,9 +63,6 @@ export default {
       mainSvg.appendChild(g);
     }
 
-    gsap.to('#antike-stoffrolle', { y: -1.2, duration: 1.8, ease: 'sine.inOut', repeat: -1, yoyo: true });
-    gsap.to('#antike-schwamm',    { y: -1.2, duration: 1.8, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 0.4 });
-
     // Update era label from STEINZEIT → ANTIKE
     const lblYear = document.getElementById('lbl-year');
     let labelSet = false;
