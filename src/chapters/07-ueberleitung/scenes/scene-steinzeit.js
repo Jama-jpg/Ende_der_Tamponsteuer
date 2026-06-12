@@ -64,12 +64,26 @@ export default {
       mainSvg.appendChild(g);
     }
 
+    let floatTween = null;
+
+    function startFloat() {
+      if (floatTween) floatTween.kill();
+      floatTween = gsap.to('#steinzeit-grp', { y: -5, duration: 2.5, ease: 'sine.inOut', repeat: -1, yoyo: true });
+    }
+    function stopFloat() {
+      if (floatTween) { floatTween.kill(); floatTween = null; gsap.set('#steinzeit-grp', { y: 0 }); }
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-ch7-steinzeit',
         start: 'top top',
         end: 'bottom bottom',
         scrub: 0.4,
+        onEnter()     { startFloat(); },
+        onEnterBack() { startFloat(); },
+        onLeave()     { stopFloat(); },
+        onLeaveBack() { stopFloat(); },
       }
     });
 

@@ -67,6 +67,16 @@ export default {
     const lblYear = document.getElementById('lbl-year');
     let labelSet = false;
 
+    let floatTween = null;
+
+    function startFloat() {
+      if (floatTween) floatTween.kill();
+      floatTween = gsap.to('#antike-grp', { y: -5, duration: 2.5, ease: 'sine.inOut', repeat: -1, yoyo: true });
+    }
+    function stopFloat() {
+      if (floatTween) { floatTween.kill(); floatTween = null; gsap.set('#antike-grp', { y: 0 }); }
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-ch7-antike',
@@ -74,6 +84,7 @@ export default {
         end: 'bottom bottom',
         scrub: 0.4,
         onEnter() {
+          startFloat();
           if (!labelSet && lblYear) {
             labelSet = true;
             gsap.timeline()
@@ -82,7 +93,10 @@ export default {
               .to(lblYear, { scale: 1, duration: 0.3, ease: 'power2.inOut' });
           }
         },
+        onEnterBack() { startFloat(); },
+        onLeave()     { stopFloat(); },
         onLeaveBack() {
+          stopFloat();
           labelSet = false;
           if (lblYear) {
             gsap.killTweensOf(lblYear);
