@@ -110,9 +110,6 @@ export default {
           <ellipse cx="0" cy="0"   rx="37" ry="66" fill="#D23537"/>
           <ellipse cx="0" cy="0"   rx="28" ry="53" fill="none" stroke="white" stroke-width="5"/>
         </g>
-        <!-- MwSt counter — center bottom -->
-        <text id="s1973-mwst" x="500" y="496" text-anchor="middle"
-              class="svg-serif" font-size="30" fill="#1a1a1a">–% MwST.</text>
       `;
       mainSvg.appendChild(g);
     }
@@ -138,8 +135,9 @@ export default {
     const yIn  = Y_IN();
     const yOut = Y_OUT();
 
+    const vatNum   = document.getElementById('vat-big-num');
+    const vatPct   = document.getElementById('vat-big-pct'); // "%" span hidden after scene-steuer-frage
     const mwstProxy = { val: 0 };
-    const getMwstEl = () => document.getElementById('s1973-mwst');
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -149,6 +147,9 @@ export default {
         scrub: 0.4,
         onEnter() {
           startFloat();
+          /* Restore the "%" sign hidden by scene-steuer-frage, show dash as initial value */
+          if (vatPct) { vatPct.style.display = 'inline-block'; gsap.set(vatPct, { opacity: 1 }); }
+          if (vatNum) vatNum.textContent = '–';
           if (!labelSet && lblYear) {
             labelSet = true;
             gsap.timeline()
@@ -157,10 +158,17 @@ export default {
               .to(lblYear, { scale: 1, duration: 0.3, ease: 'power2.inOut' });
           }
         },
-        onEnterBack() { startFloat(); },
-        onLeave()     { stopFloat(); },
+        onEnterBack() {
+          startFloat();
+          if (vatPct) { vatPct.style.display = 'inline-block'; gsap.set(vatPct, { opacity: 1 }); }
+          if (vatNum) vatNum.textContent = '–';
+        },
+        onLeave() { stopFloat(); },
         onLeaveBack() {
           stopFloat();
+          /* Restore state from scene-steuer-frage: "—" with hidden "%" */
+          if (vatNum) vatNum.textContent = '—';
+          if (vatPct) { gsap.set(vatPct, { opacity: 0 }); vatPct.style.display = 'none'; }
           labelSet = false;
           if (lblYear) {
             gsap.killTweensOf(lblYear);
@@ -230,18 +238,15 @@ export default {
       0.67,
     );
 
-    /* Reset counter text, then count 0 → 16 in sync with scroll */
-    tl.call(() => { const el = getMwstEl(); if (el) el.textContent = '–% MwST.'; }, [], 0.66);
+    /* Reset to "–" just before counting, then count 0 → 16 via the existing vat-big-num */
+    tl.call(() => { if (vatNum) vatNum.textContent = '–'; }, [], 0.66);
     tl.fromTo(mwstProxy,
       { val: 0 },
       {
         val: 16,
         duration: 0.10,
         ease: 'none',
-        onUpdate() {
-          const el = getMwstEl();
-          if (el) el.textContent = `${Math.round(mwstProxy.val)}% MwST.`;
-        },
+        onUpdate() { if (vatNum) vatNum.textContent = Math.round(mwstProxy.val); },
       },
       0.67,
     );
