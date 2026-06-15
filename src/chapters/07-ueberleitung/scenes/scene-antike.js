@@ -86,7 +86,7 @@ export default {
         trigger: '#s-ch7-antike',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.4,
+        scrub: 1.2,
         onEnter() {
           if (!labelSet && lblYear) {
             labelSet = true;
@@ -110,19 +110,13 @@ export default {
     textIn(tl, '#st-ch7-antike-left',  0.15);
     textIn(tl, '#st-ch7-antike-right', 0.15);
 
-    // Staggered slide-up entrance + upward parallax throughout scene
-    const yValues = [[60, -40], [50, -30], [70, -50]];
+    // Staggered slide-up entrance
     cards.forEach((card, i) => {
-      const inAt = 0.03 + i * 0.04;
+      const inAt = 0.02 + i * 0.05;
       tl.fromTo(card,
-        { opacity: 0, y: yValues[i][0] },
-        { opacity: 1, y: 0,            duration: 0.15, ease: 'power2.out' },
+        { opacity: 0, y: 80 },
+        { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out' },
         inAt,
-      );
-      tl.fromTo(card,
-        { y: 0 },
-        { y: yValues[i][1], duration: 1.0, ease: 'none' },
-        inAt + 0.15,
       );
     });
 
