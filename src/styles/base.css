@@ -114,9 +114,8 @@ body {
   cursor: pointer;
 }
 
-/* Spine axis — decorative only, no pointer interaction */
 #spine-hit {
-  pointer-events: none;
+  pointer-events: all;
 }
 
 /* SVG text font classes */

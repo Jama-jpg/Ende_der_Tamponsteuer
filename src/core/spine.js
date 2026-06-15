@@ -19,11 +19,68 @@ const clamp01 = (v) => Math.min(1, Math.max(0, v));
 let yFloor = Y_TOP;
 export function setSpineFloor(y) { yFloor = y; }
 
-export function createSpine({ ScrollTrigger, refs }) {
+export function createSpine({ ScrollTrigger, refs, gsap }) {
   const { cAxisProgress, spineHit, periodDots } = refs;
   if (!cAxisProgress || !spineHit) return;
 
   const dots = periodDots ? Array.from(periodDots.children) : [];
+
+  /* ── Dot 1 click → jump to Geschichte-Intro ──────────────────────── */
+  spineHit.style.cursor = 'pointer';
+  spineHit.addEventListener('click', (e) => {
+    const svg = spineHit.closest('svg');
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX;
+    pt.y = e.clientY;
+    const svgY = pt.matrixTransform(svg.getScreenCTM().inverse()).y;
+
+    let nearestIdx = 0;
+    let nearestDist = Infinity;
+    DOT_YS.forEach((y, i) => {
+      const d = Math.abs(svgY - y);
+      if (d < nearestDist) { nearestDist = d; nearestIdx = i; }
+    });
+
+    if (nearestIdx === 1 && nearestDist < 40) {
+      const target = document.querySelector('#s-ch7-geschichte-intro');
+      if (!target || !gsap) return;
+
+      // Cover the page so the brief animation cascade during the scroll jump
+      // is invisible to the user
+      const cover = document.createElement('div');
+      cover.style.cssText =
+        'position:fixed;inset:0;background:#F8F8F6;z-index:99999;pointer-events:none;';
+      document.body.appendChild(cover);
+
+      // Jump — ScrollTrigger processes this in its next rAF
+      window.scrollTo(0, target.offsetTop);
+
+      // After GSAP has rendered the new scroll position, blank everything
+      // except the spine. Scrub tweens only re-fire on the NEXT scroll event,
+      // so this state persists until the user scrolls again.
+      setTimeout(() => {
+        document.querySelectorAll('#main-svg > *:not(defs)').forEach(el => {
+          if (!['c-axis', 'period-dots', 'c-axis-progress'].includes(el.id)) {
+            gsap.set(el, { opacity: 0 });
+          }
+        });
+        document.querySelectorAll('.stext').forEach(el =>
+          gsap.set(el, { opacity: 0 })
+        );
+
+        // Restore persistent spine elements
+        gsap.set(refs.cAxis, { opacity: 1, strokeDashoffset: 0 });
+        gsap.set(refs.cAxisProgress, { opacity: 1 });
+        gsap.set(refs.periodDots, { opacity: 1 });
+        refs.cAxisProgress.setAttribute('y2', DOT_YS[1]);
+        dots[0]?.setAttribute('fill', FILLED);
+        dots[1]?.setAttribute('fill', FILLED);
+
+        // Fade out and remove the cover
+        gsap.to(cover, { opacity: 0, duration: 0.3, onComplete: () => cover.remove() });
+      }, 100);
+    }
+  });
 
   /* ── Piecewise spine progress ──────────────────────────────────────
      3 segments map to the 3 gaps between the 4 spine dots.
