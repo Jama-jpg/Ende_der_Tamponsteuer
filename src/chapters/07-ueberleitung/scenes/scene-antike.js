@@ -75,6 +75,7 @@ export default {
     }
 
     const cards = Array.from(document.querySelectorAll('#photos-antike .photo-card'));
+    gsap.set('#photos-antike', { opacity: 1 });
 
     // Update era label from STEINZEIT → ANTIKE
     const lblYear = document.getElementById('lbl-year');
@@ -109,19 +110,19 @@ export default {
     textIn(tl, '#st-ch7-antike-left',  0.15);
     textIn(tl, '#st-ch7-antike-right', 0.15);
 
-    // Staggered clip-path reveal + scale settle
-    const yValues = [[-30, 50], [-20, 30], [-50, 70]];
+    // Staggered slide-up entrance + upward parallax throughout scene
+    const yValues = [[60, -40], [50, -30], [70, -50]];
     cards.forEach((card, i) => {
       const inAt = 0.03 + i * 0.04;
       tl.fromTo(card,
-        { clipPath: 'inset(100% 0 0 0)', scale: 1.06, opacity: 1 },
-        { clipPath: 'inset(0% 0 0 0)',   scale: 1.0,  duration: 0.15, ease: 'power2.out' },
+        { opacity: 0, y: yValues[i][0] },
+        { opacity: 1, y: 0,            duration: 0.15, ease: 'power2.out' },
         inAt,
       );
       tl.fromTo(card,
-        { y: yValues[i][0] },
+        { y: 0 },
         { y: yValues[i][1], duration: 1.0, ease: 'none' },
-        0,
+        inAt + 0.15,
       );
     });
 
@@ -132,6 +133,6 @@ export default {
     textOut(tl, '#st-ch7-antike-left',    0.86);
     textOut(tl, '#st-ch7-antike-right-2', 0.86);
 
-    tl.to(cards, { opacity: 0, duration: 0.07, ease: 'power2.in' }, 0.93);
+    tl.to('#photos-antike', { opacity: 0, duration: 0.07, ease: 'power2.in' }, 0.93);
   },
 };

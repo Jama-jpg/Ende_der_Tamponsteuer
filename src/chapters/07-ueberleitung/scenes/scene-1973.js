@@ -115,6 +115,7 @@ export default {
     }
 
     const cards = Array.from(document.querySelectorAll('#photos-1973 .photo-card'));
+    gsap.set('#photos-1973', { opacity: 1 });
 
     /* ── MwSt counter — standalone SVG text (no binde shapes) ── */
     const mainSvg = document.getElementById('main-svg');
@@ -203,19 +204,19 @@ export default {
     textIn(tl, '#st-ch7-1973-right',  0.15);
     tl.to('#s1973-mwst', { opacity: 1, duration: 0.13, ease: 'power2.out' }, 0.15);
 
-    /* ── Photo cards: staggered clip-path reveal + parallax ────── */
-    const yValues = [[-30, 50], [-20, 30], [-50, 70]];
+    /* ── Photo cards: staggered slide-up entrance + upward parallax ── */
+    const yValues = [[60, -40], [50, -30], [70, -50]];
     cards.forEach((card, i) => {
       const inAt = 0.03 + i * 0.04;
       tl.fromTo(card,
-        { clipPath: 'inset(100% 0 0 0)', scale: 1.06, opacity: 1 },
-        { clipPath: 'inset(0% 0 0 0)',   scale: 1.0,  duration: 0.15, ease: 'power2.out' },
+        { opacity: 0, y: yValues[i][0] },
+        { opacity: 1, y: 0,            duration: 0.15, ease: 'power2.out' },
         inAt,
       );
       tl.fromTo(card,
-        { y: yValues[i][0] },
+        { y: 0 },
         { y: yValues[i][1], duration: 1.0, ease: 'none' },
-        0,
+        inAt + 0.15,
       );
     });
 
@@ -250,6 +251,6 @@ export default {
     textOut(tl, '#st-ch7-1973-center',  0.86);
     textOut(tl, '#st-ch7-1973-right-3', 0.86);
     tl.to('#s1973-mwst', { opacity: 0, duration: 0.09, ease: 'power2.in' }, 0.86);
-    tl.to(cards, { opacity: 0, duration: 0.07, ease: 'power2.in' }, 0.93);
+    tl.to('#photos-1973', { opacity: 0, duration: 0.07, ease: 'power2.in' }, 0.93);
   },
 };
