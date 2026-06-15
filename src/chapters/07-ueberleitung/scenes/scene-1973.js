@@ -4,11 +4,15 @@ import { textIn, textOut } from '../../../core/text-anim.js';
    SCENE — 1973  (Chapter 7 · Scene 10)  — 600vh, 3 right-column phases
 
    Spine animation  0.00 → 0.15   center 500→333, right slides in 1050→667
-   Phase 1 in       0.15 → 0.28   left + center + binde + right-v1 + mwst dash
+   Phase 1 in       0.15 → 0.28   left + center + photos + right-v1 + mwst dash
    Right swap 1→2   0.32 → 0.40   right-v1 out / 0.40→0.48 right-v2 (8%) in
    Right swap 2→3   0.55 → 0.63   right-v2 out / 0.63→0.71 right-v3 (20%) in
                                    + MwST counter 0 → 16
    Fade out         0.86 → 0.95   everything out
+
+   Left side: 3 photo placeholders with parallax + clip-path reveal.
+   MwSt counter preserved as standalone SVG text element.
+   → Replace placeholder images in /public/images/1973-[1-3].jpg
 ═══════════════════════════════════════════════════════════════════ */
 
 export default {
@@ -87,34 +91,45 @@ export default {
     gsap.set('#st-ch7-1973-right-2', { left: 'auto', width: '33%', right: '0'    });
     gsap.set('#st-ch7-1973-right-3', { left: 'auto', width: '33%', right: '0'    });
 
-    /* ── SVG: binde icons + MwSt counter ── */
-    const mainSvg = document.getElementById('main-svg');
-    if (!document.getElementById('s1973-grp')) {
-      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      g.id = 's1973-grp';
-      g.setAttribute('opacity', '0');
-      g.innerHTML = `
-        <!-- GRAY BINDE — upper center-left -->
-        <g id="s1973-binde-gray" transform="translate(215, 118) rotate(45)">
-          <ellipse cx="0" cy="-66" rx="22" ry="16" fill="#C9C9C0"/>
-          <ellipse cx="0" cy="66"  rx="22" ry="16" fill="#C9C9C0"/>
-          <ellipse cx="0" cy="0"   rx="44" ry="78" fill="#C9C9C0"/>
-          <ellipse cx="0" cy="0"   rx="34" ry="64" fill="none" stroke="white" stroke-width="5.5"/>
-        </g>
-
-        <!-- RED BINDE — lower-left corner -->
-        <g id="s1973-binde-red" transform="translate(103, 450) rotate(45)">
-          <ellipse cx="0" cy="-55" rx="18" ry="13" fill="#D23537"/>
-          <ellipse cx="0" cy="55"  rx="18" ry="13" fill="#D23537"/>
-          <ellipse cx="0" cy="0"   rx="37" ry="66" fill="#D23537"/>
-          <ellipse cx="0" cy="0"   rx="28" ry="53" fill="none" stroke="white" stroke-width="5"/>
-        </g>
-
-        <!-- MwSt counter — center column bottom -->
-        <text id="s1973-mwst" x="500" y="496" text-anchor="middle"
-              class="svg-serif" font-size="30" fill="#1a1a1a">–% MwST.</text>
+    // ── Photo panel (fits the 33% left column) ──────────────────────
+    if (!document.getElementById('photos-1973')) {
+      const p = document.createElement('div');
+      p.className = 'scene-photos';
+      p.id = 'photos-1973';
+      p.style.width = '33%';
+      p.innerHTML = `
+        <div class="photo-card" style="left:6%;top:8%;width:80%;height:40%;transform:rotate(-2deg)">
+          <img src="" alt="">
+          <span class="photo-label">BILD 1 · 1973</span>
+        </div>
+        <div class="photo-card" style="left:4%;top:52%;width:58%;height:28%;transform:rotate(1.5deg)">
+          <img src="" alt="">
+          <span class="photo-label">BILD 2 · 1973</span>
+        </div>
+        <div class="photo-card" style="left:64%;top:58%;width:30%;height:22%;transform:rotate(-1deg)">
+          <img src="" alt="">
+          <span class="photo-label">BILD 3 · 1973</span>
+        </div>
       `;
-      mainSvg.appendChild(g);
+      overlaysContainer.appendChild(p);
+    }
+
+    const cards = Array.from(document.querySelectorAll('#photos-1973 .photo-card'));
+
+    /* ── MwSt counter — standalone SVG text (no binde shapes) ── */
+    const mainSvg = document.getElementById('main-svg');
+    if (!document.getElementById('s1973-mwst')) {
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.id = 's1973-mwst';
+      t.setAttribute('x', '500');
+      t.setAttribute('y', '496');
+      t.setAttribute('text-anchor', 'middle');
+      t.setAttribute('class', 'svg-serif');
+      t.setAttribute('font-size', '30');
+      t.setAttribute('fill', '#1a1a1a');
+      t.setAttribute('opacity', '0');
+      t.textContent = '–% MwST.';
+      mainSvg.appendChild(t);
     }
 
     /* Right spine: clear opacity + dashoffset, park off-screen */
@@ -125,15 +140,6 @@ export default {
 
     const lblYear = document.getElementById('lbl-year');
     let labelSet = false;
-
-    let floatTween = null;
-    function startFloat() {
-      if (floatTween) floatTween.kill();
-      floatTween = gsap.to('#s1973-grp', { y: -5, duration: 2.5, ease: 'sine.inOut', repeat: -1, yoyo: true });
-    }
-    function stopFloat() {
-      if (floatTween) { floatTween.kill(); floatTween = null; gsap.set('#s1973-grp', { y: 0 }); }
-    }
 
     /* MwSt counter proxy — animated inside the scrub timeline */
     const mwstProxy = { val: 0 };
@@ -146,7 +152,6 @@ export default {
         end: 'bottom bottom',
         scrub: 0.4,
         onEnter() {
-          startFloat();
           if (!labelSet && lblYear) {
             labelSet = true;
             gsap.timeline()
@@ -155,10 +160,7 @@ export default {
               .to(lblYear, { scale: 1, duration: 0.3, ease: 'power2.inOut' });
           }
         },
-        onEnterBack() { startFloat(); },
-        onLeave()     { stopFloat(); },
         onLeaveBack() {
-          stopFloat();
           labelSet = false;
           if (lblYear) {
             gsap.killTweensOf(lblYear);
@@ -195,11 +197,27 @@ export default {
       0,
     );
 
-    /* ── Phase 1: all content fades in (0.15 → 0.28) ──────────── */
+    /* ── Phase 1: text + MwSt counter fade in (0.15 → 0.28) ──── */
     textIn(tl, '#st-ch7-1973-left',   0.15);
     textIn(tl, '#st-ch7-1973-center', 0.15);
     textIn(tl, '#st-ch7-1973-right',  0.15);
-    tl.to('#s1973-grp', { opacity: 1, duration: 0.13, ease: 'power2.out' }, 0.15);
+    tl.to('#s1973-mwst', { opacity: 1, duration: 0.13, ease: 'power2.out' }, 0.15);
+
+    /* ── Photo cards: staggered clip-path reveal + parallax ────── */
+    const yValues = [[-30, 50], [-20, 30], [-50, 70]];
+    cards.forEach((card, i) => {
+      const inAt = 0.03 + i * 0.04;
+      tl.fromTo(card,
+        { clipPath: 'inset(100% 0 0 0)', scale: 1.06, opacity: 1 },
+        { clipPath: 'inset(0% 0 0 0)',   scale: 1.0,  duration: 0.15, ease: 'power2.out' },
+        inAt,
+      );
+      tl.fromTo(card,
+        { y: yValues[i][0] },
+        { y: yValues[i][1], duration: 1.0, ease: 'none' },
+        0,
+      );
+    });
 
     /* ── Right swap 1→2 (0.32 out, 0.40 in) ────────────────────── */
     textOut(tl, '#st-ch7-1973-right',   0.32);
@@ -227,10 +245,11 @@ export default {
       0.63,
     );
 
-    /* ── Left + center persist; all out at end (0.86 → 0.95) ───── */
+    /* ── All out at end (0.86 → 0.95) ──────────────────────────── */
     textOut(tl, '#st-ch7-1973-left',    0.86);
     textOut(tl, '#st-ch7-1973-center',  0.86);
     textOut(tl, '#st-ch7-1973-right-3', 0.86);
-    tl.to('#s1973-grp', { opacity: 0, duration: 0.09, ease: 'power2.in' }, 0.86);
+    tl.to('#s1973-mwst', { opacity: 0, duration: 0.09, ease: 'power2.in' }, 0.86);
+    tl.to(cards, { opacity: 0, duration: 0.07, ease: 'power2.in' }, 0.93);
   },
 };
