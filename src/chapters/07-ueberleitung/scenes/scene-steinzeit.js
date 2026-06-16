@@ -3,12 +3,12 @@ import { textIn, textOut } from '../../../core/text-anim.js';
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — Steinzeit  (Chapter 7 · Scene 6)
    Right text from scene-geschichte-intro (Stigmatisierung) persists.
-   Left side: 3 photos, slide-up entrance + internal image parallax.
+   Left side: 3 photos, slide-up entrance + continuous upward parallax.
 
-   Image assignment → save to /public/images/ :
-     steinzeit-1.jpg  ←  Gras  (portrait, green grass)
-     steinzeit-2.jpg  ←  Tierfell  (landscape, animal fur)
-     steinzeit-3.jpg  ←  Moos  (landscape, moss on rock)
+   Images live in /public/images/ :
+     steinzeit-moos.png  ←  Moos auf Stein
+     steinzeit-gras.png  ←  Gras
+     steinzeit-fell.png  ←  Tierfell
 ═══════════════════════════════════════════════════════════════════ */
 
 export default {
@@ -33,16 +33,16 @@ export default {
       p.className = 'scene-photos';
       p.id = 'photos-steinzeit';
       p.innerHTML = `
-        <div class="photo-card" style="left:6%;top:7%;width:54%;height:43%;transform:rotate(-2.5deg)">
-          <img src="./images/steinzeit-1.jpg" alt="Gras"
+        <div class="photo-card" style="left:7%;top:15%;width:46%;height:29%">
+          <img src="./images/steinzeit-moos.png" alt="Moos"
                style="position:absolute;width:100%;height:100%;top:0;left:0;object-fit:cover;">
         </div>
-        <div class="photo-card" style="left:3%;top:54%;width:40%;height:31%;transform:rotate(1.5deg)">
-          <img src="./images/steinzeit-2.jpg" alt="Tierfell"
+        <div class="photo-card" style="left:61%;top:28%;width:32%;height:37%">
+          <img src="./images/steinzeit-gras.png" alt="Gras"
                style="position:absolute;width:100%;height:100%;top:0;left:0;object-fit:cover;">
         </div>
-        <div class="photo-card" style="left:45%;top:62%;width:29%;height:22%;transform:rotate(-1deg)">
-          <img src="./images/steinzeit-3.jpg" alt="Moos"
+        <div class="photo-card" style="left:20%;top:68%;width:45%;height:26%">
+          <img src="./images/steinzeit-fell.png" alt="Tierfell"
                style="position:absolute;width:100%;height:100%;top:0;left:0;object-fit:cover;">
         </div>
       `;
@@ -73,6 +73,10 @@ export default {
         inAt,
       );
     });
+
+    // Cards drift upward as a whole for the entire scroll duration —
+    // continuous parallax layered on top of the entrance slide-in.
+    tl.to(cards, { yPercent: -20, ease: 'none' }, 0);
 
     textOut(tl, '#st-ch7-steinzeit', 0.82);
     textOut(tl, '#st-ch7-geschichte-2', 0.82);

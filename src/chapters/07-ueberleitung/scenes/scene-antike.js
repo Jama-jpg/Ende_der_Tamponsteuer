@@ -59,16 +59,12 @@ export default {
       p.id = 'photos-antike';
       p.innerHTML = `
         <div class="photo-card" style="left:5%;top:9%;width:50%;height:41%;transform:rotate(2deg)">
-          <img src="" alt="">
-          <span class="photo-label">BILD 1 · ANTIKE</span>
+          <img src="./images/pexels-meruyert-gonullu-7500417.jpg" alt="Naturschwamm">
+          <span class="photo-label">NATURSCHWAMM · ANTIKE</span>
         </div>
-        <div class="photo-card" style="left:30%;top:48%;width:38%;height:30%;transform:rotate(-1.5deg)">
-          <img src="" alt="">
-          <span class="photo-label">BILD 2 · ANTIKE</span>
-        </div>
-        <div class="photo-card" style="left:2%;top:55%;width:27%;height:24%;transform:rotate(1deg)">
-          <img src="" alt="">
-          <span class="photo-label">BILD 3 · ANTIKE</span>
+        <div class="photo-card" style="left:20%;top:52%;width:42%;height:33%;transform:rotate(-1.5deg)">
+          <img src="./images/pexels-teona-swift-6850550.jpg" alt="Stoffrolle">
+          <span class="photo-label">STOFFROLLE · ANTIKE</span>
         </div>
       `;
       overlaysContainer.appendChild(p);
