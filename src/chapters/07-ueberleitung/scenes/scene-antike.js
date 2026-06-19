@@ -60,15 +60,15 @@ export default {
       p.style.width = '100%';
       p.innerHTML = `
         <div class="photo-card" style="left:5%;top:10%;width:14%;transform:rotate(2deg)">
-          <img src="./images/antike-1.jpg" alt="Naturschwamm" style="height:auto;object-fit:initial;">
+          <img src="./images/Antike_1.png" alt="Naturschwamm" style="height:auto;object-fit:initial;">
           <span class="photo-label">NATURSCHWAMM · ANTIKE</span>
         </div>
         <div class="photo-card" style="left:9%;top:55%;width:14%;transform:rotate(-1.5deg)">
-          <img src="./images/antike-2.jpg" alt="Stoffrolle" style="height:auto;object-fit:initial;">
+          <img src="./images/Antike_2.png" alt="Stoffrolle" style="height:auto;object-fit:initial;">
           <span class="photo-label">STOFFROLLE · ANTIKE</span>
         </div>
         <div class="photo-card" style="right:8%;top:15%;width:22%;transform:rotate(1.5deg)">
-          <img src="./images/antike-3.jpg" alt="Antike Statue" style="height:auto;object-fit:initial;">
+          <img src="./images/Antike_3.png" alt="Antike Statue" style="height:auto;object-fit:initial;">
           <span class="photo-label">STATUE · ANTIKE</span>
         </div>
       `;
