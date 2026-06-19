@@ -117,6 +117,19 @@ export default {
     const cards = Array.from(document.querySelectorAll('#photos-1973 .photo-card'));
     gsap.set('#photos-1973', { opacity: 1 });
 
+    // Atmospheric breathing — runs independently of the scroll timeline
+    Array.from(document.querySelectorAll('#photos-1973 img')).forEach((img, i) => {
+      gsap.to(img, {
+        scale: 1.06,
+        duration: 5 + i * 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: i * 1.4,
+        transformOrigin: 'center center',
+      });
+    });
+
     /* ── MwSt counter — standalone SVG text (no binde shapes) ── */
     const mainSvg = document.getElementById('main-svg');
     if (!document.getElementById('s1973-mwst')) {
@@ -208,6 +221,7 @@ export default {
     const yValues = [[60, -40], [50, -30], [70, -50]];
     cards.forEach((card, i) => {
       const inAt = 0.03 + i * 0.04;
+      const entranceEnd = inAt + 0.15;
       tl.fromTo(card,
         { opacity: 0, y: yValues[i][0] },
         { opacity: 1, y: 0,            duration: 0.15, ease: 'power2.out' },
@@ -215,8 +229,8 @@ export default {
       );
       tl.fromTo(card,
         { y: 0 },
-        { y: yValues[i][1], duration: 1.0, ease: 'none' },
-        inAt + 0.15,
+        { y: yValues[i][1], duration: 1.0 - entranceEnd, ease: 'none' },
+        entranceEnd,
       );
     });
 
@@ -246,11 +260,11 @@ export default {
       0.63,
     );
 
-    /* ── All out at end (0.86 → 0.95) ──────────────────────────── */
-    textOut(tl, '#st-ch7-1973-left',    0.86);
-    textOut(tl, '#st-ch7-1973-center',  0.86);
-    textOut(tl, '#st-ch7-1973-right-3', 0.86);
-    tl.to('#s1973-mwst', { opacity: 0, duration: 0.09, ease: 'power2.in' }, 0.86);
-    tl.to('#photos-1973', { opacity: 0, duration: 0.07, ease: 'power2.in' }, 0.93);
+    /* ── All out at end ─────────────────────────────────────────── */
+    textOut(tl, '#st-ch7-1973-left',    0.93);
+    textOut(tl, '#st-ch7-1973-center',  0.93);
+    textOut(tl, '#st-ch7-1973-right-3', 0.93);
+    tl.to('#s1973-mwst', { opacity: 0, duration: 0.04, ease: 'power2.in' }, 0.93);
+    tl.to('#photos-1973', { opacity: 0, duration: 0.04, ease: 'power2.in' }, 0.96);
   },
 };

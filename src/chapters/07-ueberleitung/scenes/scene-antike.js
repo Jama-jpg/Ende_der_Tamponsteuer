@@ -57,14 +57,19 @@ export default {
       const p = document.createElement('div');
       p.className = 'scene-photos';
       p.id = 'photos-antike';
+      p.style.width = '100%';
       p.innerHTML = `
-        <div class="photo-card" style="left:11%;top:10%;width:30%;height:20%;transform:rotate(2deg)">
-          <img src="./images/pexels-meruyert-gonullu-7500417.jpg" alt="Naturschwamm" style="object-position:center;">
+        <div class="photo-card" style="left:5%;top:10%;width:14%;transform:rotate(2deg)">
+          <img src="./images/antike-1.jpg" alt="Naturschwamm" style="height:auto;object-fit:initial;">
           <span class="photo-label">NATURSCHWAMM · ANTIKE</span>
         </div>
-        <div class="photo-card" style="left:19%;top:70%;width:30%;height:18%;transform:rotate(-1.5deg)">
-          <img src="./images/pexels-teona-swift-6850550.jpg" alt="Stoffrolle" style="object-position:center;">
+        <div class="photo-card" style="left:9%;top:55%;width:14%;transform:rotate(-1.5deg)">
+          <img src="./images/antike-2.jpg" alt="Stoffrolle" style="height:auto;object-fit:initial;">
           <span class="photo-label">STOFFROLLE · ANTIKE</span>
+        </div>
+        <div class="photo-card" style="right:8%;top:15%;width:22%;transform:rotate(1.5deg)">
+          <img src="./images/antike-3.jpg" alt="Antike Statue" style="height:auto;object-fit:initial;">
+          <span class="photo-label">STATUE · ANTIKE</span>
         </div>
       `;
       overlaysContainer.appendChild(p);
@@ -72,6 +77,19 @@ export default {
 
     const cards = Array.from(document.querySelectorAll('#photos-antike .photo-card'));
     gsap.set('#photos-antike', { opacity: 1 });
+
+    // Atmospheric breathing — runs independently of the scroll timeline
+    Array.from(document.querySelectorAll('#photos-antike img')).forEach((img, i) => {
+      gsap.to(img, {
+        scale: 1.06,
+        duration: 5 + i * 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: i * 1.4,
+        transformOrigin: 'center center',
+      });
+    });
 
     // Update era label from STEINZEIT → ANTIKE
     const lblYear = document.getElementById('lbl-year');
@@ -121,9 +139,9 @@ export default {
     textOut(tl, '#st-ch7-antike-right',   0.42);
     textIn(tl,  '#st-ch7-antike-right-2', 0.52);
 
-    textOut(tl, '#st-ch7-antike-left',    0.86);
-    textOut(tl, '#st-ch7-antike-right-2', 0.86);
+    textOut(tl, '#st-ch7-antike-left',    0.93);
+    textOut(tl, '#st-ch7-antike-right-2', 0.93);
 
-    tl.to('#photos-antike', { opacity: 0, y: -60, duration: 0.07, ease: 'power2.in' }, 0.93);
+    tl.to('#photos-antike', { opacity: 0, y: -60, duration: 0.04, ease: 'power2.in' }, 0.96);
   },
 };

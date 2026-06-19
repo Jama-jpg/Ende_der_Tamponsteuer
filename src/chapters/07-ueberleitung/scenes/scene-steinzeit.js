@@ -53,6 +53,19 @@ export default {
 
     gsap.set('#photos-steinzeit', { opacity: 1 });
 
+    // Atmospheric breathing — runs independently of the scroll timeline
+    Array.from(document.querySelectorAll('#photos-steinzeit img')).forEach((img, i) => {
+      gsap.to(img, {
+        scale: 1.06,
+        duration: 5 + i * 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: i * 1.4,
+        transformOrigin: 'center center',
+      });
+    });
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#s-ch7-steinzeit',
@@ -78,8 +91,8 @@ export default {
     // continuous parallax layered on top of the entrance slide-in.
     tl.to(cards, { yPercent: -20, ease: 'none' }, 0);
 
-    textOut(tl, '#st-ch7-steinzeit', 0.82);
-    textOut(tl, '#st-ch7-geschichte-2', 0.82);
-    tl.to('#photos-steinzeit', { opacity: 0, y: -60, duration: 0.12, ease: 'power1.inOut' }, 0.88);
+    textOut(tl, '#st-ch7-steinzeit', 0.93);
+    textOut(tl, '#st-ch7-geschichte-2', 0.93);
+    tl.to('#photos-steinzeit', { opacity: 0, y: -60, duration: 0.04, ease: 'power1.inOut' }, 0.96);
   },
 };

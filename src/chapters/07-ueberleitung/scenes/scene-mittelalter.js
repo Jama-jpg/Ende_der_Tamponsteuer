@@ -70,6 +70,19 @@ export default {
     const cards = Array.from(document.querySelectorAll('#photos-mittelalter .photo-card'));
     gsap.set('#photos-mittelalter', { opacity: 1 });
 
+    // Atmospheric breathing — runs independently of the scroll timeline
+    Array.from(document.querySelectorAll('#photos-mittelalter img')).forEach((img, i) => {
+      gsap.to(img, {
+        scale: 1.06,
+        duration: 5 + i * 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: i * 1.4,
+        transformOrigin: 'center center',
+      });
+    });
+
     // Update era label from ANTIKE → MITTELALTER
     const lblYear = document.getElementById('lbl-year');
     let labelSet = false;
@@ -100,13 +113,16 @@ export default {
       },
     });
 
-    textIn(tl, '#st-ch7-mittelalter-left',  0.15);
-    textIn(tl, '#st-ch7-mittelalter-right', 0.15);
+    textIn(tl, '#st-ch7-mittelalter-left',  0.02);
+    textIn(tl, '#st-ch7-mittelalter-right', 0.05);
 
-    // Staggered slide-up entrance + upward parallax throughout scene
+    // Staggered slide-up entrance + upward parallax throughout scene.
+    // Parallax duration fills from entrance end to 1.0 so the timeline
+    // stays at 1.0 total and textOut timing remains percentage-accurate.
     const yValues = [[60, -40], [50, -30], [70, -50]];
     cards.forEach((card, i) => {
       const inAt = 0.03 + i * 0.04;
+      const entranceEnd = inAt + 0.15;
       tl.fromTo(card,
         { opacity: 0, y: yValues[i][0] },
         { opacity: 1, y: 0,            duration: 0.15, ease: 'power2.out' },
@@ -114,14 +130,14 @@ export default {
       );
       tl.fromTo(card,
         { y: 0 },
-        { y: yValues[i][1], duration: 1.0, ease: 'none' },
-        inAt + 0.15,
+        { y: yValues[i][1], duration: 1.0 - entranceEnd, ease: 'none' },
+        entranceEnd,
       );
     });
 
-    textOut(tl, '#st-ch7-mittelalter-left',  0.86);
-    textOut(tl, '#st-ch7-mittelalter-right', 0.86);
+    textOut(tl, '#st-ch7-mittelalter-left',  0.93);
+    textOut(tl, '#st-ch7-mittelalter-right', 0.93);
 
-    tl.to('#photos-mittelalter', { opacity: 0, duration: 0.07, ease: 'power2.in' }, 0.93);
+    tl.to('#photos-mittelalter', { opacity: 0, duration: 0.04, ease: 'power2.in' }, 0.96);
   },
 };
