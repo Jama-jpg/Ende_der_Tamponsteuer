@@ -3,9 +3,8 @@ import { textIn, textOut } from '../../../core/text-anim.js';
 /* ═══════════════════════════════════════════════════════════════════
    SCENE — 19. Jahrhundert  (Chapter 7 · Scene 9)
    Left + right text about handmade pads and menstruation declared illness.
-   Left side: 3 photo placeholders with parallax + clip-path reveal.
+   Left side: 2 photos with parallax.
    Era label transitions from MITTELALTER → 19. JAHRHUNDERT
-   → Replace placeholder images in /public/images/19jhd-[1-3].jpg
 ═══════════════════════════════════════════════════════════════════ */
 
 export default {
@@ -47,16 +46,12 @@ export default {
       p.id = 'photos-19jhd';
       p.innerHTML = `
         <div class="photo-card" style="left:7%;top:8%;width:52%;height:42%;transform:rotate(1.5deg)">
-          <img src="" alt="">
+          <img src="/images/19Jhd_1.png" alt="Wolle für Binden im 19. Jahrhundert">
           <span class="photo-label">BILD 1 · 19. JHD.</span>
         </div>
         <div class="photo-card" style="left:5%;top:53%;width:38%;height:30%;transform:rotate(-2deg)">
-          <img src="" alt="">
+          <img src="/images/19Jhd_2.png" alt="Stoffreste für Binden im 19. Jahrhundert">
           <span class="photo-label">BILD 2 · 19. JHD.</span>
-        </div>
-        <div class="photo-card" style="left:44%;top:61%;width:28%;height:21%;transform:rotate(1.5deg)">
-          <img src="" alt="">
-          <span class="photo-label">BILD 3 · 19. JHD.</span>
         </div>
       `;
       overlaysContainer.appendChild(p);
@@ -114,7 +109,7 @@ export default {
     // Staggered slide-up entrance + upward parallax throughout scene.
     // Parallax duration fills from entrance end to 1.0 so the timeline
     // stays at 1.0 total and textOut timing remains percentage-accurate.
-    const yValues = [[60, -40], [50, -30], [70, -50]];
+    const yValues = [[60, -40], [50, -30]];
     cards.forEach((card, i) => {
       const inAt = 0.03 + i * 0.04;
       const entranceEnd = inAt + 0.15;
