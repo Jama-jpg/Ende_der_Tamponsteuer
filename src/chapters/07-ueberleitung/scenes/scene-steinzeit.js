@@ -33,17 +33,17 @@ export default {
       p.className = 'scene-photos';
       p.id = 'photos-steinzeit';
       p.innerHTML = `
-        <div class="photo-card" style="left:7%;top:15%;width:46%;height:29%">
+        <div class="photo-card" style="left:11%;top:10%;width:30%;">
           <img src="./images/steinzeit-moos.png" alt="Moos"
-               style="position:absolute;width:100%;height:100%;top:0;left:0;object-fit:cover;">
+               style="display:block;width:100%;height:auto;object-fit:contain;">
         </div>
-        <div class="photo-card" style="left:61%;top:28%;width:32%;height:37%">
+        <div class="photo-card" style="left:56%;top:13%;width:25%;">
           <img src="./images/steinzeit-gras.png" alt="Gras"
-               style="position:absolute;width:100%;height:100%;top:0;left:0;object-fit:cover;">
+               style="display:block;width:100%;height:auto;object-fit:contain;">
         </div>
-        <div class="photo-card" style="left:20%;top:68%;width:45%;height:26%">
+        <div class="photo-card" style="left:18%;top:70%;width:30%;">
           <img src="./images/steinzeit-fell.png" alt="Tierfell"
-               style="position:absolute;width:100%;height:100%;top:0;left:0;object-fit:cover;">
+               style="display:block;width:100%;height:auto;object-fit:contain;">
         </div>
       `;
       document.getElementById('overlays').appendChild(p);
@@ -80,6 +80,6 @@ export default {
 
     textOut(tl, '#st-ch7-steinzeit', 0.82);
     textOut(tl, '#st-ch7-geschichte-2', 0.82);
-    tl.to('#photos-steinzeit', { opacity: 0, duration: 0.12, ease: 'power1.inOut' }, 0.88);
+    tl.to('#photos-steinzeit', { opacity: 0, y: -60, duration: 0.12, ease: 'power1.inOut' }, 0.88);
   },
 };

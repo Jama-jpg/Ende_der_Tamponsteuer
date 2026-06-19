@@ -58,12 +58,12 @@ export default {
       p.className = 'scene-photos';
       p.id = 'photos-antike';
       p.innerHTML = `
-        <div class="photo-card" style="left:5%;top:9%;width:50%;height:41%;transform:rotate(2deg)">
-          <img src="./images/pexels-meruyert-gonullu-7500417.jpg" alt="Naturschwamm">
+        <div class="photo-card" style="left:11%;top:10%;width:30%;height:20%;transform:rotate(2deg)">
+          <img src="./images/pexels-meruyert-gonullu-7500417.jpg" alt="Naturschwamm" style="object-position:center;">
           <span class="photo-label">NATURSCHWAMM · ANTIKE</span>
         </div>
-        <div class="photo-card" style="left:20%;top:52%;width:42%;height:33%;transform:rotate(-1.5deg)">
-          <img src="./images/pexels-teona-swift-6850550.jpg" alt="Stoffrolle">
+        <div class="photo-card" style="left:19%;top:70%;width:30%;height:18%;transform:rotate(-1.5deg)">
+          <img src="./images/pexels-teona-swift-6850550.jpg" alt="Stoffrolle" style="object-position:center;">
           <span class="photo-label">STOFFROLLE · ANTIKE</span>
         </div>
       `;
@@ -103,15 +103,16 @@ export default {
       },
     });
 
-    textIn(tl, '#st-ch7-antike-left',  0.15);
-    textIn(tl, '#st-ch7-antike-right', 0.15);
+    textIn(tl, '#st-ch7-antike-left',  0.02);
+    textIn(tl, '#st-ch7-antike-right', 0.05);
 
-    // Staggered slide-up entrance
+    // Staggered slide-up entrance — starts immediately so the photo panel
+    // hands off seamlessly from scene-steinzeit's fade-out at the scroll boundary.
     cards.forEach((card, i) => {
-      const inAt = 0.02 + i * 0.05;
+      const inAt = i * 0.02;
       tl.fromTo(card,
         { opacity: 0, y: 80 },
-        { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out' },
+        { opacity: 1, y: 0, duration: 0.08, ease: 'power2.out' },
         inAt,
       );
     });
@@ -123,6 +124,6 @@ export default {
     textOut(tl, '#st-ch7-antike-left',    0.86);
     textOut(tl, '#st-ch7-antike-right-2', 0.86);
 
-    tl.to('#photos-antike', { opacity: 0, duration: 0.07, ease: 'power2.in' }, 0.93);
+    tl.to('#photos-antike', { opacity: 0, y: -60, duration: 0.07, ease: 'power2.in' }, 0.93);
   },
 };
