@@ -50,18 +50,16 @@ export default {
       const p = document.createElement('div');
       p.className = 'scene-photos';
       p.id = 'photos-mittelalter';
+      p.style.width = '100vw';
       p.innerHTML = `
-        <div class="photo-card" style="left:8%;top:6%;width:48%;height:44%;transform:rotate(-1.5deg)">
-          <img src="" alt="">
-          <span class="photo-label">BILD 1 · MITTELALTER</span>
+        <div class="photo-card" style="left:18%;top:7%;width:27%;height:auto;transform:rotate(-1.5deg)">
+          <img src="./images/19Jhd_2.png" alt="Stofffetzen" style="display:block;width:100%;height:auto;object-fit:fill;">
         </div>
-        <div class="photo-card" style="left:4%;top:53%;width:36%;height:29%;transform:rotate(2deg)">
-          <img src="" alt="">
-          <span class="photo-label">BILD 2 · MITTELALTER</span>
+        <div class="photo-card" style="left:3%;top:55%;width:20%;height:auto;transform:rotate(2deg)">
+          <img src="./images/19Jhd_1.png" alt="Asche" style="display:block;width:100%;height:auto;object-fit:fill;">
         </div>
-        <div class="photo-card" style="left:42%;top:60%;width:30%;height:22%;transform:rotate(-1deg)">
-          <img src="" alt="">
-          <span class="photo-label">BILD 3 · MITTELALTER</span>
+        <div class="photo-card" style="left:52%;top:8%;width:27%;height:auto;transform:rotate(-1deg)">
+          <img src="./images/Mittelalter_3.png" alt="Mittelalter Statue" style="display:block;width:100%;height:auto;object-fit:fill;">
         </div>
       `;
       overlaysContainer.appendChild(p);
