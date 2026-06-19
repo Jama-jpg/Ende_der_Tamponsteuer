@@ -59,15 +59,15 @@ export default {
       p.id = 'photos-antike';
       p.style.width = '100%';
       p.innerHTML = `
-        <div class="photo-card" style="left:5%;top:10%;width:14%;transform:rotate(2deg)">
+        <div class="photo-card" style="left:3%;top:7%;width:38%;transform:rotate(1deg)">
           <img src="./images/Antike_1.png" alt="Naturschwamm" style="height:auto;object-fit:initial;">
           <span class="photo-label">NATURSCHWAMM · ANTIKE</span>
         </div>
-        <div class="photo-card" style="left:9%;top:55%;width:14%;transform:rotate(-1.5deg)">
+        <div class="photo-card" style="left:3%;top:60%;width:18%;transform:rotate(-1deg)">
           <img src="./images/Antike_2.png" alt="Stoffrolle" style="height:auto;object-fit:initial;">
           <span class="photo-label">STOFFROLLE · ANTIKE</span>
         </div>
-        <div class="photo-card" style="right:8%;top:15%;width:22%;transform:rotate(1.5deg)">
+        <div class="photo-card" style="right:5%;top:8%;width:30%;transform:rotate(1.5deg)">
           <img src="./images/Antike_3.png" alt="Antike Statue" style="height:auto;object-fit:initial;">
           <span class="photo-label">STATUE · ANTIKE</span>
         </div>

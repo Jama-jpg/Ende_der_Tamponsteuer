@@ -33,17 +33,17 @@ export default {
       p.className = 'scene-photos';
       p.id = 'photos-steinzeit';
       p.innerHTML = `
-        <div class="photo-card" style="left:11%;top:10%;width:30%;">
+        <div class="photo-card" style="left:8%;top:18%;width:42%;height:28vh;">
           <img src="./images/steinzeit-moos.png" alt="Moos"
-               style="display:block;width:100%;height:auto;object-fit:contain;">
+               style="display:block;width:100%;height:100%;object-fit:cover;">
         </div>
-        <div class="photo-card" style="left:56%;top:13%;width:25%;">
+        <div class="photo-card" style="left:51%;top:25%;width:34%;height:27vh;">
           <img src="./images/steinzeit-gras.png" alt="Gras"
-               style="display:block;width:100%;height:auto;object-fit:contain;">
+               style="display:block;width:100%;height:100%;object-fit:cover;">
         </div>
-        <div class="photo-card" style="left:18%;top:70%;width:30%;">
+        <div class="photo-card" style="left:14%;top:62%;width:48%;height:29vh;">
           <img src="./images/steinzeit-fell.png" alt="Tierfell"
-               style="display:block;width:100%;height:auto;object-fit:contain;">
+               style="display:block;width:100%;height:100%;object-fit:cover;">
         </div>
       `;
       document.getElementById('overlays').appendChild(p);
