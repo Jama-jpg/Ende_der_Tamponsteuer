@@ -31,7 +31,7 @@ export default {
       ov.id = 'st-ch7-antike-right';
       ov.innerHTML = `
         <p class="sl">Gleichzeitig gilt der<br>weibliche Körper als</p>
-        <p class="sh">FEHLERHAFT.<br>Als zu FEUCHT.</p>
+        <p class="sh">FEHLERHAFT.<br>Als zu „FEUCHT".</p>
         <p class="sl">Ohne die Blutung/<br>Entwässerung<br>drohe der Wahnsinn.</p>
       `;
       overlaysContainer.appendChild(ov);
@@ -59,16 +59,16 @@ export default {
       p.id = 'photos-antike';
       p.style.width = '100%';
       p.innerHTML = `
-        <div class="photo-card" style="left:3%;top:7%;width:38%;transform:rotate(1deg)">
-          <img src="./images/Antike_1.png" alt="Naturschwamm" style="height:auto;object-fit:initial;">
+        <div class="photo-card" style="left:3%;top:7%;width:32%;height:auto;overflow:visible;transform:rotate(1deg)">
+          <img src="./images/Antike_1.png" alt="Naturschwamm" style="display:block;width:100%;height:auto;object-fit:fill;">
           <span class="photo-label">NATURSCHWAMM · ANTIKE</span>
         </div>
-        <div class="photo-card" style="left:3%;top:60%;width:18%;transform:rotate(-1deg)">
-          <img src="./images/Antike_2.png" alt="Stoffrolle" style="height:auto;object-fit:initial;">
+        <div class="photo-card" style="left:3%;top:65%;width:14%;height:auto;overflow:visible;transform:rotate(-1deg)">
+          <img src="./images/Antike_2.png" alt="Stoffrolle" style="display:block;width:100%;height:auto;object-fit:fill;">
           <span class="photo-label">STOFFROLLE · ANTIKE</span>
         </div>
-        <div class="photo-card" style="right:5%;top:8%;width:30%;transform:rotate(1.5deg)">
-          <img src="./images/Antike_3.png" alt="Antike Statue" style="height:auto;object-fit:initial;">
+        <div class="photo-card" style="right:2%;top:8%;width:26%;height:auto;overflow:visible;transform:rotate(1.5deg)">
+          <img src="./images/Antike_3.png" alt="Antike Statue" style="display:block;width:100%;height:auto;object-fit:fill;">
           <span class="photo-label">STATUE · ANTIKE</span>
         </div>
       `;
