@@ -77,7 +77,7 @@ export default {
       ov.innerHTML = `
         <p class="sh">PERIODEN-<br>PRODUKTE</p>
         <p class="sl">werden bei der Gesetzgebung<br>vergessen und nicht beachtet:<br>Daher fallen sie automatisch<br>in den Normalsteuersatz von</p>
-        <p class="sh">20%</p>
+        <p class="sh">16%</p>
       `;
       overlaysContainer.appendChild(ov);
     }
@@ -128,6 +128,26 @@ export default {
       });
     });
 
+    /* VAT counter: steuer-frage left it at "—MwST." with "%" hidden.
+       Wrap the bare "%" text node if steuer-frage hasn't done it yet. */
+    const vatNum = document.getElementById('vat-big-num');
+    let vatPct = document.getElementById('vat-big-pct');
+    if (!vatPct) {
+      const vatCore = document.getElementById('vat-big-core');
+      if (vatCore) {
+        for (const node of vatCore.childNodes) {
+          if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('%')) {
+            vatPct = document.createElement('span');
+            vatPct.id = 'vat-big-pct';
+            vatPct.style.display = 'inline-block';
+            vatPct.textContent = '%';
+            vatCore.replaceChild(vatPct, node);
+            break;
+          }
+        }
+      }
+    }
+
     /* Right spine: clear opacity + dashoffset, park off-screen */
     gsap.set('#c-axis-right', { attr: { x1: 1050, x2: 1050, opacity: 1, 'stroke-dashoffset': 0 } });
 
@@ -152,8 +172,34 @@ export default {
               .to(lblYear, { scale: 1, duration: 0.3, ease: 'power2.inOut' });
           }
         },
+        onUpdate(self) {
+          if (!vatNum) return;
+          const p = self.progress;
+          if (p < 0.40) {
+            /* Phase 1: dash */
+            vatNum.textContent = '—';
+            if (vatPct) gsap.set(vatPct, { display: 'none' });
+          } else if (p < 0.55) {
+            /* Count 0 → 8 over the 0.40–0.48 window */
+            const ratio = Math.min((p - 0.40) / 0.08, 1);
+            vatNum.textContent = String(Math.round(ratio * 8));
+            if (vatPct) gsap.set(vatPct, { display: 'inline-block', opacity: 1 });
+          } else if (p < 0.63) {
+            /* Hold at 8 while right-2 fades out */
+            vatNum.textContent = '8';
+            if (vatPct) gsap.set(vatPct, { display: 'inline-block', opacity: 1 });
+          } else {
+            /* Count 8 → 20 over the 0.63–0.71 window */
+            const ratio = Math.min((p - 0.63) / 0.08, 1);
+            vatNum.textContent = String(Math.round(8 + ratio * 8));
+            if (vatPct) gsap.set(vatPct, { display: 'inline-block', opacity: 1 });
+          }
+        },
         onLeaveBack() {
           labelSet = false;
+          /* Restore the VAT counter to the dash state steuer-frage left it in */
+          if (vatNum) vatNum.textContent = '—';
+          if (vatPct) gsap.set(vatPct, { display: 'none' });
           if (lblYear) {
             gsap.killTweensOf(lblYear);
             gsap.set(lblYear, { scale: 1 });
@@ -215,7 +261,7 @@ export default {
     textOut(tl, '#st-ch7-1973-right',   0.32);
     textIn(tl,  '#st-ch7-1973-right-2', 0.40);
 
-    /* ── Right swap 2→3 (0.55 out, 0.63 in) + MwSt counter ─────── */
+    /* ── Right swap 2→3 (0.55 out, 0.63 in) ─────── */
     textOut(tl, '#st-ch7-1973-right-2', 0.55);
     textIn(tl,  '#st-ch7-1973-right-3', 0.63);
 
