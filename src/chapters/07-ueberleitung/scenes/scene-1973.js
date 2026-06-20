@@ -7,11 +7,9 @@ import { textIn, textOut } from '../../../core/text-anim.js';
    Phase 1 in       0.15 → 0.28   left + center + photos + right-v1 + mwst dash
    Right swap 1→2   0.32 → 0.40   right-v1 out / 0.40→0.48 right-v2 (8%) in
    Right swap 2→3   0.55 → 0.63   right-v2 out / 0.63→0.71 right-v3 (20%) in
-                                   + MwST counter 0 → 16
    Fade out         0.86 → 0.95   everything out
 
    Left side: 3 photo placeholders with parallax + clip-path reveal.
-   MwSt counter preserved as standalone SVG text element.
    → Replace placeholder images in /public/images/1973-[1-3].jpg
 ═══════════════════════════════════════════════════════════════════ */
 
@@ -130,22 +128,6 @@ export default {
       });
     });
 
-    /* ── MwSt counter — standalone SVG text (no binde shapes) ── */
-    const mainSvg = document.getElementById('main-svg');
-    if (!document.getElementById('s1973-mwst')) {
-      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      t.id = 's1973-mwst';
-      t.setAttribute('x', '500');
-      t.setAttribute('y', '496');
-      t.setAttribute('text-anchor', 'middle');
-      t.setAttribute('class', 'svg-serif');
-      t.setAttribute('font-size', '30');
-      t.setAttribute('fill', '#1a1a1a');
-      t.setAttribute('opacity', '0');
-      t.textContent = '–% MwST.';
-      mainSvg.appendChild(t);
-    }
-
     /* Right spine: clear opacity + dashoffset, park off-screen */
     gsap.set('#c-axis-right', { attr: { x1: 1050, x2: 1050, opacity: 1, 'stroke-dashoffset': 0 } });
 
@@ -154,10 +136,6 @@ export default {
 
     const lblYear = document.getElementById('lbl-year');
     let labelSet = false;
-
-    /* MwSt counter proxy — animated inside the scrub timeline */
-    const mwstProxy = { val: 0 };
-    const getMwstEl = () => document.getElementById('s1973-mwst');
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -215,7 +193,6 @@ export default {
     textIn(tl, '#st-ch7-1973-left',   0.15);
     textIn(tl, '#st-ch7-1973-center', 0.15);
     textIn(tl, '#st-ch7-1973-right',  0.15);
-    tl.to('#s1973-mwst', { opacity: 1, duration: 0.13, ease: 'power2.out' }, 0.15);
 
     /* ── Photo cards: staggered slide-up entrance + upward parallax ── */
     const yValues = [[60, -40], [50, -30], [70, -50]];
@@ -242,29 +219,10 @@ export default {
     textOut(tl, '#st-ch7-1973-right-2', 0.55);
     textIn(tl,  '#st-ch7-1973-right-3', 0.63);
 
-    /* Reset counter text just before it starts counting */
-    tl.call(() => { const el = getMwstEl(); if (el) el.textContent = '–% MwST.'; }, [], 0.62);
-
-    /* Count 0 → 16 in sync with the scroll */
-    tl.fromTo(mwstProxy,
-      { val: 0 },
-      {
-        val: 16,
-        duration: 0.09,
-        ease: 'none',
-        onUpdate() {
-          const el = getMwstEl();
-          if (el) el.textContent = `${Math.round(mwstProxy.val)}% MwST.`;
-        },
-      },
-      0.63,
-    );
-
     /* ── All out at end ─────────────────────────────────────────── */
     textOut(tl, '#st-ch7-1973-left',    0.93);
     textOut(tl, '#st-ch7-1973-center',  0.93);
     textOut(tl, '#st-ch7-1973-right-3', 0.93);
-    tl.to('#s1973-mwst', { opacity: 0, duration: 0.04, ease: 'power2.in' }, 0.93);
     tl.to('#photos-1973', { opacity: 0, duration: 0.04, ease: 'power2.in' }, 0.96);
   },
 };
