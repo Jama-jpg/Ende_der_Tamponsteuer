@@ -8,10 +8,11 @@ import antike           from './scenes/scene-antike.js';
 import mittelalter      from './scenes/scene-mittelalter.js';
 import jhd19           from './scenes/scene-19jhd.js';
 import scene1896      from './scenes/scene-1896.js';
+import scene1930er    from './scenes/scene-1930er.js';
 import scene1973      from './scenes/scene-1973.js';
 
 export default {
   id: 'ueberleitung',
   title: 'Die Überleitung',
-  scenes: [steuerIntro, steuer10pct, steuer20pct, steuerFrage, geschichteIntro, steinzeit, antike, mittelalter, jhd19, scene1896, scene1973],
+  scenes: [steuerIntro, steuer10pct, steuer20pct, steuerFrage, geschichteIntro, steinzeit, antike, mittelalter, jhd19, scene1896, scene1930er, scene1973],
 };
