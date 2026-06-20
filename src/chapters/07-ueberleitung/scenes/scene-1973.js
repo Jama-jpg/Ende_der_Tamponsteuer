@@ -179,7 +179,7 @@ export default {
           if (lblYear) {
             gsap.killTweensOf(lblYear);
             gsap.set(lblYear, { scale: 1 });
-            lblYear.textContent = '19. JAHRHUNDERT';
+            lblYear.textContent = '1950er';
           }
         },
       },
