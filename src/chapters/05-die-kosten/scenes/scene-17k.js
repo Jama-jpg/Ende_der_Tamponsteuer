@@ -74,14 +74,15 @@ export default {
     });
 
     /* ── Re-enter from below (user snapped backward from scene-25k) ── */
-    /* When scrolling back from scene-25k, the snap lands at scene-17k's
-       end boundary — well past the 'top 70%' trigger above, so onEnter
-       never fires. This trigger catches that case via onEnterBack. */
+    /* The 'top 70%' onEnter above only fires when entering scene-17k from
+       above. When the backward snap lands at scene-17k's end boundary
+       (well inside the section), this separate trigger catches it.
+       'top bottom' of scene-25k = the exact boundary where scene-17k ends,
+       so onLeaveBack fires unconditionally when scrolling backward past it. */
     ScrollTrigger.create({
-      trigger: '#s-ch5-17k',
-      start:   'top top',
-      end:     'bottom bottom',
-      onEnterBack() {
+      trigger: '#s-ch5-25k',
+      start:   'top bottom',
+      onLeaveBack() {
         if (!ch5State.hasPlayed && !ch5State.physics) {
           ch5State.hasPlayed = true;
           gsap.set([mRect, rRect, lines38Grp], { opacity: 0 });
