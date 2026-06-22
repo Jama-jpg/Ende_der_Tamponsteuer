@@ -72,5 +72,22 @@ export default {
         setTimeout(() => p.destroy(), 800);
       },
     });
+
+    /* ── Re-enter from below (user snapped backward from scene-25k) ── */
+    /* When scrolling back from scene-25k, the snap lands at scene-17k's
+       end boundary — well past the 'top 70%' trigger above, so onEnter
+       never fires. This trigger catches that case via onEnterBack. */
+    ScrollTrigger.create({
+      trigger: '#s-ch5-17k',
+      start:   'top top',
+      end:     'bottom bottom',
+      onEnterBack() {
+        if (!ch5State.hasPlayed && !ch5State.physics) {
+          ch5State.hasPlayed = true;
+          gsap.set([mRect, rRect, lines38Grp], { opacity: 0 });
+          ch5State.physics = createPhysicsWorld({ tamponCount: 17, spawnIntervalMs: 300 });
+        }
+      },
+    });
   },
 };

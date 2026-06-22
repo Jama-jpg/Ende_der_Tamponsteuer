@@ -161,7 +161,7 @@ export default {
         ch5State.physics.liftUp();
         const p = ch5State.physics;
         ch5State.physics = null;
-        setTimeout(() => p.destroy(), 800);
+        setTimeout(() => p.destroy(), 600);
       },
     });
 
