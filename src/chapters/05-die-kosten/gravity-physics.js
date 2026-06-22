@@ -702,6 +702,11 @@ export function createPhysicsWorld({ tamponCount = 17, spawnIntervalMs = 300 } =
       };
     },
 
+    /** Reverse gravity so all dynamic bodies float up and off screen. */
+    liftUp() {
+      engine.gravity.y = -2;
+    },
+
     destroy() {
       timers.forEach(clearTimeout);
       Runner.stop(runner);

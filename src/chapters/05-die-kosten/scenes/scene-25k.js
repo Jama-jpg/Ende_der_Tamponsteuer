@@ -151,6 +151,18 @@ export default {
           ch5State.physics.morph({ extraBalls: 8, extraSpawnMs: 400 });
         }
       },
+      onLeaveBack() {
+        /* Scrolling back from 25k into 17k territory — lift everything up and
+           fully reset state so scene-17k replays when the user scrolls forward. */
+        ch5State.morphed    = false;
+        ch5State.iconsAdded = false;
+        ch5State.hasPlayed  = false;
+        if (!ch5State.physics) return;
+        ch5State.physics.liftUp();
+        const p = ch5State.physics;
+        ch5State.physics = null;
+        setTimeout(() => p.destroy(), 800);
+      },
     });
 
   },

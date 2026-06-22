@@ -59,6 +59,18 @@ export default {
           ch5State.physics = createPhysicsWorld({ tamponCount: 17, spawnIntervalMs: 300 });
         }
       },
+      onLeaveBack() {
+        /* Always reset flags so the animation replays on next forward scroll */
+        ch5State.hasPlayed  = false;
+        ch5State.morphed    = false;
+        ch5State.iconsAdded = false;
+        gsap.to([mRect, rRect, lines38Grp], { opacity: 1, duration: 0.4 });
+        if (!ch5State.physics) return;
+        ch5State.physics.liftUp();
+        const p = ch5State.physics;
+        ch5State.physics = null;
+        setTimeout(() => p.destroy(), 800);
+      },
     });
   },
 };

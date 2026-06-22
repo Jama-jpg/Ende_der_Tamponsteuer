@@ -67,18 +67,39 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
   const maxScroll = () => ScrollTrigger.maxScroll(window);
   const locked    = () => document.body.style.overflow === 'hidden';
 
+  /* True when the current scroll position is sitting on a snapOnce snap point
+     that has already fired. Used to allow unlimited-distance backward snapping
+     so that tall scenes (100+ vh) can always snap back to the previous scene. */
+  function atFiredSnapPoint() {
+    const y   = Math.round(window.scrollY || window.pageYOffset);
+    const eps = 8;
+    for (const scene of scenes) {
+      if (!scene.snapOnce || !scene.snapPoints || !firedScenes.has(scene.id)) continue;
+      const el = document.getElementById(scene.id);
+      if (!el) continue;
+      const start      = el.offsetTop;
+      const sceneRange = el.offsetHeight - window.innerHeight;
+      for (const f of scene.snapPoints) {
+        if (Math.abs(y - Math.round(start + f * sceneRange)) < eps) return true;
+      }
+    }
+    return false;
+  }
+
   /* Returns true only if there is a snap boundary ahead in the given
      direction (+1 down, -1 up) AND within 1.5 viewports — so native scroll
-     is left untouched when the snap scenes are far away. */
+     is left untouched when the snap scenes are far away.
+     Exception: when sitting on a fired snapOnce point, always allow snapping
+     backward regardless of distance (tall scenes have far-apart snap points). */
   function wouldSnap(dir) {
     const pts = boundaries(dir);
     if (!pts.length) return false;
     const y     = Math.round(window.scrollY || window.pageYOffset);
     const eps   = 4;
     const range = window.innerHeight * 1.5;
-    return dir > 0
-      ? pts.some(p => p > y + eps && p < y + range)
-      : pts.some(p => p < y - eps && p > y - range);
+    if (dir > 0) return pts.some(p => p > y + eps && p < y + range);
+    if (atFiredSnapPoint()) return pts.some(p => p < y - eps);
+    return pts.some(p => p < y - eps && p > y - range);
   }
 
   /* When scrolling up, un-fire snapOnce scenes whose start is now above us,
@@ -118,7 +139,9 @@ export function createSnap({ ScrollTrigger, gsap, scenes }) {
       dest = pts.find((p) => p > y + eps && p < y + range);
       if (dest == null) return;
     } else {
-      const above = pts.filter((p) => p < y - eps && p > y - range);
+      const above = atFiredSnapPoint()
+        ? pts.filter((p) => p < y - eps)
+        : pts.filter((p) => p < y - eps && p > y - range);
       if (!above.length) return;
       dest = above[above.length - 1];
     }

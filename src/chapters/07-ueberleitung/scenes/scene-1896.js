@@ -15,7 +15,7 @@ export default {
     id: 'st-ch7-1896-left',
     html: `
       <p class="sl">Mit „Lister's Towel" erscheint<br>die erste</p>
-      <p class="sh">EINWEG-<br>BINDE</p>
+      <p class="sh">EINWEGBINDE</p>
       <p class="sl">auf dem Markt. Mangels moderner<br>Klebetechnik muss sie mit schweren</p>
       <p class="sh">GURTEN</p>
       <p class="sl">am Körper fixiert werden.</p>
