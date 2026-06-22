@@ -9,8 +9,6 @@ import { textIn, textOut } from '../../../core/text-anim.js';
    Right swap 2→3   0.55 → 0.63   right-v2 out / 0.63→0.71 right-v3 (20%) in
    Fade out         0.86 → 0.95   everything out
 
-   Left side: 3 photo placeholders with parallax + clip-path reveal.
-   → Replace placeholder images in /public/images/1973-[1-3].jpg
 ═══════════════════════════════════════════════════════════════════ */
 
 export default {
@@ -88,45 +86,6 @@ export default {
     gsap.set('#st-ch7-1973-right',   { left: 'auto', width: '33%', right: '0'    });
     gsap.set('#st-ch7-1973-right-2', { left: 'auto', width: '33%', right: '0'    });
     gsap.set('#st-ch7-1973-right-3', { left: 'auto', width: '33%', right: '0'    });
-
-    // ── Photo panel (fits the 33% left column) ──────────────────────
-    if (!document.getElementById('photos-1973')) {
-      const p = document.createElement('div');
-      p.className = 'scene-photos';
-      p.id = 'photos-1973';
-      p.style.width = '33%';
-      p.innerHTML = `
-        <div class="photo-card" style="left:6%;top:8%;width:80%;height:40%;transform:rotate(-2deg)">
-          <img src="" alt="">
-          <span class="photo-label">BILD 1 · 1973</span>
-        </div>
-        <div class="photo-card" style="left:4%;top:52%;width:58%;height:28%;transform:rotate(1.5deg)">
-          <img src="" alt="">
-          <span class="photo-label">BILD 2 · 1973</span>
-        </div>
-        <div class="photo-card" style="left:64%;top:58%;width:30%;height:22%;transform:rotate(-1deg)">
-          <img src="" alt="">
-          <span class="photo-label">BILD 3 · 1973</span>
-        </div>
-      `;
-      overlaysContainer.appendChild(p);
-    }
-
-    const cards = Array.from(document.querySelectorAll('#photos-1973 .photo-card'));
-    gsap.set('#photos-1973', { opacity: 1 });
-
-    // Atmospheric breathing — runs independently of the scroll timeline
-    Array.from(document.querySelectorAll('#photos-1973 img')).forEach((img, i) => {
-      gsap.to(img, {
-        scale: 1.06,
-        duration: 5 + i * 2,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: i * 1.4,
-        transformOrigin: 'center center',
-      });
-    });
 
     /* VAT counter: steuer-frage left it at "—MwST." with "%" hidden.
        Wrap the bare "%" text node if steuer-frage hasn't done it yet. */
@@ -240,23 +199,6 @@ export default {
     textIn(tl, '#st-ch7-1973-center', 0.15);
     textIn(tl, '#st-ch7-1973-right',  0.15);
 
-    /* ── Photo cards: staggered slide-up entrance + upward parallax ── */
-    const yValues = [[60, -40], [50, -30], [70, -50]];
-    cards.forEach((card, i) => {
-      const inAt = 0.03 + i * 0.04;
-      const entranceEnd = inAt + 0.15;
-      tl.fromTo(card,
-        { opacity: 0, y: yValues[i][0] },
-        { opacity: 1, y: 0,            duration: 0.15, ease: 'power2.out' },
-        inAt,
-      );
-      tl.fromTo(card,
-        { y: 0 },
-        { y: yValues[i][1], duration: 1.0 - entranceEnd, ease: 'none' },
-        entranceEnd,
-      );
-    });
-
     /* ── Right swap 1→2 (0.32 out, 0.40 in) ────────────────────── */
     textOut(tl, '#st-ch7-1973-right',   0.32);
     textIn(tl,  '#st-ch7-1973-right-2', 0.40);
@@ -269,6 +211,5 @@ export default {
     textOut(tl, '#st-ch7-1973-left',    0.93);
     textOut(tl, '#st-ch7-1973-center',  0.93);
     textOut(tl, '#st-ch7-1973-right-3', 0.93);
-    tl.to('#photos-1973', { opacity: 0, duration: 0.04, ease: 'power2.in' }, 0.96);
   },
 };
