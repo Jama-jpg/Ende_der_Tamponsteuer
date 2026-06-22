@@ -67,10 +67,6 @@ export default {
           <img src="./images/Antike_2.png" alt="Stoffrolle" style="display:block;width:100%;height:auto;object-fit:fill;">
           <span class="photo-label">STOFFROLLE · ANTIKE</span>
         </div>
-        <div class="photo-card" style="right:3%;top:10%;width:16.2%;height:auto;overflow:visible;transform:rotate(1.5deg)">
-          <img src="./images/Antike_3.png" alt="Antike Statue" style="display:block;width:100%;height:auto;object-fit:fill;">
-          <span class="photo-label">STATUE · ANTIKE</span>
-        </div>
       `;
       overlaysContainer.appendChild(p);
     }

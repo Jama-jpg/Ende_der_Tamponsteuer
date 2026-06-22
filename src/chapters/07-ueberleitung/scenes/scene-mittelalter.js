@@ -58,9 +58,6 @@ export default {
         <div class="photo-card" style="left:3%;top:67%;width:12%;height:auto;transform:rotate(2deg)">
           <img src="./images/Mittelalter_2.png" alt="Asche" style="display:block;width:100%;height:auto;">
         </div>
-        <div class="photo-card" style="left:55%;top:8%;width:13%;height:auto;transform:rotate(-1deg)">
-          <img src="./images/Mittelalter_3.png" alt="Mittelalter Statue" style="display:block;width:100%;height:auto;">
-        </div>
       `;
       overlaysContainer.appendChild(p);
     }
@@ -117,7 +114,7 @@ export default {
     // Staggered slide-up entrance + upward parallax throughout scene.
     // Parallax duration fills from entrance end to 1.0 so the timeline
     // stays at 1.0 total and textOut timing remains percentage-accurate.
-    const yValues = [[60, -40], [50, -30], [70, -50]];
+    const yValues = [[60, -40], [50, -30]];
     cards.forEach((card, i) => {
       const inAt = 0.03 + i * 0.04;
       const entranceEnd = inAt + 0.15;

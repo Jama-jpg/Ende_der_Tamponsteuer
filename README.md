@@ -4,8 +4,8 @@ A scroll-driven data story ("scrollytelling") about Austria's path to abolishing
 VAT on period products. As you scroll, a single animated SVG canvas morphs through
 a narrative: a VAT counter draining 20 → 0%, the scale of menstruation worldwide
 (1.9 billion people, 26% of the world), a lifetime of costs (17 000 products,
-≈ €25 000), period poverty in Austria (500 000 affected), 150 years of taxation
-history, a world comparison, and what still needs to change.
+≈ €25 000), period poverty in Austria (500 000 affected), and 150 years of
+taxation history from the Stone Age to 1973.
 
 Built with **[GSAP](https://gsap.com/) + ScrollTrigger** and bundled with **[Vite](https://vitejs.dev/)**.
 The animation code is plain, imperative GSAP — there is no UI framework. Instead the
@@ -59,6 +59,7 @@ src/
     euro-counter.js         Persistent top-left euro counter (counts 0 → 25 000)
     snap.js                 Scroll-snap engine (wheel/touch → scene edges)
     spine.js                Spine scroll indicator + click/drag seek
+    text-anim.js            Shared text animation helpers
 
   stage/
     markup.js               Persistent #ui / #liquid-bg / #main-svg template
@@ -71,14 +72,11 @@ src/
   chapters/
     01-intro/               Countdown → title → period axis
     02-the-scale/           Circle grows to 1.9 billion, 26% pie
-    03-every-month/         12 month circles → lifetime sequence (ch 3+4 merged)
-    04-the-lifetime/        38 years → 456 lines → 7-year payoff (standalone copy)
+    03-every-month/         jeden-monat + lifetime sequence (borrows scenes from 04)
+    04-the-lifetime/        38 years → 456 lines → 7-year payoff (scenes used by ch3)
     05-die-kosten/          17 000 products, €25 000 lifetime cost, physics coins
     06-periodenarmut/       1.4 M at risk → 500 k period poverty → consequences
-    07-ueberleitung/        Balance scale: structural inequality in VAT
-    08-timeline/            150-year history across 6 eras, two-track timeline
-    09-vergleich/           Reality check Jan 2026, 3D globe, EU comparison table
-    10-abschluss/           Fazit, what remains, protest signs
+    07-ueberleitung/        Balance scale (VAT inequality) + 150-year history timeline
 ```
 
 ## The story, chapter by chapter
@@ -90,10 +88,7 @@ src/
 | **3 — Die Periode** | jeden-monat, scene-a, scene-b, scene-c | "Jeden Monat" → 12 month circles → rect widens → 38 years → 456 barcode lines → 7-year payoff |
 | **5 — Die Kosten** | scene-17k, scene-25k, scene-coins-grow | 17 000 products drop via Matter.js physics; euro counter flies to €25 000; coins converge into poverty circle |
 | **6 — Periodenarmut** | scene-1-4m, scene-500k, scene-folgen, scene-pie-90/60/15/12 | 1.4 M at-risk circle (hover: 17%); 500 k sub-circle grows; consequences; pie slices show % affected |
-| **7 — Die Überleitung** | steuer-intro, steuer-10pct, steuer-20pct, steuer-frage | Structural inequality framing; balance scale tips under 10% vs 20% VAT weights |
-| **8 — Die Timeline** | layout-transition, era-1–6, layout-exit | Two-track timeline (products + stigma/activism) from ~Steinzeit to 2026 across 6 eras |
-| **9 — Der Vergleich** | realitaetscheck, globe, eu-comparison | Jan 2026 retailer check (362 products, 10 chains); scroll-driven 3D globe; EU VAT table |
-| **10 — Abschluss** | fazit-a, fazit-b, was-bleibt, protest | "End of 150 years of discrimination"; remaining burdens (88% suffer period pain); protest signs rise |
+| **7 — Die Überleitung** | steuer-intro, steuer-10pct, steuer-20pct, steuer-frage, geschichte-intro, steinzeit, antike, mittelalter, 19jhd, 1896, 1930er, 1973 | Balance scale tips under 10% vs 20% VAT weights; then a photo-card timeline from Stone Age to 1973 |
 
 ## Key data points
 
@@ -116,6 +111,7 @@ src/
 | `spine.js` | The central SVG axis acts as a scrubable scrollbar; four dots fill as the reader advances; click or drag to seek |
 | `wave.js` | Animated liquid background that drains as the VAT counter drops |
 | `pulse.js` | Breathing pulse animation on the main circle |
+| `text-anim.js` | Shared helpers for animating text overlays across scenes |
 
 ## Physics (Chapter 5)
 
@@ -133,3 +129,13 @@ Chapter 5 runs a live **Matter.js** simulation alongside the GSAP scroll animati
 - Two pans connected by an arm that pivots around a fulcrum
 - The scale tips depending on the VAT weight placed on each pan
 - Used in scene-steuer-10pct and scene-steuer-20pct to illustrate the structural tax inequality on period products
+
+## History timeline (Chapter 7)
+
+After the balance scale, chapter 7 continues into a photo-card timeline spanning human history:
+
+- **Steinzeit / Antike / Mittelalter** — early period management across civilisations
+- **19. Jahrhundert** — industrialisation and the first commercial products
+- **1896** — a landmark moment in period product history
+- **1930er** — interwar period and changing social norms
+- **1973** — a pivotal year for women's rights and taxation debates
