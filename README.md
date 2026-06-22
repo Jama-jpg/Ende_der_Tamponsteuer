@@ -74,7 +74,7 @@ src/
     02-the-scale/           Circle grows to 1.9 billion, 26% pie
     03-every-month/         jeden-monat + lifetime sequence (borrows scenes from 04)
     04-the-lifetime/        38 years → 456 lines → 7-year payoff (scenes used by ch3)
-    05-die-kosten/          17 000 products, €25 000 lifetime cost, physics coins
+    05-die-kosten/          17 000 products, €25 000 lifetime cost, physics coins (physics.js + gravity-physics.js)
     06-periodenarmut/       1.4 M at risk → 500 k period poverty → consequences
     07-ueberleitung/        Balance scale (VAT inequality) + 150-year history timeline
 ```
@@ -100,7 +100,7 @@ src/
 | Lifetime cost | ≈ €25 000 |
 | At poverty risk in Austria | 1.4 million (17% of population) |
 | Affected by period poverty in Austria | 500 000 women |
-| VAT abolished | 0% from 1 January 2026 |
+| VAT abolished | 0% since 1 January 2026 |
 
 ## Core modules
 
@@ -115,12 +115,13 @@ src/
 
 ## Physics (Chapter 5)
 
-Chapter 5 runs a live **Matter.js** simulation alongside the GSAP scroll animation:
+Chapter 5 runs two physics layers alongside the GSAP scroll animation:
 
-- `gravity-physics.js` — creates the Matter.js world, drops tampon pills and coin circles
+- `physics.js` — seeded RNG gravity stack simulator; calculates deterministic GSAP transform offsets for every coin/tampon so the layout is identical on every load (required for scroll-scrub reproducibility)
+- `gravity-physics.js` — live **Matter.js** world that drops tampon pills and coin circles in real time; runs on its own `requestAnimationFrame` loop, independent of scroll
 - `chapter5-state.js` — shared state so scene-17k, scene-25k, and scene-coins-grow hand off the same physics world
-- Physics runs on its own `requestAnimationFrame` loop, independent of scroll
-- When scene-coins-grow ends, the world is destroyed and the SVG coin group takes over for the GSAP-driven convergence animation
+- ScrollTrigger handles bidirectional navigation: scrolling backward from scene-25k re-enters scene-17k and restores the physics world to its correct state
+- When scene-coins-grow ends, the Matter.js world is destroyed and the SVG coin group takes over for the GSAP-driven convergence animation
 
 ## Balance scale (Chapter 7)
 
